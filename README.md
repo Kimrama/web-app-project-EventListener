@@ -1,3 +1,3 @@
-```bash
+```powershell
     dotnet run
 ```

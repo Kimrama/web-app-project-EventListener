@@ -95,3 +95,4 @@ D:\web-application\EventListener\obj\Debug\net9.0\refint\EventListener.dll
 D:\web-application\EventListener\obj\Debug\net9.0\EventListener.pdb
 D:\web-application\EventListener\obj\Debug\net9.0\EventListener.genruntimeconfig.cache
 D:\web-application\EventListener\obj\Debug\net9.0\ref\EventListener.dll
+D:\web-application\EventListener\obj\Debug\net9.0\EventListener.sourcelink.json

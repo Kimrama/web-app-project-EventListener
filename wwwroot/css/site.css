@@ -101,6 +101,8 @@ section {
 }
 body {
     line-height: 1;
+    background-color: #F6F6F6;
+    font-family: sans-serif;
 }
 ol,
 ul {

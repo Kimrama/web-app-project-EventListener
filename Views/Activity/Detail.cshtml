@@ -2,16 +2,25 @@
     ViewData["Title"] = "Activity Details";
 }
 
-<div style="box-sizing: border-box; margin: 0; padding: 0;">
-    <div style="display: flex; justify-content: space-between; border-bottom: 0.5px solid black; height: 100px; ">
-        <div>
-            <i class="fa-brands fa-facebook"></i>
-            <span>Facebook</span>
+<link rel="stylesheet" href="~/css/activity/activity_details.css" asp-append-version="true">
+
+<div>
+    <nav>
+        <div class="logo">
+            <i class="fa-brands fa-facebook fa-4x"></i>
+            <span>EventListener</span>
         </div>
-        <div>
-            <button><i class="fa-solid fa-plus" style="margin-right: 8px;"></i>สร้างกิจกรรม</button>
-            <button><i class="fa-regular fa-bell" style="margin-right: 8px;"></i>การเเจ้งเตือน</button>
-            <i class="fa-solid fa-circle-user"></i>
+        <div class="buttongroup-and-user">
+            <button>
+                <i class="fa-solid fa-plus"></i> 
+                <span>สร้างกิจกรรม</span>
+            </button>
+            <button>
+                <i class="fa-regular fa-bell"></i>
+                <span>การเเจ้งเตือน</span>
+            </button>
+            <i class="fa-solid fa-circle-user fa-3x"></i>
         </div>
-    </div>
+    </nav>
 </div>
+

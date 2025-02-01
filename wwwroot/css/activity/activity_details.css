@@ -31,14 +31,11 @@ nav {
         border: 1px solid #E232BC;
         background-color: #E232BC;
         color: white;
-
-        span {
-            margin-left: 5px;
-        }
-    }
-
-    button:nth-child(1) :hover {
         cursor: pointer;
+
+        i {
+            margin-right: 5px;
+        }
     }
 
     button:nth-child(2) {
@@ -48,14 +45,44 @@ nav {
         border: 1px solid #FF713E;
         background-color: #FF713E;
         color: white;
+        cursor: pointer;
 
-        span {
-            margin-left: 5px;
+        i {
+            margin-right: 5px;
         }
     }
+    
+}
 
-    button:nth-child(2) :hover {
-        cursor: pointer;
+main {
+    max-width: 1366px;
+    margin: 0 auto;
+}
+
+.content {
+
+}
+
+.activity-img {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+
+    img {
+        width: 1366px;
+        height: 540px;
+        border-radius: 16px;
     }
+}
+
+
+.activity-details {
+}
+
+.owner {
+
+}
+
+.participant {
 
 }

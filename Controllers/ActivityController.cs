@@ -10,4 +10,8 @@ public class ActivityController : Controller
     }
 
     // Create
+    public IActionResult Create()
+    {
+        return View();
+    }
 }

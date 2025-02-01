@@ -1,1 +1,38 @@
-<h1>Login</h1>
+<link rel="stylesheet" href="~/css/auth/login.css" asp-append-version="true">
+
+<div class="login-container">
+    <h1>Welcome</h1>
+    <form action="">
+        <div class="input-container">
+            <label for="username">Username</label><br>
+            <input type="text" placeholder="Enter Username">
+        </div>
+        <div class="input-container">
+            <label for="password">Password</label><br>
+            <input type="password" placeholder="Enter Password">
+        </div>
+        <div class="option">
+            <div class="checkbox-wrapper-32">
+                <input type="checkbox" name="checkbox-32" id="checkbox-32" />
+                <label for="checkbox-32"> Remember&nbsp;me </label>
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M 10 10 L 90 90"
+                        stroke="#000"
+                        stroke-dasharray="113"
+                        stroke-dashoffset="113"
+                    ></path>
+                    <path
+                        d="M 90 10 L 10 90"
+                        stroke="#000"
+                        stroke-dasharray="113"
+                        stroke-dashoffset="113"
+                    ></path>
+                </svg>
+            </div>
+            <a href="">Forgot password?</a>
+        </div>
+        <button type="submit">Login</button>
+        <p>Don’t have an account ? <a href="">Register now</a></p>
+    </form>
+</div>

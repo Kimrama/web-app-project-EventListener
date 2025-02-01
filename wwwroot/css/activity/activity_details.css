@@ -1,0 +1,61 @@
+nav {
+    background-color: white;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 0.25px solid black; 
+    padding: 16px;
+}
+
+.logo {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 16px;
+
+    span {
+        font-size: 24px;
+        font-weight: bold;
+    }
+}
+
+.buttongroup-and-user {
+    display: flex; 
+    align-items: center; 
+    gap: 16px;
+
+    button:nth-child(1) {
+        padding: 8px 18px; 
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #E232BC;
+        background-color: #E232BC;
+        color: white;
+
+        span {
+            margin-left: 5px;
+        }
+    }
+
+    button:nth-child(1) :hover {
+        cursor: pointer;
+    }
+
+    button:nth-child(2) {
+        padding: 8px 18px; 
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #FF713E;
+        background-color: #FF713E;
+        color: white;
+
+        span {
+            margin-left: 5px;
+        }
+    }
+
+    button:nth-child(2) :hover {
+        cursor: pointer;
+    }
+
+}

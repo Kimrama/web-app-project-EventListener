@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Activity Details";
+}
+
+<link rel="stylesheet" href="~/css/activity/create-activity.css" asp-append-version="true">
+<div>
+    <nav>
+         <button class="cancel-button">
+                <i class="fa-solid fa-x"></i>
+                ยกเลิก
+            </button>
+        <h2 class="title">สร้างกิจกรรม</h2>
+        <div class="buttongroup-and-user">
+            <button class="confirm-button">
+                <i class="fa-solid fa-check"></i>
+                ยืนยัน
+            </button>
+        </div>
+    </nav>
+    <div class="form">
+        <div class="question">
+            <label for="name"><i class="fa-solid fa-pen-nib"></i>ชื่อกิจกรรม:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <div class="question">
+            <label for="name"><i class="fa-solid fa-location-dot"></i>สถานที่:</label>
+            <input type="text" id="location" name="location">
+        </div>
+        <div class="question">
+            <label for="name"><i class="fa-regular fa-calendar"></i>เวลา-วันที่:</label>
+            <input type="text" id="date_time" name="date_time">
+        </div>
+        <div class="question">
+            <label for="name"><i class="fa-regular fa-user"></i>จำนวนสมาชิกสูงสุด:</label>
+            <input type="text" id="maximum_participant" name="maximum_participant">
+        </div>
+        <div class="drag-drop">
+            <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
+            <div class="source"></div>
+            <div class="destination"></div>
+        </div>
+        <div class="question">
+            <label for="name"><i class="fa-solid fa-link"></i>หมายเหตุ:</label>
+            <input type="text" id="maximum_participant" name="maximum_participant">
+        </div>
+        <div class="img-question">
+            <label for="name"><i class="fa-solid fa-link"></i>รูปภาพ:</label>
+            <div class="add-image-area">add image-area</div>
+        </div>
+        
+    </div>
+</div>

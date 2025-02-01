@@ -7,12 +7,12 @@ nav {
     padding: 16px;
 }
 
+
 .logo {
     display: flex; 
     justify-content: center; 
     align-items: center; 
     gap: 16px;
-
     span {
         font-size: 24px;
         font-weight: bold;

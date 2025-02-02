@@ -4,7 +4,12 @@ namespace EventListener.Controllers;
 
 public class ProfileController : Controller 
 {
-    public IActionResult Index()
+    public IActionResult Me()
+    {
+        return View();
+    }
+
+    public IActionResult Person()
     {
         return View();
     }

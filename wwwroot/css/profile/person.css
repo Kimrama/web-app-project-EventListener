@@ -67,45 +67,60 @@ nav {
 .profile-div{
     display:grid;
     grid-template-columns: max-content max-content;
-    gap:60px;
+    gap:4.32vw;
     padding-bottom:50px;
 }
 
-.profile-div-left{
-    img:first-child{
-        border-radius: 25px;
-        width:400px;
-        height:400px;
-    }
+.profile-img_rect-div{
+    height: min-content;
+}
 
-    p:nth-child(3){
+.profile-interest-div{
+    p:nth-child(1){
         font-family: Noto Sans Thai;
         font-weight: bold;
         letter-spacing: 1px;
-        font-size:16px;
+        font-size:clamp(14px,1.15vw,16px);
         padding:0px 0px 15px 0px;
     }
 }
 
-.profile-div-right{
+.profile-img-div{
+    display:flex;
+    padding: 0;
+
+    img{
+        border-radius: 25px;
+        width:28.8vw;
+        height:28.8vw;
+        max-width: 400px;
+        max-height: 350px;
+        object-fit: fill;
+    }
+}
+
+.profile-detail-div{
     font-family: Inter;
     p:nth-child(1){
         font-weight:bolder;
-        font-size:34px;
+        /* 1.15 vw = 15.96 px (width=1388px,height=838px) */
+        font-size: clamp(28px,2.44vw,34px);
     }
 
     p:nth-child(3){
         font-family: Noto Sans Thai;
         font-weight: bold;
         letter-spacing: 1px;
-        font-size:16px;
-        padding: 25px 0px 15px 0px;
+        padding: 25px 0px 15px 0px;/*top right bottom left*/ 
+        font-size: clamp(14px,1.15vw,16px);
     }
 
     p:nth-child(4){
-        font-size:16px;
-        letter-spacing: 0.25px;
-        line-height:18px;
+        letter-spacing: 0.018vw;
+        line-height: 1.1;/*1.3vw */
+        width:42.8vw;
+        margin:0;
+        font-size: clamp(14px,1.15vw,16px);
     }
 }
 
@@ -114,7 +129,7 @@ nav {
 .name_status-div{
     display:grid;
     grid-template-columns: max-content max-content;
-    gap:12px;
+    gap:0.86vw;
 }
 
 .status-circle{
@@ -129,40 +144,44 @@ nav {
 .id_birthday-div{
     display: grid;
     grid-template-columns:max-content min-content max-content;
-    gap:10px; 
-    padding-bottom: 0px;/*top right bottom left*/ 
+    gap:0.72vw; 
+    padding: 0;
 
     p:nth-child(n){
-        font-size: 14px;
         font-weight: normal;
         color:darkgray;
-        letter-spacing: normal;
-        padding: 10px 0px 0px 0px;
+        font-size: clamp(10px,1vw,14px);
+        padding:10px 0px 0px 0px;
+        letter-spacing: 0.25px;
     }
 
     i{
         color:darkgray;
-        padding: 9px 0px 0px 0px;
+        font-size: clamp(10px,1vw,14px);
+        padding-top: 10px; 
     }
 }
 
 .sex-rect{
-    width:100%;
+    width:28.8vw;
+    max-width: 400px;
     height:40px;
-    background-color: #3EB5FF;
+    background-color:#3EB5FF;
     border-radius: 20px;
-    margin: 20px 0px 50px 0px;
+    margin: 20px 0px 0px 0px;
 }
 
 .interest-ul{
     display:flex;
     flex-wrap: wrap;
     max-width: 400px;
-    gap: 10px;
+    width:28.8vw;
+    gap: 0.72vw;
 
     li:nth-child(n){
         background-color: lightgray;
         width:fit-content;
+        font-size: clamp(14px,1.15vw,16px);
         border-radius: 10px;
         padding:5px 8px 5px 8px;
     }
@@ -172,10 +191,87 @@ nav {
         background-color: gray;
         transition: 0.25s;
     }
+}
 
-    li:last-child{
-        padding:5px 15px 5px 15px;
+@media (width:820px) { /*ipad Air*/
+    .profile-main-div{
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-div{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-img_rect-div{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-img-div{
+        width: 400px;
+        height: 350px;
+        align-self: center;
+
+        img{
+            width:400px;
+            height:350px;
+        }
+    }
+
+    .sex-rect{
+        width: 400px;
+        align-self: center;
+        margin: 20px 0px 0px 0px;
+    }
+
+    .profile-detail-div{
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+
+        p:nth-child(n){
+            align-self: center;
+        }
+
+        div:first-child{
+            align-self: center;
+        }
+    }
+
+    .name_status-div{
+        display: flex;
+        width:fit-content;
+    }
+
+    .status-circle{
+        margin: 4px 0px;
+    }
+
+    .id_birthday-div{
+        align-self: center;
+    }
+
+    .profile-interest-div{
+        display: flex;
+        flex-direction: column;
+        width:400px;
+        align-self: center;
+
+        p:first-child{
+            align-self: center;
+        }
+    }
+
+    .interest-ul{
+        width: 400px;
+    }
+
+    .edit-btn{
+        align-self: center;
+        width: 450px;
     }
 }
+
 
 

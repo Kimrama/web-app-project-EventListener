@@ -1,7 +1,18 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Hello World</h1>
+﻿<link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
+<div>
+    <nav>
+        <div class="left-container">
+            <div class="search-bar">
+                <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
+                <input type="text" name="" id="">
+            </div>
+            <div class="filter-container">
+                <div class="date-input">
+                    <i class="fa-regular fa-calendar"></i><button>1 jan 2025 - 5 jan 2025</button>
+                </div>
+                <div class="filter"><i class="fa-solid fa-sliders"></i><button> all</button></div>
+            </div>
+        </div>
+        <div class="right-container"></div>
+    </nav>
 </div>

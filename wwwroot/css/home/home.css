@@ -1,0 +1,30 @@
+nav {
+    padding: 16px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid black;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.filter-container {
+    display: flex;
+
+    .date-input {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-right: 25px;
+    }
+    .filter {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+}
+
+i {
+    font-size: 26px;
+}

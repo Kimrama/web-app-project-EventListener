@@ -1,9 +1,9 @@
 nav {
     background-color: white;
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 0.25px solid black; 
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
     padding: 16px;
     position: fixed;
     top: 0;
@@ -12,9 +12,9 @@ nav {
 }
 
 .logo {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 16px;
     span {
         font-size: 24px;
@@ -23,16 +23,16 @@ nav {
 }
 
 .buttongroup-and-user {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     gap: 16px;
 
     button:nth-child(1) {
-        padding: 8px 18px; 
+        padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
-        border: 1px solid #E232BC;
-        background-color: #E232BC;
+        border: 1px solid #e232bc;
+        background-color: #e232bc;
         color: white;
         cursor: pointer;
 
@@ -42,11 +42,11 @@ nav {
     }
 
     button:nth-child(2) {
-        padding: 8px 18px; 
+        padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
-        border: 1px solid #FF713E;
-        background-color: #FF713E;
+        border: 1px solid #ff713e;
+        background-color: #ff713e;
         color: white;
         cursor: pointer;
 
@@ -93,7 +93,7 @@ main {
     }
 
     .tag-topic {
-        background-color: #A2D2FF;
+        background-color: #a2d2ff;
         padding: 8px;
         border-radius: 20px;
         font-size: 14px;
@@ -132,9 +132,9 @@ main {
     button {
         font-size: 16px;
         padding: 10px 20px;
-        background-color: #9381FF;
+        background-color: #9381ff;
         color: white;
-        border: 1px solid #9381FF;
+        border: 1px solid #9381ff;
         border-radius: 12px;
         cursor: pointer;
 
@@ -152,7 +152,7 @@ main {
 
     h3 {
         font-size: 18px;
-    } 
+    }
 
     h4 {
         font-size: 18px;
@@ -183,9 +183,9 @@ main {
 
 .all-participant {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); 
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 30px;
-    margin-top: 30px; 
+    margin-top: 30px;
 }
 
 .participant {
@@ -203,13 +203,13 @@ main {
 
     .buttongroup-and-user {
         button:nth-child(1) {
-            padding: 8px 16px; 
+            padding: 8px 16px;
         }
-    
+
         button:nth-child(2) {
-            padding: 8px 16px; 
+            padding: 8px 16px;
         }
-    
+
         img {
             width: 50px;
             height: 50px;
@@ -225,15 +225,11 @@ main {
     }
 
     .activity-details {
-        width: 70%
+        width: 70%;
     }
 
     .all-participant {
         display: grid;
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(4, 1fr);
     }
-
 }
-
-
-

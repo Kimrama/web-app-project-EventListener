@@ -1,13 +1,29 @@
 nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 16px;
     width: 100%;
     background-color: white;
     border-bottom: 1px solid black;
+    height: 97px;
+}
+.left-container {
+    i {
+        font-size: 26px;
+    }
 }
 .search-bar {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-bottom: 8px;
+
+    input[type="text"] {
+        font-size: 18px;
+        border-radius: 14px;
+        padding: 0 16px;
+    }
 }
 .filter-container {
     display: flex;
@@ -23,8 +39,55 @@ nav {
         align-items: center;
         gap: 16px;
     }
+    button {
+        border-radius: 8px;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
 }
 
-i {
-    font-size: 26px;
+.buttongroup-and-user {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    button:nth-child(1) {
+        padding: 5px 16px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #e232bc;
+        background-color: #e232bc;
+        color: white;
+        cursor: pointer;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    button:nth-child(2) {
+        padding: 5px 18px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #ff713e;
+        background-color: #ff713e;
+        color: white;
+        cursor: pointer;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        height: 38px;
+    }
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+    }
 }

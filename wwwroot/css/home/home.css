@@ -91,3 +91,25 @@ nav {
         border-radius: 100%;
     }
 }
+
+.activity-card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+
+    .header-tag {
+        font-size: 20px;
+        text-align: center;
+        height: 36px;
+        line-height: 36px;
+        color: white;
+        background-color: #ff9d00;
+        border-radius: 16px 16px 0 0;
+    }
+    .activity-card {
+        height: 256px;
+        width: 75%;
+        background-color: white;
+    }
+}

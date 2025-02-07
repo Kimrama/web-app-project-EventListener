@@ -1,115 +1,117 @@
 <link rel="stylesheet" href="~/css/auth/register.css" asp-append-version="true">
 
-<div class="register-container">
-    <h1>Create Account</h1>
-    <form action="">
-        <div class="user-input-continer">
-            <div class="info-container">
-                <label for="username">Username (Display Name)</label><br>
-                <input type="text" placeholder="Enter Username">
-                
-                <label for="fname">First Name</label><br>
-                <input type="text" placeholder="Enter First Name">
+<div class="screen-container">
+    <div class="register-container">
+        <h1>Create Account</h1>
+        <form action="">
+            <div class="user-input-continer">
+                <div class="info-container">
+                    <label for="username">Username (Display Name)</label><br>
+                    <input type="text" placeholder="Enter Username">
+                    
+                    <label for="fname">First Name</label><br>
+                    <input type="text" placeholder="Enter First Name">
 
-                <label for="lname">Last Name</label><br>
-                <input type="text" placeholder="Enter Last Name">
+                    <label for="lname">Last Name</label><br>
+                    <input type="text" placeholder="Enter Last Name">
 
-                <label for="password">Password</label><br>
-                <input type="password" placeholder="Enter a password">
-                
-                <label for="con-password">Confirm Password</label><br>
-                <input type="password" placeholder="Confirm your password">
+                    <label for="password">Password</label><br>
+                    <input type="password" placeholder="Enter a password">
+                    
+                    <label for="con-password">Confirm Password</label><br>
+                    <input type="password" placeholder="Confirm your password">
 
+                </div>
+                <div class="select-container">
+                    <h2><i class="fa-solid fa-tag"></i> Select Your Interests</h2>
+                    <section class="sport-and-fitness">
+                        <h3>Sports & Fitness</h3>
+                        <div class="select-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Running" />
+                                <span>Running</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Swimming" />
+                                <span>Swimming</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Badminton" />
+                                <span>Badminton</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Basketball" />
+                                <span>Basketball</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Weight-trainning" />
+                                <span>Weight trainning</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Table-tennis" />
+                                <span>Table tennis</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Patong" />
+                                <span>Patong</span>
+                            </label>
+                        </div>
+                    </section>
+                    <section class="sport-and-fitness">
+                        <h3>Arts & Culture</h3>
+                        <div class="select-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Painting" />
+                                <span>Painting</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Music" />
+                                <span>Music</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Dance" />
+                                <span>Dance</span>
+                            </label>
+                        </div>
+                    </section>
+                    <section class="sport-and-fitness">
+                        <h3>Education</h3>
+                        <div class="select-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Tutoring" />
+                                <span>Tutoring</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Lab" />
+                                <span>Lab</span>
+                            </label>
+                        </div>
+                    </section>
+                    <section class="sport-and-fitness">
+                        <h3>Social</h3>
+                        <div class="select-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Food-Dining" />
+                                <span>Food & Dining</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Board-Games" />
+                                <span>Board Games</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Gaming" />
+                                <span>Gaming</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="choice" value="Travel" />
+                                <span>Travel</span>
+                            </label>
+                        </div>
+                    </section>
+                </div>
             </div>
-            <div class="select-container">
-                <h2><i class="fa-solid fa-tag"></i> Select Your Interests</h2>
-                <section class="sport-and-fitness">
-                    <h3>Sports & Fitness</h3>
-                    <div class="select-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Running" />
-                            <span>Running</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Swimming" />
-                            <span>Swimming</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Badminton" />
-                            <span>Badminton</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Basketball" />
-                            <span>Basketball</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Weight-trainning" />
-                            <span>Weight trainning</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Table-tennis" />
-                            <span>Table tennis</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Patong" />
-                            <span>Patong</span>
-                        </label>
-                    </div>
-                </section>
-                <section class="sport-and-fitness">
-                    <h3>Arts & Culture</h3>
-                    <div class="select-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Painting" />
-                            <span>Painting</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Music" />
-                            <span>Music</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Dance" />
-                            <span>Dance</span>
-                        </label>
-                    </div>
-                </section>
-                <section class="sport-and-fitness">
-                    <h3>Education</h3>
-                    <div class="select-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Tutoring" />
-                            <span>Tutoring</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Lab" />
-                            <span>Lab</span>
-                        </label>
-                    </div>
-                </section>
-                <section class="sport-and-fitness">
-                    <h3>Social</h3>
-                    <div class="select-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Food-Dining" />
-                            <span>Food & Dining</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Board-Games" />
-                            <span>Board Games</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Gaming" />
-                            <span>Gaming</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="choice" value="Travel" />
-                            <span>Travel</span>
-                        </label>
-                    </div>
-                </section>
-            </div>
-        </div>
-        <button type="submit">Create Account</button>
-        <p>Already have an account ? <a href="">Sign in</a></p>
-    </form>
+            <button type="submit">Create Account</button>
+            <p>Already have an account ? <a href="">Sign in</a></p>
+        </form>
+    </div>
 </div>

@@ -82,7 +82,7 @@ nav {
         font-family: Noto Sans Thai;
         font-weight: bold;
         letter-spacing: 1px;
-        font-size:clamp(14px,1.15vw,16px);
+        font-size:clamp(16px,1.15vw);
         padding:0px 0px 15px 0px;
     }
 }
@@ -106,12 +106,12 @@ nav {
     p:nth-child(1){
         font-weight:bolder;
         /* 1.15 vw = 15.96 px (width=1388px,height=838px) */
-        font-size: clamp(28px,2.44vw,34px);
+        font-size: clamp(30px,2.44vw,34px);
     }
     
     p:nth-child(2){
         padding: 12px 0px 8px 0px;
-        font-size: clamp(14px,1.15vw,16px);
+        font-size: clamp(16px,1.15vw);
     }
 
     p:nth-child(4){
@@ -119,7 +119,7 @@ nav {
         font-weight: bold;
         letter-spacing: 1px;
         padding: 25px 0px 15px 0px;/*top right bottom left*/ 
-        font-size: clamp(14px,1.15vw,16px);
+        font-size: clamp(16px,1.15vw);
     }
 
     p:nth-child(5){
@@ -127,7 +127,7 @@ nav {
         line-height: 1.1;/*1.3vw */
         width:42.8vw;
         margin:0;
-        font-size: clamp(14px,1.15vw,16px);
+        font-size: clamp(16px,1.15vw);
     }
 }
 
@@ -140,12 +140,12 @@ nav {
     p:nth-child(n){
         font-weight: normal;
         color:darkgray;
-        font-size: clamp(10px,1vw,14px);
+        font-size: clamp(12px,1vw,14px);
     }
 
     i{
         color:darkgray;
-        font-size: clamp(10px,1vw,14px);
+        font-size: clamp(12px,1vw,14px);
         padding: 0; 
     }
 }
@@ -169,7 +169,7 @@ nav {
     li:nth-child(n){
         background-color: lightgray;
         width:fit-content;
-        font-size: clamp(14px,1.15vw,16px);
+        font-size: clamp(16px,1.15vw);
         border-radius: 10px;
         padding:5px 8px 5px 8px;
     }

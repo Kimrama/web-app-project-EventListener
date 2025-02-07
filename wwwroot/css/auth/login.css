@@ -1,8 +1,12 @@
+.screen-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .login-container {
     background-color: white;
     width: 25%;
-    margin: auto;
-    margin-top: 10vh;
     border-radius: 4px;
     padding: 10px;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
@@ -150,4 +154,10 @@ p {
 .checkbox-wrapper-32 input[type="checkbox"]:checked ~ svg path {
     stroke-dashoffset: 0;
     stroke-width: calc(var(--size) / 2);
+}
+
+@media screen and (max-width: 820px) {
+    .login-container {
+        width: 50%;
+    }
 }

@@ -76,6 +76,7 @@ main {
         width: 1366px;
         height: 540px;
         border-radius: 16px;
+        object-fit: cover;
     }
 }
 

@@ -18,7 +18,6 @@
         </div>
     </nav>
     <div class="form_body">
-        <div class="zone1">
             <div class="question">
                 <label for="name"><i class="fa-solid fa-pen-nib"></i>ชื่อกิจกรรม:</label>
                 <input type="text" id="name" name="name">
@@ -35,6 +34,20 @@
                 <label for="name"><i class="fa-regular fa-user"></i>จำนวนสมาชิกสูงสุด:</label>
                 <input type="number" id="maximum_participant" name="maximum_participant">
             </div>
+            <div class="question">
+                <label for="name"><i class="fa-regular fa-user"></i>รายละเอียด</label>
+                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
+            </div>
+            <div class="question">
+                <label for="searchDropdown">เลือกแท็ก:</label>
+                    <input type="text" id="dropdownSearch" placeholder="ค้นหาแท็ก...">
+                    <select id="searchDropdown">
+                        <option value="technology">เทคโนโลยี</option>
+                        <option value="sports">กีฬา</option>
+                        <option value="music">ดนตรี</option>
+                        <option value="education">การศึกษา</option>
+                        <option value="travel">ท่องเที่ยว</option>
+                    </select>
             <div class="imgquestion">
                 <div class="imgreq">
                     <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
@@ -45,110 +58,10 @@
                 </div>
             </div>  
         </div>
-        <div class="zone2">
-            <div class="drag-drop">
-            <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
-            <div class="source"></div>
-            <div class="destination"></div>
-        </div>
-        </div>
     </div>
 </div>
 
 <script>
-
-document.addEventListener("DOMContentLoaded", function () {
-    const source = document.querySelector(".source");
-    const destination = document.querySelector(".destination");
-
-    for (let i = 1; i <= 3; i++) {
-        let tag = document.createElement("div");
-        tag.textContent = "แท็ก " + i;
-        tag.setAttribute("draggable", true);
-        tag.style.padding = "10px";
-        tag.style.margin = "5px";
-        tag.style.background = "#007bff";
-        tag.style.color = "white";
-        tag.style.borderRadius = "5px";
-        tag.style.cursor = "grab";
-        tag.style.width = "20%"
-        tag.style.height = "15%"
-        tag.addEventListener("dragstart", dragStart);
-        source.appendChild(tag);
-    }
-    function dragStart(event) {
-        event.dataTransfer.setData("text/plain", event.target.textContent);
-    }
-
-    destination.addEventListener("dragover", function (event) {
-        event.preventDefault();
-    });
-
-    destination.addEventListener("drop", function (event) {
-        event.preventDefault();
-
-        let data = event.dataTransfer.getData("text/plain");
-        let draggedTag = Array.from(source.children).find(tag => tag.textContent === data);
-        let checkedTag = Array.from(destination.children).find(tag => tag.textContent === data);
-
-        if (draggedTag) {
-            draggedTag.remove();
-        }
-        if (checkedTag) {
-            return 0
-        }
-
-        let newTag = document.createElement("div");
-        newTag.textContent = data;
-        newTag.style.padding = "10px";
-        newTag.style.margin = "5px";
-        newTag.style.background = "green";
-        newTag.style.color = "white";
-        newTag.style.borderRadius = "5px";
-        newTag.style.cursor = "grab";
-        newTag.style.width = "20%"
-        newTag.style.height = "15%"
-        newTag.setAttribute("draggable", true);
-        newTag.addEventListener("dragstart", dragStart);
-
-        destination.appendChild(newTag);
-    });
-
-    source.addEventListener("dragover", function (event) {
-        event.preventDefault();
-    });
-
-    source.addEventListener("drop", function (event) {
-        event.preventDefault();
-
-        let data = event.dataTransfer.getData("text/plain");
-        let draggedTag = Array.from(destination.children).find(tag => tag.textContent === data);
-        let checkedTag = Array.from(source.children).find(tag => tag.textContent === data);
-
-        if (draggedTag) {
-            draggedTag.remove();
-        }
-
-        if (checkedTag) {
-            return 0
-        }
-
-        let newTag = document.createElement("div");
-        newTag.textContent = data;
-        newTag.style.padding = "10px";
-        newTag.style.margin = "5px";
-        newTag.style.background = "#007bff";
-        newTag.style.color = "white";
-        newTag.style.borderRadius = "5px";
-        newTag.style.cursor = "grab";
-        newTag.style.width = "20%"
-        newTag.style.height = "15%"
-        newTag.setAttribute("draggable", true);
-        newTag.addEventListener("dragstart", dragStart);
-        source.appendChild(newTag);
-    });
-});
-
 document.getElementById("imageUpload").addEventListener("change", function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -162,6 +75,16 @@ document.getElementById("imageUpload").addEventListener("change", function(event
 
             };
             reader.readAsDataURL(file);
+        }
+    });
+    document.getElementById("dropdownSearch").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        let dropdown = document.getElementById("searchDropdown");
+        let options = dropdown.getElementsByTagName("option");
+
+        for (let option of options) {
+            let text = option.textContent.toLowerCase();
+            option.style.display = text.includes(filter) ? "" : "none";
         }
     });
 

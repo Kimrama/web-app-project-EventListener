@@ -1,0 +1,125 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
+    padding: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.title {
+    font-size: 4vh;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+}
+
+.confirm-button{
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid green;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+}
+
+.cancel-button{
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid red;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.form_body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    margin-top: 20vh;
+    margin-bottom: 10vh;
+    width: 50vw;
+    height: auto;
+    box-sizing: border-box;
+    background-color: white;
+    max-width: 80vw;
+    padding: 3vh;
+    border-radius: 1vh;
+    box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.1);
+}
+
+
+.question {
+    display: flex;
+    flex-direction: column;
+    margin-top : 5vh;
+}
+
+.question label {
+    font-weight: bold;
+    margin-bottom: 1vh;
+}
+
+.question input {
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+}
+
+.question textarea{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
+.question select{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
+
+.imgquestion {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
+    gap: 2vh;
+}
+
+.imgreq {
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+}
+
+.imgdiv{
+    width: 80%;
+    height: auto;
+    border-radius: 1vh;
+    display: block;
+    margin-top: 2vh;
+    align-self: center;
+}

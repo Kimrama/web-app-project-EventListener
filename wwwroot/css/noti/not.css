@@ -1,0 +1,91 @@
+nav {
+    background-color: white;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 0.25px solid black; 
+    padding: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.logo {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 16px;
+    span {
+        font-size: 24px;
+        font-weight: bold;
+    }
+}
+
+.buttongroup-and-user {
+    display: flex; 
+    align-items: center; 
+    gap: 16px;
+
+    button:nth-child(1) {
+        padding: 8px 18px; 
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #E232BC;
+        background-color: #E232BC;
+        color: white;
+        cursor: pointer;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    button:nth-child(2) {
+        padding: 8px 18px; 
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #FF713E;
+        background-color: #FF713E;
+        color: white;
+        cursor: pointer;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+    }
+}
+.notification-container {
+    text-align: center;
+    margin-top: 300px;
+}
+
+.bell-icon img {
+    width: 100px;
+    animation: shake 1s infinite alternate;
+}
+
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.no-notifications {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.notification-text {
+    font-size: 16px;
+    color: gray;
+}

@@ -1,14 +1,24 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 nav {
     background-color: white;
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 0.25px solid black; 
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
     padding: 16px;
-    pointer-events: none;
-    user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
-
 
 .title {
     font-size: 4vh;
@@ -20,20 +30,20 @@ nav {
 }
 
 .confirm-button{
-    padding: 8px 18px; 
-    font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid green;
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid green;
     background-color: green;
     color: white;
     cursor: pointer;
-
 }
+
 .cancel-button{
-    padding: 8px 18px; 
-    font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid red;
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid red;
     background-color: red;
     color: white;
     cursor: pointer;
@@ -41,141 +51,75 @@ nav {
 
 .form_body {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    height: 90vh;
-    box-sizing: border-box;
-    margin: 0 auto;
-
-}
-
-.zone1, .zone2 {
-    height: 100%;
-    width: 45%;
-    display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 20px;
-    gap: 10px;
-    align-items: center;
-
+    align-self: center;
+    margin-top: 20vh;
+    margin-bottom: 10vh;
+    width: 50vw;
+    height: auto;
+    box-sizing: border-box;
+    background-color: white;
+    max-width: 80vw;
+    padding: 3vh;
+    border-radius: 1vh;
+    box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.1);
 }
 
 
 .question {
-    background-color: #99AFD7;
-    padding: 10px;
     display: flex;
     flex-direction: column;
-    color: white;
-    border-radius: 5px;
-    gap: 5px;
-    width: 80%;
+    margin-top : 5vh;
 }
 
 .question label {
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    pointer-events: none;
-    user-select: none;
+    font-weight: bold;
+    margin-bottom: 1vh;
 }
 
 .question input {
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
 }
+
+.question textarea{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
+.question select{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
 
 .imgquestion {
-    background-color: #99AFD7;
-    padding: 10px;
     display: flex;
     flex-direction: column;
-    color: white;
-    border-radius: 5px;
-    gap: 5px;
-    width: 80%;
-    height: 30%;
+    margin-top: 5vh;
+    gap: 2vh;
 }
+
 .imgreq {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.imgreq input{
-    margin-left: 5%;
-}
-
-.imgquestion .imgdiv{
-        background-color: whitesmoke;
-        padding: 8px;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        height: 30%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: black;
-        flex-grow: 1; 
-}
-
-.drag-drop{
-    background-color: #99AFD7;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    border-radius: 5px;
-    gap: 5px;
-    width: 80%;
-    height: 80%;
-}
-
-.drag-drop label {
-    font-size: 16px;
-    display: flex;
     align-items: center;
-    gap: 5px;
-    pointer-events: none;
-    user-select: none;
+    gap: 2vh;
 }
 
-.drag-drop .source {
-    background-color: whitesmoke;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    height: 30%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    text-align: center;
-    color: black;
-    flex-grow: 1; 
+.imgdiv{
+    width: 80%;
+    height: auto;
+    border-radius: 1vh;
+    display: block;
+    margin-top: 2vh;
+    align-self: center;
 }
-
-.drag-drop .destination {
-    background-color: whitesmoke;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    height: 30%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    text-align: center;
-    flex-wrap: wrap;
-    color: black;
-    flex-grow: 1; 
-}
-

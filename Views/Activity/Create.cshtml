@@ -17,36 +17,75 @@
             </button>
         </div>
     </nav>
-    <div class="form">
-        <div class="question">
-            <label for="name"><i class="fa-solid fa-pen-nib"></i>ชื่อกิจกรรม:</label>
-            <input type="text" id="name" name="name">
+    <div class="form_body">
+            <div class="question">
+                <label for="name"><i class="fa-solid fa-pen-nib"></i>ชื่อกิจกรรม:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="question">
+                <label for="name"><i class="fa-solid fa-location-dot"></i>สถานที่:</label>
+                <input type="text" id="location" name="location">
+            </div>
+            <div class="question">
+                <label for="name"><i class="fa-regular fa-calendar"></i>เวลา-วันที่:</label>
+                <input type="datetime-local" id="date_time" name="date_time">
+            </div>
+            <div class="question">
+                <label for="name"><i class="fa-regular fa-user"></i>จำนวนสมาชิกสูงสุด:</label>
+                <input type="number" id="maximum_participant" name="maximum_participant">
+            </div>
+            <div class="question">
+                <label for="name"><i class="fa-regular fa-user"></i>รายละเอียด</label>
+                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
+            </div>
+            <div class="question">
+                <label for="searchDropdown">เลือกแท็ก:</label>
+                    <input type="text" id="dropdownSearch" placeholder="ค้นหาแท็ก...">
+                    <select id="searchDropdown">
+                        <option value="technology">เทคโนโลยี</option>
+                        <option value="sports">กีฬา</option>
+                        <option value="music">ดนตรี</option>
+                        <option value="education">การศึกษา</option>
+                        <option value="travel">ท่องเที่ยว</option>
+                    </select>
+            <div class="imgquestion">
+                <div class="imgreq">
+                    <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+                <div class="imgdiv">
+                    <img id="previewImage" style="display: none;">
+                </div>
+            </div>  
         </div>
-        <div class="question">
-            <label for="name"><i class="fa-solid fa-location-dot"></i>สถานที่:</label>
-            <input type="text" id="location" name="location">
-        </div>
-        <div class="question">
-            <label for="name"><i class="fa-regular fa-calendar"></i>เวลา-วันที่:</label>
-            <input type="text" id="date_time" name="date_time">
-        </div>
-        <div class="question">
-            <label for="name"><i class="fa-regular fa-user"></i>จำนวนสมาชิกสูงสุด:</label>
-            <input type="text" id="maximum_participant" name="maximum_participant">
-        </div>
-        <div class="drag-drop">
-            <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
-            <div class="source"></div>
-            <div class="destination"></div>
-        </div>
-        <div class="question">
-            <label for="name"><i class="fa-solid fa-link"></i>หมายเหตุ:</label>
-            <input type="text" id="maximum_participant" name="maximum_participant">
-        </div>
-        <div class="img-question">
-            <label for="name"><i class="fa-solid fa-link"></i>รูปภาพ:</label>
-            <div class="add-image-area">add image-area</div>
-        </div>
-        
     </div>
 </div>
+
+<script>
+document.getElementById("imageUpload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById("previewImage");
+                img.src = e.target.result;
+                img.style.display = "block";
+                img.style.width = "100%";
+                img.style.height = "100%";
+
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    document.getElementById("dropdownSearch").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        let dropdown = document.getElementById("searchDropdown");
+        let options = dropdown.getElementsByTagName("option");
+
+        for (let option of options) {
+            let text = option.textContent.toLowerCase();
+            option.style.display = text.includes(filter) ? "" : "none";
+        }
+    });
+
+</script>

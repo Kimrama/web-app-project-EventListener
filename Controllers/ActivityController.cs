@@ -45,10 +45,12 @@ public class ActivityController : Controller
         );
 
         var usersJoinActivity = await _context.UserJoinActivities
-        .FirstOrDefaultAsync(
+        .Include(u => u.User)
+        .Where(
             u => u.ActivityOwnerId == keys[0] &&
             u.ActivityCreatedAt == activityCreatedAt
-        );
+        )
+        .ToListAsync();
 
         var userJoinActivityCount = await _context.UserJoinActivities
         .Where(
@@ -63,7 +65,6 @@ public class ActivityController : Controller
             UserJoinActivity = usersJoinActivity,
             UserJoinActivityCount = userJoinActivityCount
         };
-
 
         return View(model);
     }

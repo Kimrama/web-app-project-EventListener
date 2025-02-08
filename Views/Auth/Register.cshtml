@@ -3,24 +3,34 @@
 <div class="screen-container">
     <div class="register-container">
         <h1>Create Account</h1>
-        <form action="">
+        <form id="register-form" action="">
             <div class="user-input-continer">
                 <div class="info-container">
                     <label for="username">Username (Display Name)</label><br>
-                    <input type="text" placeholder="Enter Username">
+                    <input type="text" placeholder="Enter Username" required>
                     
                     <label for="fname">First Name</label><br>
-                    <input type="text" placeholder="Enter First Name">
+                    <input type="text" placeholder="Enter First Name" required>
 
                     <label for="lname">Last Name</label><br>
-                    <input type="text" placeholder="Enter Last Name">
-
+                    <input type="text" placeholder="Enter Last Name" required>
+                    
+                    <label for="birthdate">Birthdate</label><span class="error-message" id="bdate-error-message"> -x- Please enter a valid birthdate.</span><br>
+                    <input type="date" id="birth-date" name="birthdate" required>
+                    <br>
+                    
+                    <label for="gender">Gender</label><br>
+                    <select id="gender" name="gender" onchange="changeColor()" required>
+                        <option value="">-- Select --</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                     <label for="password">Password</label><br>
-                    <input type="password" placeholder="Enter a password">
+                    <input id="passwd" type="password" placeholder="Enter a password" required>
                     
                     <label for="con-password">Confirm Password</label><br>
-                    <input type="password" placeholder="Confirm your password">
-
+                    <input id="conf-passwd" type="password" placeholder="Confirm your password" required>
+                    <span class="error-message" id="confpasswd-error-message"> -x- Confirm password not match</span>
                 </div>
                 <div class="select-container">
                     <h2><i class="fa-solid fa-tag"></i> Select Your Interests</h2>
@@ -115,3 +125,4 @@
         </form>
     </div>
 </div>
+<script src="~/js/auth/register.js" asp-append-version="true"></script>

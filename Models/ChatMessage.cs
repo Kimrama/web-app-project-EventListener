@@ -1,5 +1,3 @@
-using System;
-
 namespace EventListener.Models;
 
 public class ChatMessage
@@ -11,7 +9,6 @@ public class ChatMessage
     public string Message { get; set; }
     public DateTime Date { get; set; }
 
-    // Navigation Property
 
     public User User { get; set; }
     public Activity Activity { get; set; }

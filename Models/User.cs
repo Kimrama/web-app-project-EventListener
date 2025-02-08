@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace EventListener.Models;
 
@@ -11,8 +9,9 @@ public class User : IdentityUser
     public DateOnly Birthday { get; set; }
     public string Sex { get; set; }
     public string About { get; set; }
+    public string UserImageUrl { get; set; }
 
-    // Navigation Property
+    
     public ICollection<Activity> Activities { get; set; }
     public ICollection<UserJoinActivity> UserJoinActivities { get; set; }
     public ICollection<UserInterestActivityTag> UserInterestActivityTags { get; set; }

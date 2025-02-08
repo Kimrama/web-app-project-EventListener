@@ -1,3 +1,5 @@
+@model ActivityDetailViewModel      
+
 @{
     ViewData["Title"] = "Activity Details";
 }
@@ -31,25 +33,23 @@
         <div class="content">
             <div class="activity-details">
                 <div class="group-tag-topic">
-                    <span class="tag-topic">Tag Topic</span>
-                    <span class="tag-topic">Tag Topic</span>
+                    <span class="tag-topic">@Model.Activity.ActivityTagId</span>
                 </div>
                 <h4 class="start-datetime">
-                    เสาร์, 1 กุมภาพันธ์ 2025, 17:00 น.
+
                 </h4>
                 <br>
                 <h3 class="topic">
-                    ติวสอบ Final วิชา Web Application Development
+                    @Model.Activity.ActivityName
                 </h3>
                 <br>
                 <h4 class="location">
                     <i class="fa-solid fa-location-dot fa-lg" style="color: #ff0000;"></i>
-                    King Mongkut’s Institute of Technology
+                    @Model.Activity.Location
                 </h4>
                 <br>
                 <p class="detail">
-                    รายละเอียด : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam imperdiet
-                    lorem vel lectus egestas, a eleifend risus bibendum
+                    รายละเอียด : @Model.Activity.Detail
                 </p>
                 <br>
                 <button>
@@ -60,11 +60,11 @@
             <div class="owner">
                 <h3>เจ้าของ</h3>
                 <img src="https://i.pinimg.com/564x/69/2b/76/692b76e52092469fd10487cd0f4c62e6.jpg" alt="">
-                <h4>Jack</h4>
+                <h4>@Model.Activity.User.UserName</h4>
             </div>
         </div>
         <div class="participant-container">
-            <h2>8 ผู้เข้าร่วม</h2>
+            <h2>@Model.UserJoinActivityCount ผู้เข้าร่วม</h2>
             <div class="all-participant">
                 <div class="participant">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">

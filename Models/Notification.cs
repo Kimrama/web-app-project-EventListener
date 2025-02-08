@@ -1,5 +1,3 @@
-using System;
-
 namespace EventListener.Models;
 
 public class Notification
@@ -8,7 +6,7 @@ public class Notification
     public string UserId { get; set; } //fk => pk of User
     public string Message { get; set; }
 
-    // Navigation Property
+
     public User User { get; set; }
 }
 

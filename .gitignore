@@ -1,4 +1,4 @@
 obj/
 bin/
 Migrations/
-
+appsettings.json

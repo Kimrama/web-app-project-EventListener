@@ -1,0 +1,17 @@
+@model EventListener.Models.User
+
+<h2>Profile: @Model.UserName</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Firstname @Model.Lastname</h4>
+        <p class="card-text"><strong>Email:</strong> @Model.Email</p>
+        <p class="card-text"><strong>Birthday:</strong> @Model.Birthday.ToShortDateString()</p>
+        <p class="card-text"><strong>Sex:</strong> @Model.Sex</p>
+        <p class="card-text"><strong>About:</strong> @Model.About</p>
+    </div>
+</div>
+
+</ul>
+
+<a href="@Url.Action("Index", "ShowProfile", new { username = "mockuser2" })" class="btn btn-primary">View Mock User</a>

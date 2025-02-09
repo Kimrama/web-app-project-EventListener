@@ -1,9 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace EventListener.Controllers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using dotnetcoreidentity.Data;
+using EventListener.Models;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 public class ProfileController : Controller 
 {
+
+    private readonly ApplicationDbContext _context;
+
+    public ProfileController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+
     public IActionResult Me()
     {
         return View();
@@ -14,5 +29,21 @@ public class ProfileController : Controller
         return View();
     }
 
-    // Edit
+ public async Task<IActionResult> Edit(string username)
+    {
+        if (string.IsNullOrEmpty(username))
+        {
+            return BadRequest("Username is required");
+        }
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.UserName == username);
+
+        if (user == null)
+        {
+            return NotFound($"User '{username}' not found.");
+        }
+
+        return View(user);
+    }
 }

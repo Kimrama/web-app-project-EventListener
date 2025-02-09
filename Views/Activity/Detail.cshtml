@@ -66,38 +66,13 @@
         <div class="participant-container">
             <h2>@Model.UserJoinActivityCount ผู้เข้าร่วม</h2>
             <div class="all-participant">
+                @foreach(var p in Model.UserJoinActivity)
+            {
                 <div class="participant">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
+                    <h4>@p.User.UserName</h4>
                 </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
+            }
             </div>
         </div>
     </main>

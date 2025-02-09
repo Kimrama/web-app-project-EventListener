@@ -59,7 +59,6 @@ namespace dotnetcoreidentity.Data
             .HasIndex(u => new { u.UserId, u.ActivityTagId })
             .IsUnique();
 
-
             modelBuilder.Entity<Activity>()
             .HasOne(a => a.User)
             .WithMany(b => b.Activities)
@@ -87,18 +86,15 @@ namespace dotnetcoreidentity.Data
             .WithMany(b => b.UserInterestActivityTags)
             .HasForeignKey(a => a.ActivityTagId);
 
-
             modelBuilder.Entity<Activity>()
             .HasOne(a => a.ActivityTag)
             .WithMany(b => b.Activities)
             .HasForeignKey(a => a.ActivityTagId);
 
-
             modelBuilder.Entity<Notification>()
             .HasOne(a => a.User)
             .WithMany(b => b.Notifications)
             .HasForeignKey(a => a.UserId);
-
 
             modelBuilder.Entity<ChatMessage>()
             .HasOne(a => a.User)

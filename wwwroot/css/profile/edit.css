@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
+    padding: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.title {
+    font-size: 4vh;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+}
+
+.confirm-button{
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid green;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+}
+
+.cancel-button{
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid red;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}

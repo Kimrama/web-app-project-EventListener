@@ -1,8 +1,20 @@
 @model EventListener.Models.User
+<link rel="stylesheet" href="~/css/Profile/edit.css" asp-append-version="true">
 
-<h2>Profile: @Model.UserName</h2>
-
-<div class="card">
+<div class="main">
+    <nav>
+         <button class="cancel-button">
+                <i class="fa-solid fa-x"></i>
+                ยกเลิก
+            </button>
+        <h2 class="title">แก้ไขโปรไฟลฺ์</h2>
+        <div class="buttongroup-and-user">
+            <button class="confirm-button">
+                <i class="fa-solid fa-check"></i>
+                ยืนยัน
+            </button>
+        </div>
+    </nav>
     <div class="card-body">
         <h4 class="card-title">@Model.Firstname @Model.Lastname</h4>
         <p class="card-text"><strong>Email:</strong> @Model.Email</p>

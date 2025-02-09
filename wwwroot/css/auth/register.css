@@ -44,8 +44,8 @@ input {
     border: 1px solid #c3c3c3;
     border-radius: 5px;
     padding: 5px;
-    margin-bottom: 32px;
-    margin-top: 6px;
+    margin-bottom: 18px;
+    margin-top: 4px;
 }
 ::placeholder {
     color: #929292;
@@ -54,16 +54,17 @@ input {
 }
 
 select {
-    margin-top: 6px;
     padding: 5px;
-    font-size: 20px;
+    font-size: 18px;
+    line-height: 18px;
     width: 100%;
     border: 1px solid #c3c3c3;
     border-radius: 5px;
-    margin-bottom: 32px;
-    margin-top: 6px;
+    margin-bottom: 18px;
+    margin-top: 4px;
     outline: none;
     cursor: pointer;
+    height: 30px;
     transition: background-color 0.3s ease;
 }
 section {

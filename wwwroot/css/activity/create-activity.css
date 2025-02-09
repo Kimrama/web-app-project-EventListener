@@ -116,8 +116,8 @@ nav {
 }
 
 .imgdiv{
-    width: 80%;
-    height: auto;
+    width: 30vw;
+    height: 30vh;
     border-radius: 1vh;
     display: block;
     margin-top: 2vh;

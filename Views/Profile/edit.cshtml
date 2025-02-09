@@ -1,17 +1,184 @@
 @model EventListener.Models.User
+<link rel="stylesheet" href="~/css/Profile/edit.css" asp-append-version="true">
 
-<h2>Profile: @Model.UserName</h2>
-
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">@Model.Firstname @Model.Lastname</h4>
-        <p class="card-text"><strong>Email:</strong> @Model.Email</p>
-        <p class="card-text"><strong>Birthday:</strong> @Model.Birthday.ToShortDateString()</p>
-        <p class="card-text"><strong>Sex:</strong> @Model.Sex</p>
-        <p class="card-text"><strong>About:</strong> @Model.About</p>
-    </div>
+<div class="main">
+    <nav>
+         <button class="cancel-button">
+                <i class="fa-solid fa-x"></i>
+                ยกเลิก
+            </button>
+        <h2 class="title">แก้ไขโปรไฟลฺ์</h2>
+        <div class="buttongroup-and-user">
+            <button class="confirm-button">
+                <i class="fa-solid fa-check"></i>
+                ยืนยัน
+            </button>
+        </div>
+    </nav>
+    <form class="form_body" action="/Home/SubmitForm" method="post">
+         <div class="zone1">
+            <div class="imgquestion">
+                <div class="imgdiv">
+                    <img id="previewImage" style="display: none;">
+                </div>
+                <div class="imgreq">
+                    <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+            </div>
+            <div class="rowq">
+                <div class="question">
+                    <label for="name">Firstname:</label>
+                    <input type="text" id="name" name="fname" required value="@Model.Firstname">
+                </div>
+                <div class="question">
+                    <label for="name">Lastname:</label>
+                    <input type="text" id="name" name="lname" required value="@Model.Lastname">
+                </div>
+            
+            </div>
+        </div>
+        <div class="zone2">
+            <div class="rowq">
+                <div class="question">
+                        <label for="bdate">Birthdate:</label>
+                        <input type="date" id="bdate" name="birthday" value="@Model.Birthday" required>
+                </div>
+                <div class="question">
+                        <label for="sex">sex</label>
+                        <input type="text" id="sex" name="sex" value ="@Model.Sex" required>
+                </div>
+            </div>
+            <div class="question">
+                <label for="name"><i class="fa-regular fa-user"></i>About me</label>
+                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่...">@Model.About</textarea>
+            </div>
+            <div class="drag-drop">
+                <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
+                <div class="source"></div>
+                <div class="destination"></div>
+            </div>
+        </div>
+        
+    </form>
 </div>
 
-</ul>
+<script>
+    document.getElementById("imageUpload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById("previewImage");
+                img.src = e.target.result;
+                img.style.display = "block";
+                img.style.width = "100%";
+                img.style.height = "100%";
 
-<a href="@Url.Action("Index", "ShowProfile", new { username = "mockuser2" })" class="btn btn-primary">View Mock User</a>
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+    const source = document.querySelector(".source");
+    const destination = document.querySelector(".destination");
+
+    for (let i = 1; i <= 3; i++) {
+        let tag = document.createElement("div");
+        tag.textContent = "แท็ก " + i;
+        tag.setAttribute("draggable", true);
+        tag.style.padding = "10px";
+        tag.style.margin = "5px";
+        tag.style.background = "#007bff";
+        tag.style.color = "white";
+        tag.style.borderRadius = "10px";
+        tag.style.cursor = "grab";
+        tag.style.width = "15%"
+        tag.style.height = "10%"
+        tag.style.display = "flex";  
+        tag.style.alignItems = "center"; 
+        tag.style.justifyContent = "center"; 
+        tag.style.textAlign = "center";
+        tag.addEventListener("dragstart", dragStart);
+        source.appendChild(tag);
+    }
+    function dragStart(event) {
+        event.dataTransfer.setData("text/plain", event.target.textContent);
+    }
+
+    destination.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    destination.addEventListener("drop", function (event) {
+        event.preventDefault();
+
+        let data = event.dataTransfer.getData("text/plain");
+        let draggedTag = Array.from(source.children).find(tag => tag.textContent === data);
+        let checkedTag = Array.from(destination.children).find(tag => tag.textContent === data);
+
+        if (draggedTag) {
+            draggedTag.remove();
+        }
+        if (checkedTag) {
+            return 0
+        }
+
+        let newTag = document.createElement("div");
+        newTag.textContent = data;
+        newTag.style.padding = "10px";
+        newTag.style.margin = "5px";
+        newTag.style.background = "green";
+        newTag.style.color = "white";
+        newTag.style.borderRadius = "5px";
+        newTag.style.cursor = "grab";
+        newTag.style.width = "15%"
+        newTag.style.height = "10%"
+        newTag.style.display = "flex"; 
+        newTag.style.alignItems = "center"; 
+        newTag.style.justifyContent = "center"; 
+        newTag.style.textAlign = "center";
+        newTag.setAttribute("draggable", true);
+        newTag.addEventListener("dragstart", dragStart);
+        destination.appendChild(newTag);
+    });
+
+    source.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    source.addEventListener("drop", function (event) {
+        event.preventDefault();
+
+        let data = event.dataTransfer.getData("text/plain");
+        let draggedTag = Array.from(destination.children).find(tag => tag.textContent === data);
+        let checkedTag = Array.from(source.children).find(tag => tag.textContent === data);
+
+        if (draggedTag) {
+            draggedTag.remove();
+        }
+
+        if (checkedTag) {
+            return 0
+        }
+
+        let newTag = document.createElement("div");
+        newTag.textContent = data;
+        newTag.style.padding = "10px";
+        newTag.style.margin = "5px";
+        newTag.style.background = "#007bff";
+        newTag.style.color = "white";
+        newTag.style.borderRadius = "5px";
+        newTag.style.cursor = "grab";
+        newTag.style.width = "15%"
+        newTag.style.height = "10%"
+        newTag.style.display = "flex";  
+        newTag.style.alignItems = "center";  
+        newTag.style.justifyContent = "center";
+        newTag.style.textAlign = "center"; 
+        newTag.setAttribute("draggable", true);
+        newTag.addEventListener("dragstart", dragStart);
+        source.appendChild(newTag);
+    });
+});
+</script>

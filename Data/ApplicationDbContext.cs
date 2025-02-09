@@ -2,7 +2,7 @@ using EventListener.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnetcoreidentity.Data
+namespace EventListener.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {

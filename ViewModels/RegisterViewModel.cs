@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EventListener.ViewModels.Auth;
-
 public class RegisterViewModel
 {
     [Required]
-    public string Username { get; set; }
+    public string UserName { get; set; }
 
     [Required]
     public string Firstname { get; set; }
@@ -14,8 +12,7 @@ public class RegisterViewModel
     public string Lastname { get; set; }
 
     [Required]
-    [DataType(DataType.Date)]
-    public DateTime Birthdate { get; set; }
+    public DateOnly Birthday { get; set; }
 
     [Required]
     public string Sex { get; set; }
@@ -31,4 +28,5 @@ public class RegisterViewModel
 
     public List<string> Interests { get; set; }
 }
+
 

@@ -19,7 +19,7 @@
     width: 42%;
     margin-top: 30px;
 }
-.user-input-continer {
+.user-input-container {
     display: flex;
     justify-content: space-around;
 }

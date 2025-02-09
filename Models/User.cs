@@ -11,7 +11,7 @@ public class User : IdentityUser
     public string About { get; set; }
     public string UserImageUrl { get; set; }
 
-    
+
     public ICollection<Activity> Activities { get; set; }
     public ICollection<UserJoinActivity> UserJoinActivities { get; set; }
     public ICollection<UserInterestActivityTag> UserInterestActivityTags { get; set; }

@@ -1,23 +1,17 @@
 namespace EventListener.Controllers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using dotnetcoreidentity.Data;
-using EventListener.Models;
-using System.Linq;
-using System.Security.Claims;
+using EventListener.Data;
 using System.Threading.Tasks;
 
-public class ProfileController : Controller 
+public class ProfileController : Controller
 {
-
     private readonly ApplicationDbContext _context;
 
     public ProfileController(ApplicationDbContext context)
     {
         _context = context;
     }
-
 
     public IActionResult Me()
     {
@@ -29,7 +23,7 @@ public class ProfileController : Controller
         return View();
     }
 
- public async Task<IActionResult> Edit(string username)
+    public async Task<IActionResult> Edit(string username)
     {
         if (string.IsNullOrEmpty(username))
         {

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using dotnetcoreidentity.Data;
 using EventListener.Models;
-using EventListener.ViewModels.Profile;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class ProfileController : Controller

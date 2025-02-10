@@ -251,6 +251,10 @@ nav {
         p:nth-child(n){
             align-self: center;
         }
+
+        p:nth-child(5){
+            width:410px;
+        }
     }
 
     .id_birthday-div{

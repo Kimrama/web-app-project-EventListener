@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using dotnetcoreidentity.Data;
+using EventListener.Data;
 using EventListener.Models;
 
 var builder = WebApplication.CreateBuilder(args);

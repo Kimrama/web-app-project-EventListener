@@ -80,7 +80,7 @@ nav {
         font-family: Noto Sans Thai;
         font-weight: bold;
         letter-spacing: 1px;
-        font-size:clamp(14px,1.15vw,16px);
+        font-size:clamp(16px,1.15vw);
         padding:0px 0px 15px 0px;
     }
 }
@@ -232,6 +232,10 @@ nav {
 
         p:nth-child(n){
             align-self: center;
+        }
+
+        p:nth-child(4){
+            width:410px;
         }
 
         div:first-child{

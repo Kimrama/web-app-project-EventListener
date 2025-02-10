@@ -26,8 +26,10 @@ public class ProfileController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Edit(string username)
+    [HttpGet]
+    public async Task<IActionResult> Edit()
     {
+        string username = HttpContext.User.Identity.Name;
         if (string.IsNullOrEmpty(username))
         {
             return BadRequest("Username is required");
@@ -56,5 +58,27 @@ public class ProfileController : Controller
 
 
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(EditProfileViewModel model)
+    {
+
+        // if (!ModelState.IsValid) return View(model);
+        string username = HttpContext.User.Identity?.Name;
+        var user = await _context.Users.FindAsync(username);
+        if (user == null) return NotFound();
+
+        user.Firstname = model.User.Firstname;
+        user.Lastname = model.User.Lastname;
+        user.Birthday = model.User.Birthday;
+        user.Sex = model.User.Sex;
+        user.About = model.User.About;
+
+
+        _context.Update(user);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Me"); 
     }
 }

@@ -1,8 +1,9 @@
 namespace EventListener.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using dotnetcoreidentity.Data;
+using EventListener.Data;
 using EventListener.Models;
+using EventListener.ViewModels.Profile;
 using System.Linq;
 using System.Threading.Tasks;
 

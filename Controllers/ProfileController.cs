@@ -44,7 +44,7 @@ public class ProfileController : Controller
         var tagList = await _context.ActivityTags.ToListAsync();
 
         var userInterestTag = await _context.UserInterestActivityTags
-            .Where(u => u.UserId == user.Id)
+            .Where(u => u.UserId == username)
             .ToListAsync();
 
         var model = new EditProfileViewModel
@@ -53,6 +53,7 @@ public class ProfileController : Controller
             UserInterestActivityTag = userInterestTag,
             TagList = tagList
         };
+
 
         return View(model);
     }

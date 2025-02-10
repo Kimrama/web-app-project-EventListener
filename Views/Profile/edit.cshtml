@@ -31,11 +31,11 @@
             <div class="rowq">
                 <div class="question">
                     <label for="name">Firstname:</label>
-                    <input type="text" id="name" name="fname" required value="">
+                    <input type="text" id="name" name="fname" required value="@Model.User.Firstname">
                 </div>
                 <div class="question">
                     <label for="name">Lastname:</label>
-                    <input type="text" id="name" name="lname" required value="">
+                    <input type="text" id="name" name="lname" required value="@Model.User.Lastname">
                 </div>
             
             </div>
@@ -44,23 +44,37 @@
             <div class="rowq">
                 <div class="question">
                         <label for="bdate">Birthdate:</label>
-                        <input type="date" id="bdate" name="birthday" value="" required>
+                        <input type="date" id="bdate" name="birthday" value="@Model.User.Birthday" required>
                 </div>
                 <div class="question">
                         <label for="sex">sex</label>
-                        <input type="text" id="sex" name="sex" value ="" required>
+                        <input type="text" id="sex" name="sex" value ="@Model.User.Sex" required>
                 </div>
             </div>
             <div class="question">
                 <label for="name"><i class="fa-regular fa-user"></i>About me</label>
-                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
+                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่...">@Model.User.About</textarea>
             </div>
             <div class="drag-drop">
                 <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
-                <div class="source"></div>
-                <div class="destination"></div>
+                
+                <div class="source">
+                        @foreach (var tag in Model.TagList)
+                        {   @if(!Model.UserInterestActivityTag.Any(t => t.ActivityTagId == tag.ActivityName)){
+                                <div class="tag">@tag.ActivityName</div>
+                            }
+                        }
+                    
+                </div>
+                <div class="destination">
+                @foreach (var tag in Model.UserInterestActivityTag)
+                {
+                    <div class="tag">@tag.ActivityTagId</div>
+                }
+                </div>
             </div>
         </div>
+
         
     </form>
 </div>
@@ -82,105 +96,92 @@
         }
     });
     document.addEventListener("DOMContentLoaded", function () {
-    const source = document.querySelector(".source");
-    const destination = document.querySelector(".destination");
+        const source = document.querySelector(".source");
+        const destination = document.querySelector(".destination");
+        tags = Array.from(source.children);
+        tags.forEach(e => {
+            e.setAttribute("draggable", true);
+            e.addEventListener("dragstart", dragStart);
+        })
 
-    for (let i = 1; i <= 3; i++) {
-        let tag = document.createElement("div");
-        tag.textContent = "แท็ก " + i;
-        tag.setAttribute("draggable", true);
-        tag.style.padding = "10px";
-        tag.style.margin = "5px";
-        tag.style.background = "#007bff";
-        tag.style.color = "white";
-        tag.style.borderRadius = "10px";
-        tag.style.cursor = "grab";
-        tag.style.width = "15%"
-        tag.style.height = "10%"
-        tag.style.display = "flex";  
-        tag.style.alignItems = "center"; 
-        tag.style.justifyContent = "center"; 
-        tag.style.textAlign = "center";
-        tag.addEventListener("dragstart", dragStart);
-        source.appendChild(tag);
-    }
-    function dragStart(event) {
-        event.dataTransfer.setData("text/plain", event.target.textContent);
-    }
-
-    destination.addEventListener("dragover", function (event) {
-        event.preventDefault();
-    });
-
-    destination.addEventListener("drop", function (event) {
-        event.preventDefault();
-
-        let data = event.dataTransfer.getData("text/plain");
-        let draggedTag = Array.from(source.children).find(tag => tag.textContent === data);
-        let checkedTag = Array.from(destination.children).find(tag => tag.textContent === data);
-
-        if (draggedTag) {
-            draggedTag.remove();
-        }
-        if (checkedTag) {
-            return 0
+        function dragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.textContent);
         }
 
-        let newTag = document.createElement("div");
-        newTag.textContent = data;
-        newTag.style.padding = "10px";
-        newTag.style.margin = "5px";
-        newTag.style.background = "green";
-        newTag.style.color = "white";
-        newTag.style.borderRadius = "5px";
-        newTag.style.cursor = "grab";
-        newTag.style.width = "15%"
-        newTag.style.height = "10%"
-        newTag.style.display = "flex"; 
-        newTag.style.alignItems = "center"; 
-        newTag.style.justifyContent = "center"; 
-        newTag.style.textAlign = "center";
-        newTag.setAttribute("draggable", true);
-        newTag.addEventListener("dragstart", dragStart);
-        destination.appendChild(newTag);
-    });
+        destination.addEventListener("dragover", function (event) {
+            event.preventDefault();
+        });
 
-    source.addEventListener("dragover", function (event) {
+        destination.addEventListener("drop", function (event) {
+            event.preventDefault();
+
+            let data = event.dataTransfer.getData("text/plain");
+            let draggedTag = Array.from(source.children).find(tag => tag.textContent === data);
+            let checkedTag = Array.from(destination.children).find(tag => tag.textContent === data);
+
+            if (draggedTag) {
+                draggedTag.remove();
+            }
+            if (checkedTag) {
+                return 0
+            }
+
+            let newTag = document.createElement("div");
+            newTag.textContent = data;
+            newTag.style.padding = "10px";
+            newTag.style.margin = "5px";
+            newTag.style.background = "green";
+            newTag.style.color = "white";
+            newTag.style.borderRadius = "10px";
+            newTag.style.cursor = "grab";
+            newTag.style.width = "15%"
+            newTag.style.height = "10%"
+            newTag.setAttribute("draggable", true);
+            newTag.addEventListener("dragstart", dragStart);
+
+            destination.appendChild(newTag);
+        });
+
+        source.addEventListener("dragover", function (event) {
         event.preventDefault();
-    });
+        });
 
-    source.addEventListener("drop", function (event) {
-        event.preventDefault();
+        source.addEventListener("drop", function (event) {
+            event.preventDefault();
 
-        let data = event.dataTransfer.getData("text/plain");
-        let draggedTag = Array.from(destination.children).find(tag => tag.textContent === data);
-        let checkedTag = Array.from(source.children).find(tag => tag.textContent === data);
+            let data = event.dataTransfer.getData("text/plain");
+            let draggedTag = Array.from(destination.children).find(tag => tag.textContent === data);
+            let checkedTag = Array.from(source.children).find(tag => tag.textContent === data);
 
-        if (draggedTag) {
-            draggedTag.remove();
-        }
+            if (draggedTag) {
+                draggedTag.remove();
+            }
 
-        if (checkedTag) {
-            return 0
-        }
+            if (checkedTag) {
+                return 0
+            }
 
-        let newTag = document.createElement("div");
-        newTag.textContent = data;
-        newTag.style.padding = "10px";
-        newTag.style.margin = "5px";
-        newTag.style.background = "#007bff";
-        newTag.style.color = "white";
-        newTag.style.borderRadius = "5px";
-        newTag.style.cursor = "grab";
-        newTag.style.width = "15%"
-        newTag.style.height = "10%"
-        newTag.style.display = "flex";  
-        newTag.style.alignItems = "center";  
-        newTag.style.justifyContent = "center";
-        newTag.style.textAlign = "center"; 
-        newTag.setAttribute("draggable", true);
-        newTag.addEventListener("dragstart", dragStart);
-        source.appendChild(newTag);
-    });
-});
+            let newTag = document.createElement("div");
+            newTag.textContent = data;
+            newTag.style.padding = "10px";
+            newTag.style.margin = "5px";
+            newTag.style.background = "#007bff";
+            newTag.style.color = "white";
+            newTag.style.borderRadius = "10px";
+            newTag.style.cursor = "grab";
+            newTag.style.width = "15%"
+            newTag.style.height = "10%"
+            newTag.style.display = "flex";  
+            newTag.style.alignItems = "center"; 
+            newTag.style.justifyContent = "center"; 
+            newTag.style.textAlign = "center";
+
+            newTag.setAttribute("draggable", true);
+            newTag.addEventListener("dragstart", dragStart);
+            source.appendChild(newTag);
+        });
+
+
+    })
+
 </script>

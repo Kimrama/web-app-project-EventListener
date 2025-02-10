@@ -22,6 +22,8 @@ public class AuthController : Controller
     [HttpPost("auth/register")]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        Console.WriteLine("test");
+
         if (!ModelState.IsValid) return View(model);
 
         var user = new User
@@ -29,10 +31,9 @@ public class AuthController : Controller
             UserName = model.UserName,
             Firstname = model.Firstname,
             Lastname = model.Lastname,
+            Nickname = model.Nickname,
             Birthday = model.Birthday,
             Sex = model.Sex,
-            About = " ",
-            UserImageUrl = " "
         };
 
         var userInterestActivityTag = new List<UserInterestActivityTag>();
@@ -44,7 +45,8 @@ public class AuthController : Controller
                 UserId = model.UserName,
                 ActivityTagId = i
             });
-        };
+        }
+        ;
 
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
@@ -67,4 +69,26 @@ public class AuthController : Controller
     }
 
     public IActionResult Login() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+        if (result.Succeeded)
+            return RedirectToAction("Index", "Home");
+
+        ModelState.AddModelError("", "Invalid login attempt.");
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
 }
+
+

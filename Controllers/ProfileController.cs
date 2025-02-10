@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using dotnetcoreidentity.Data;
 using EventListener.Models;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 public class ProfileController : Controller

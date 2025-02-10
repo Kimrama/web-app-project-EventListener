@@ -1,4 +1,6 @@
-@model EventListener.Models.User
+@model EventListener.ViewModels.Profile.EditProfileViewModel
+
+
 <link rel="stylesheet" href="~/css/Profile/edit.css" asp-append-version="true">
 
 <div class="main">
@@ -29,11 +31,11 @@
             <div class="rowq">
                 <div class="question">
                     <label for="name">Firstname:</label>
-                    <input type="text" id="name" name="fname" required value="@Model.Firstname">
+                    <input type="text" id="name" name="fname" required value="">
                 </div>
                 <div class="question">
                     <label for="name">Lastname:</label>
-                    <input type="text" id="name" name="lname" required value="@Model.Lastname">
+                    <input type="text" id="name" name="lname" required value="">
                 </div>
             
             </div>
@@ -42,16 +44,16 @@
             <div class="rowq">
                 <div class="question">
                         <label for="bdate">Birthdate:</label>
-                        <input type="date" id="bdate" name="birthday" value="@Model.Birthday" required>
+                        <input type="date" id="bdate" name="birthday" value="" required>
                 </div>
                 <div class="question">
                         <label for="sex">sex</label>
-                        <input type="text" id="sex" name="sex" value ="@Model.Sex" required>
+                        <input type="text" id="sex" name="sex" value ="" required>
                 </div>
             </div>
             <div class="question">
                 <label for="name"><i class="fa-regular fa-user"></i>About me</label>
-                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่...">@Model.About</textarea>
+                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
             </div>
             <div class="drag-drop">
                 <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>

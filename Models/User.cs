@@ -8,8 +8,8 @@ public class User : IdentityUser
     public string Lastname { get; set; }
     public DateOnly Birthday { get; set; }
     public string Sex { get; set; }
-    public string About { get; set; }
     public string UserImageUrl { get; set; }
+    public string About { get; set; } = string.Empty;
 
     
     public ICollection<Activity> Activities { get; set; }

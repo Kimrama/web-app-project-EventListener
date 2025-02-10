@@ -1,23 +1,20 @@
 namespace EventListener.Controllers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using dotnetcoreidentity.Data;
 using EventListener.Models;
+using EventListener.ViewModels.Profile;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
-public class ProfileController : Controller 
+public class ProfileController : Controller
 {
-
     private readonly ApplicationDbContext _context;
 
     public ProfileController(ApplicationDbContext context)
     {
         _context = context;
     }
-
 
     public IActionResult Me()
     {
@@ -29,7 +26,7 @@ public class ProfileController : Controller
         return View();
     }
 
- public async Task<IActionResult> Edit(string username)
+    public async Task<IActionResult> Edit(string username)
     {
         if (string.IsNullOrEmpty(username))
         {
@@ -44,6 +41,19 @@ public class ProfileController : Controller
             return NotFound($"User '{username}' not found.");
         }
 
-        return View(user);
+        var tagList = await _context.ActivityTags.ToListAsync();
+
+        var userInterestTag = await _context.UserInterestActivityTags
+            .Where(u => u.UserId == user.Id)
+            .ToListAsync();
+
+        var model = new EditProfileViewModel
+        {
+            User = user,
+            UserInterestActivityTag = userInterestTag,
+            TagList = tagList
+        };
+
+        return View(model);
     }
 }

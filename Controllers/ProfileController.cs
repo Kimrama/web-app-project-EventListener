@@ -2,6 +2,9 @@ namespace EventListener.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EventListener.Data;
+using EventListener.Models;
+using EventListener.ViewModels.Profile;
+using System.Linq;
 using System.Threading.Tasks;
 
 public class ProfileController : Controller
@@ -38,6 +41,20 @@ public class ProfileController : Controller
             return NotFound($"User '{username}' not found.");
         }
 
-        return View(user);
+        var tagList = await _context.ActivityTags.ToListAsync();
+
+        var userInterestTag = await _context.UserInterestActivityTags
+            .Where(u => u.UserId == username)
+            .ToListAsync();
+
+        var model = new EditProfileViewModel
+        {
+            User = user,
+            UserInterestActivityTag = userInterestTag,
+            TagList = tagList
+        };
+
+
+        return View(model);
     }
 }

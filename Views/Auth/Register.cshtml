@@ -20,6 +20,9 @@
 
                     <label asp-for="Lastname">Lastname</label><br>
                     <input type="text" asp-for="Lastname" placeholder="Enter Lastname" required >
+
+                    <label asp-for="Nickname">Nickname</label><br>
+                    <input type="text" asp-for="Nickname" placeholder="Enter Nickname" required >
                     
                     <label asp-for="Birthday">Birthdate</label><span class="error-message" id="bdate-error-message"> -x- Please enter a valid birthdate.</span><br>
                     <input type="date" asp-for="Birthday" >
@@ -138,7 +141,7 @@
                 </div>
             </div>
             <button type="submit">Create Account</button>
-            <p>Already have an account ? <a href="">Sign in</a></p>
+            <p>Already have an account ? <a asp-action="Login" asp-controller="Auth">Sign in</a></p>
         </form>
     </div>
 </div>

@@ -12,6 +12,9 @@ public class RegisterViewModel
     public string Lastname { get; set; }
 
     [Required]
+    public string Nickname { get; set; }
+
+    [Required]
     public DateOnly Birthday { get; set; }
 
     [Required]

@@ -6,6 +6,8 @@ using EventListener.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
+namespace EventListener.Controllers;
+
 [Authorize]
 public class ProfileController : Controller
 {
@@ -81,7 +83,6 @@ public class ProfileController : Controller
             UserInterestActivityTag = userInterestTag,
             TagList = tagList
         };
-
 
         return View(model);
     }

@@ -4,7 +4,6 @@ public class RegisterViewModel
 {
     [Required]
     public string UserName { get; set; }
-
     [Required]
     public string Firstname { get; set; }
 
@@ -16,12 +15,12 @@ public class RegisterViewModel
 
     [Required]
     public DateOnly Birthday { get; set; }
-
+ 
     [Required]
     public string Sex { get; set; }
 
     [Required]
-    [DataType(DataType.Password)]
+    [DataType(DataType.Password)] 
     public string Password { get; set; }
 
     [Required]

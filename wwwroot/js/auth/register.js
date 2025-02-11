@@ -31,9 +31,9 @@ document
 function changeColor() {
     console.log("change");
     let select = document.getElementById("gender");
-    if (select.value === "male") {
+    if (select.value === "Male") {
         select.style.backgroundColor = "#ADD8E6";
-    } else if (select.value === "female") {
+    } else if (select.value === "Female") {
         select.style.backgroundColor = "#FFC0CB";
     } else {
         select.style.backgroundColor = "white";

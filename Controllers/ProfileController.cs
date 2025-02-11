@@ -1,9 +1,9 @@
-namespace EventListener.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EventListener.Data;
 using System.Threading.Tasks;
 
+namespace EventListener.Controllers;
 public class ProfileController : Controller
 {
     private readonly ApplicationDbContext _context;

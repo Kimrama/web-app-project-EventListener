@@ -1,19 +1,49 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
-using EventListener.ViewModels.Profile;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace EventListener.Controllers;
+
+[Authorize]
 public class ProfileController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public ProfileController(ApplicationDbContext context)
+    public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return Forbid();
+        }
+
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var model = new ProfileViewModel
+        {
+            UserName = user.UserName,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname
+        };
+
+        return View(model);
     }
 
     public IActionResult Me()
@@ -29,14 +59,14 @@ public class ProfileController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit()
     {
-        string username = HttpContext.User.Identity.Name;
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
         if (string.IsNullOrEmpty(username))
         {
             return BadRequest("Username is required");
         }
 
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == username);
+        var user = await _userManager.FindByNameAsync(username);
 
         if (user == null)
         {
@@ -47,7 +77,12 @@ public class ProfileController : Controller
 
         var userInterestTag = await _context.UserInterestActivityTags
             .Where(u => u.UserId == username)
+            .Include(u => u.ActivityTag)
             .ToListAsync();
+
+        foreach(var u in userInterestTag){
+            Console.WriteLine(u.ActivityTag.ActivityName);
+        }
 
         var model = new EditProfileViewModel
         {
@@ -55,7 +90,6 @@ public class ProfileController : Controller
             UserInterestActivityTag = userInterestTag,
             TagList = tagList
         };
-
 
         return View(model);
     }

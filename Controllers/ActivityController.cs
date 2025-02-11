@@ -69,7 +69,6 @@ public class ActivityController : Controller
         return View(model);
     }
 
-    // Create
     public IActionResult Create()
     {
         return View();

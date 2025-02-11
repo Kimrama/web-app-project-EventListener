@@ -1,16 +1,15 @@
-using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
-public class AuthController : Controller
+public class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ApplicationDbContext _context;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
+    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -19,11 +18,9 @@ public class AuthController : Controller
 
     public IActionResult Register() => View();
 
-    [HttpPost("auth/register")]
+    [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        Console.WriteLine("test");
-
         if (!ModelState.IsValid) return View(model);
 
         var user = new User
@@ -34,6 +31,7 @@ public class AuthController : Controller
             Nickname = model.Nickname,
             Birthday = model.Birthday,
             Sex = model.Sex,
+            Email = model.UserName + "@gmail.com"
         };
 
         var userInterestActivityTag = new List<UserInterestActivityTag>();
@@ -51,21 +49,29 @@ public class AuthController : Controller
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
-            _context.UserInterestActivityTags.AddRange(userInterestActivityTag);
-            await _context.SaveChangesAsync();
-
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return RedirectToAction("Login", "Auth");
-        }
-        else
-        {
-            foreach (var error in result.Errors)
+
+            try
             {
-                Console.WriteLine(error.Description);
+                _context.UserInterestActivityTags.AddRange(userInterestActivityTag);
+                await _context.SaveChangesAsync();
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                return View(model);
+            }
+
+            return RedirectToAction("Login", "Account");
         }
 
-        return View();
+        foreach (var error in result.Errors)
+        {
+            Console.WriteLine(error.Description);
+        }
+
+        return View(model);
     }
 
     public IActionResult Login() => View();
@@ -83,11 +89,11 @@ public class AuthController : Controller
 
         return View(model);
     }
-
+    
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Login", "Account");
     }
 }
 

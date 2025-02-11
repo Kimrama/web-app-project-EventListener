@@ -1,7 +1,7 @@
 @model EventListener.ViewModels.Profile.EditProfileViewModel
 
 
-<link rel="stylesheet" href="~/css/Profile/edit.css" asp-append-version="true">
+<link rel="stylesheet" href="~/css/Profile/edit.css" asp-append-version="true" enctype="multipart/form-data">
 
 <div class="main">
     <nav>
@@ -17,7 +17,7 @@
             </button>
         </div>
     </nav>
-    <form class="form_body" action="/Home/SubmitForm" method="post">
+    <form class="form_body" asp-action="Edit" method="post">
          <div class="zone1">
             <div class="imgquestion">
                 <div class="imgdiv">
@@ -31,12 +31,13 @@
             <div class="rowq">
                 <div class="question">
                     <label for="name">Firstname:</label>
-                    <input type="text" id="name" name="fname" required value="@Model.User.Firstname">
+                    <input type="text" id="name" asp-for="User.Firstname" required value="@Model.User.Firstname">
                 </div>
                 <div class="question">
                     <label for="name">Lastname:</label>
-                    <input type="text" id="name" name="lname" required value="@Model.User.Lastname">
+                    <input type="text" id="name" asp-for="User.Lastname" required value="@Model.User.Lastname">
                 </div>
+                <button type="submit">Update</button>
             
             </div>
         </div>
@@ -44,16 +45,16 @@
             <div class="rowq">
                 <div class="question">
                         <label for="bdate">Birthdate:</label>
-                        <input type="date" id="bdate" name="birthday" value="@Model.User.Birthday" required>
+                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday" required>
                 </div>
                 <div class="question">
                         <label for="sex">sex</label>
-                        <input type="text" id="sex" name="sex" value ="@Model.User.Sex" required>
+                        <input type="text" id="sex" asp-for="User.Sex" value ="@Model.User.Sex" required>
                 </div>
             </div>
             <div class="question">
                 <label for="name"><i class="fa-regular fa-user"></i>About me</label>
-                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่...">@Model.User.About</textarea>
+                <textarea id="details" rows="4" cols="50" asp-for="User.About" placeholder="กรอกรายละเอียดที่นี่...">@Model.User.About</textarea>
             </div>
             <div class="drag-drop">
                 <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>

@@ -157,24 +157,24 @@ body {
     }
 
     .logo span {
-        font-size: 28px; /* เพิ่มขนาดตัวหนังสือโลโก้ */
+        font-size: 28px; 
     }
 
     .buttongroup-and-user button {
-        font-size: 18px; /* เพิ่มขนาดตัวหนังสือปุ่ม */
+        font-size: 18px;
         padding: 10px 20px;
     }
 
     .container h2 {
-        font-size: 28px; /* เพิ่มขนาดหัวข้อ */
+        font-size: 28px;
     }
 
     .notification .content strong {
-        font-size: 16px; /* ขยายขนาดข้อความหัวข้อ */
+        font-size: 16px;
     }
 
     .notification .content p {
-        font-size: 16px; /* ขยายขนาดเนื้อหาข้อความ */
+        font-size: 16px;
     }
 
     .notification .time {
@@ -184,21 +184,21 @@ body {
 
 @media (max-width: 480px) {
     nav {
-        flex-direction: column; /* เรียงแนวตั้งแทน */
+        flex-direction: column;
         align-items: center;
         text-align: center;
     }
 
     .buttongroup-and-user {
-        flex-direction: column; /* จัดเรียงปุ่มใหม่ให้อยู่คนละบรรทัด */
+        flex-direction: column;
     }
 
     .container h2 {
-        font-size: 32px; /* เพิ่มขนาดหัวข้อใหญ่ขึ้นอีก */
+        font-size: 32px;
     }
 
     .notification {
-        flex-direction: column; /* จัดให้อยู่แนวตั้ง */
+        flex-direction: column;
         align-items: flex-start;
     }
 
@@ -208,7 +208,7 @@ body {
 
     .notification .content strong,
     .notification .content p {
-        font-size: 18px; /* ปรับให้ใหญ่ขึ้นสำหรับจอเล็ก */
+        font-size: 18px;
     }
 
     .notification .time {

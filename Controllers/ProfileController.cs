@@ -1,16 +1,47 @@
-namespace EventListener.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
-using System.Threading.Tasks;
+using EventListener.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
+[Authorize]
 public class ProfileController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public ProfileController(ApplicationDbContext context)
+    public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return Forbid();
+        }
+
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var model = new ProfileViewModel
+        {
+            UserName = user.UserName,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname
+        };
+
+        return View(model);
     }
 
     public IActionResult Me()

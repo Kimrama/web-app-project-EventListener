@@ -151,3 +151,67 @@ body {
 .notification .delete:hover {
     color: #ef4444;
 }
+@media (max-width: 900px) {
+    nav {
+        padding: 12px;
+    }
+
+    .logo span {
+        font-size: 28px; /* เพิ่มขนาดตัวหนังสือโลโก้ */
+    }
+
+    .buttongroup-and-user button {
+        font-size: 18px; /* เพิ่มขนาดตัวหนังสือปุ่ม */
+        padding: 10px 20px;
+    }
+
+    .container h2 {
+        font-size: 28px; /* เพิ่มขนาดหัวข้อ */
+    }
+
+    .notification .content strong {
+        font-size: 16px; /* ขยายขนาดข้อความหัวข้อ */
+    }
+
+    .notification .content p {
+        font-size: 16px; /* ขยายขนาดเนื้อหาข้อความ */
+    }
+
+    .notification .time {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav {
+        flex-direction: column; /* เรียงแนวตั้งแทน */
+        align-items: center;
+        text-align: center;
+    }
+
+    .buttongroup-and-user {
+        flex-direction: column; /* จัดเรียงปุ่มใหม่ให้อยู่คนละบรรทัด */
+    }
+
+    .container h2 {
+        font-size: 32px; /* เพิ่มขนาดหัวข้อใหญ่ขึ้นอีก */
+    }
+
+    .notification {
+        flex-direction: column; /* จัดให้อยู่แนวตั้ง */
+        align-items: flex-start;
+    }
+
+    .notification .icon {
+        font-size: 24px;
+    }
+
+    .notification .content strong,
+    .notification .content p {
+        font-size: 18px; /* ปรับให้ใหญ่ขึ้นสำหรับจอเล็ก */
+    }
+
+    .notification .time {
+        font-size: 16px;
+    }
+}

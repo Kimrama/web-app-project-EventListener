@@ -2,7 +2,6 @@ namespace EventListener.Models;
 
 public class ActivityTag
 {
-    public string Name { get; set; }//pk
     public string Category { get; set; }
     public string ActivityName { get; set; } //pk
 

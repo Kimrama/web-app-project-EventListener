@@ -69,6 +69,20 @@ public class ProfileController : Controller
             return NotFound($"User '{username}' not found.");
         }
 
-        return View(user);
+        var tagList = await _context.ActivityTags.ToListAsync();
+
+        var userInterestTag = await _context.UserInterestActivityTags
+            .Where(u => u.UserId == username)
+            .ToListAsync();
+
+        var model = new EditProfileViewModel
+        {
+            User = user,
+            UserInterestActivityTag = userInterestTag,
+            TagList = tagList
+        };
+
+
+        return View(model);
     }
 }

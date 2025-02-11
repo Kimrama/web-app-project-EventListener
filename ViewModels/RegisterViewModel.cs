@@ -4,6 +4,7 @@ public class RegisterViewModel
 {
     [Required]
     public string UserName { get; set; }
+    
     [Required]
     public string Firstname { get; set; }
 

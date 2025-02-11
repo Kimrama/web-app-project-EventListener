@@ -59,14 +59,14 @@ public class ProfileController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit()
     {
-        string username = HttpContext.User.Identity.Name;
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
         if (string.IsNullOrEmpty(username))
         {
             return BadRequest("Username is required");
         }
 
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == username);
+        var user = await _userManager.FindByNameAsync(username);
 
         if (user == null)
         {
@@ -77,7 +77,12 @@ public class ProfileController : Controller
 
         var userInterestTag = await _context.UserInterestActivityTags
             .Where(u => u.UserId == username)
+            .Include(u => u.ActivityTag)
             .ToListAsync();
+
+        foreach(var u in userInterestTag){
+            Console.WriteLine(u.ActivityTag.ActivityName);
+        }
 
         var model = new EditProfileViewModel
         {

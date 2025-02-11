@@ -179,6 +179,9 @@ nav {
     text-align: center;
     color: black;
     flex-grow: 1; 
+    flex-grow: 1;
+    flex-wrap: wrap;
+    overflow-y: auto;
 }
 
 .drag-drop .destination {
@@ -194,4 +197,22 @@ nav {
     text-align: center;
     color: black;
     flex-grow: 1; 
+    flex-grow: 1;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+
+.tag{
+    padding : 10px;
+    margin : 5px;
+    background : #007bff;
+    color : white;
+    border-radius : 10px;
+    cursor : grab;
+    width : 15%;
+    height : 10%;
+    display : flex;  
+    align-items : center; 
+    justify-content : center; 
+    text-align : center;
 }

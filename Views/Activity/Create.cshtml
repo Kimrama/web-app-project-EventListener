@@ -1,72 +1,73 @@
 @{
-    ViewData["Title"] = "Activity Details";
+    ViewData["Title"] = "สร้างกิจกรรม";
 }
+
+@model CreateActivityViewModel
 
 <link rel="stylesheet" href="~/css/activity/create-activity.css" asp-append-version="true">
 <div>
     <nav>
-         <button class="cancel-button">
-                <i class="fa-solid fa-x"></i>
-                ยกเลิก
-            </button>
+        <button class="cancel-button">
+            <i class="fa-solid fa-x"></i>
+            ยกเลิก
+        </button>
         <h2 class="title">สร้างกิจกรรม</h2>
         <div class="buttongroup-and-user">
-            <button class="confirm-button">
+            <button class="confirm-button" type="submit" form="activity-create-form">
                 <i class="fa-solid fa-check"></i>
                 ยืนยัน
             </button>
         </div>
     </nav>
-    <div class="form_body">
-            <div class="question">
-                <label for="name"><i class="fa-solid fa-pen-nib"></i>ชื่อกิจกรรม:</label>
-                <input type="text" id="name" name="name">
-            </div>
-            <div class="question">
-                <label for="name"><i class="fa-solid fa-location-dot"></i>สถานที่:</label>
-                <input type="text" id="location" name="location">
-            </div>
-            <div class="question">
-                <label for="name"><i class="fa-regular fa-calendar"></i>เวลา-วันที่:</label>
-                <input type="datetime-local" id="date_time" name="date_time">
-            </div>
-            <div class="question">
-                <label for="name"><i class="fa-regular fa-user"></i>จำนวนสมาชิกสูงสุด:</label>
-                <input type="number" id="maximum_participant" name="maximum_participant">
-            </div>
-            <div class="question">
-                <label for="name"><i class="fa-regular fa-user"></i>รายละเอียด</label>
-                <textarea id="details" name="details" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
-            </div>
-            <div class="question">
-                <label for="searchDropdown">เลือกแท็ก:</label>
-                    <input type="text" id="dropdownSearch" placeholder="ค้นหาแท็ก...">
-                    <select id="searchDropdown">
-                        <option value="technology">เทคโนโลยี</option>
-                        <option value="sports">กีฬา</option>
-                        <option value="music">ดนตรี</option>
-                        <option value="education">การศึกษา</option>
-                        <option value="travel">ท่องเที่ยว</option>
-                    </select>
+    <form id="activity-create-form" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="question">
+            <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
+            <input type="text" id="name" asp-for="ActivityName">
+        </div>
+        <div class="question">
+            <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
+            <input type="text" id="location" asp-for="Location">
+        </div>
+        <div class="question">
+            <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
+            <input type="datetime-local" id="date_time" asp-for="StartDateTime">
+        </div>
+        <div class="question">
+            <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
+            <input type="number" id="maximum_participant" asp-for="ParticipantLimit">
+        </div>
+        <div class="question">
+            <label asp-for="Detail"><i class="fa-regular fa-user"></i> รายละเอียด</label>
+            <textarea id="details" asp-for="Detail" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
+        </div>
+        <div class="question">
+            <label for="searchDropdown">เลือกแท็ก</label>
+            @* <input type="text" id="dropdownSearch" placeholder="ค้นหาแท็ก..."> *@
+            <select asp-for="ActivityTag" id="searchDropdown">
+                @foreach (var a in ViewBag.activityTags)
+                {
+                    <option value="@a.ActivityName">@a.ActivityName</option>
+                }
+            </select>
             <div class="imgquestion">
                 <div class="imgreq">
-                    <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
+                    <input type="file" id="file" name="file" accept="image/*">
                 </div>
                 <div class="imgdiv">
                     <img id="previewImage" style="display: none;">
                 </div>
-            </div>  
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <script>
-document.getElementById("imageUpload").addEventListener("change", function(event) {
+    document.getElementById("file").addEventListener("change", function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const img = document.getElementById("previewImage");
                 img.src = e.target.result;
                 img.style.display = "block";
@@ -77,7 +78,7 @@ document.getElementById("imageUpload").addEventListener("change", function(event
             reader.readAsDataURL(file);
         }
     });
-    document.getElementById("dropdownSearch").addEventListener("keyup", function() {
+    @* document.getElementById("dropdownSearch").addEventListener("keyup", function () {
         let filter = this.value.toLowerCase();
         let dropdown = document.getElementById("searchDropdown");
         let options = dropdown.getElementsByTagName("option");
@@ -86,6 +87,6 @@ document.getElementById("imageUpload").addEventListener("change", function(event
             let text = option.textContent.toLowerCase();
             option.style.display = text.includes(filter) ? "" : "none";
         }
-    });
+    }); *@
 
 </script>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
 using System.Security.Claims;
+using EventListener.Services;
 using DotNetEnv;
 
 
@@ -36,6 +37,14 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
 });
+
+// Load Cloudinary settings Environment
+builder.Configuration["Cloudinary:CloudName"] = Environment.GetEnvironmentVariable("CLOUD_NAME");
+builder.Configuration["Cloudinary:ApiKey"] = Environment.GetEnvironmentVariable("API_KEY");
+builder.Configuration["Cloudinary:ApiSecret"] = Environment.GetEnvironmentVariable("API_SECRET");
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<CloudinaryService>();
 
 var app = builder.Build();
 

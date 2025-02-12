@@ -98,14 +98,14 @@ public class ProfileController : Controller
     public async Task<IActionResult> Edit(EditProfileViewModel model)
     {
 
-        if (!ModelState.IsValid)
-        {
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine($"Validation Error: {error.ErrorMessage}");
-            }
-            return View(model);
-        }
+        // if (!ModelState.IsValid)
+        // {
+        //     foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        //     {
+        //         Console.WriteLine($"Validation Error: {error.ErrorMessage}");
+        //     }
+        //     return View(model);
+        // }
         string username = HttpContext.User.Identity?.Name;
         var user = await _context.Users.FindAsync(username);
         if (user == null) return NotFound();

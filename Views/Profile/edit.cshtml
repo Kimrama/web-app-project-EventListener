@@ -8,7 +8,7 @@
                 <i class="fa-solid fa-x"></i>
                 ยกเลิก
             </button>
-        <h2 class="title">แก้ไขโปรไฟล์</h2>
+        <h2 class="title">แก้ไขโปรไฟล์ (user: @Model.User.UserName)</h2>
         <div class="buttongroup-and-user">
             <button class="confirm-button">
                 <i class="fa-solid fa-check"></i>
@@ -29,16 +29,20 @@
             </div>
             <div class="rowq">
                 <div class="question">
-                    <label for="name">Firstname:</label>
-                    <input type="text" id="name" asp-for="User.Firstname" required value="@Model.User.Firstname">
+                    <label for="fname">Firstname:</label>
+                    <input type="text" id="fname" asp-for="User.Firstname" required value="@Model.User.Firstname">
                 </div>
                 <div class="question">
-                    <label for="name">Lastname:</label>
-                    <input type="text" id="name" asp-for="User.Lastname" required value="@Model.User.Lastname">
+                    <label for="lname">Lastname:</label>
+                    <input type="text" id="lname" asp-for="User.Lastname" required value="@Model.User.Lastname">
                 </div>
-                <button type="submit">Update</button>
-            
             </div>
+            <div class="question">
+                    <label for="nname">Nickname: </label>
+                    <input class=nickname type="text" id="nname" asp-for="User.Nickname" required value="@Model.User.Nickname">
+            </div>
+             <button type="submit">Update</button>
+
         </div>
         <div class="zone2">
             <div class="rowq">

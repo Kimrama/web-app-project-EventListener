@@ -6,7 +6,6 @@ using System.Security.Claims;
 using EventListener.Services;
 using DotNetEnv;
 
-
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);

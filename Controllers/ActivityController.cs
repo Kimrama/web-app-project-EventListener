@@ -1,5 +1,10 @@
 using System.Globalization;
+using System.Security.Claims;
 using EventListener.Data;
+using EventListener.Models;
+using EventListener.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +13,14 @@ namespace EventListener.Controllers;
 public class ActivityController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<User> _userManager;
+    private readonly CloudinaryService _cloudinaryService;
 
-    public ActivityController(ApplicationDbContext context)
+    public ActivityController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
         _context = context;
+        _userManager = userManager;
+        _cloudinaryService = cloudinaryService;
     }
 
     public string EncodeBase64(string input)
@@ -69,8 +78,77 @@ public class ActivityController : Controller
         return View(model);
     }
 
-    public IActionResult Create()
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Create()
     {
+        var activityTags = await _context.ActivityTags.ToListAsync();
+
+        ViewBag.activityTags = activityTags;
+
         return View();
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateActivityViewModel model, IFormFile file)
+    {
+
+        if (!ModelState.IsValid) return View(model);
+
+        if (file == null || file.Length == 0)
+        {
+            ModelState.AddModelError("", "กรุณาเลือกไฟล์รูปภาพ");
+            Console.WriteLine("ยังไม่ได้อัพโหลดรูปภาพ");
+            return View();
+        }
+        else
+        {
+            Console.WriteLine("อัพโหลดรูปภาพเเล้ว");
+        }
+
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return Forbid();
+        }
+
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        DateOnly startDate = DateOnly.FromDateTime(model.StartDateTime);
+        TimeSpan startTime = model.StartDateTime.TimeOfDay;
+
+        var uploadResult = await _cloudinaryService.UploadImageAsync(file);
+        if (uploadResult == null)
+        {
+            ModelState.AddModelError("", "อัปโหลดไม่สำเร็จ");
+            return View();
+        }
+
+        Console.WriteLine(user.UserName);
+
+        var activity = new Activity
+        {
+            OwnerId = user.UserName,
+            ActivityTagId = model.ActivityTag,
+            ActivityName = model.ActivityName,
+            Location = model.Location,
+            StartDate = startDate,
+            StartTime = startTime,
+            Detail = model.Detail,
+            ParticipantLimit = model.ParticipantLimit,
+            ActivityImageUrl = uploadResult.SecureUrl.AbsoluteUri
+        };
+
+        _context.Activities.Add(activity);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Home");
     }
 }

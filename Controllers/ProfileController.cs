@@ -80,10 +80,6 @@ public class ProfileController : Controller
             .Include(u => u.ActivityTag)
             .ToListAsync();
 
-        foreach(var u in userInterestTag){
-            Console.WriteLine(u.ActivityTag.ActivityName);
-        }
-
         var model = new EditProfileViewModel
         {
             User = user,

@@ -226,7 +226,7 @@ nav {
         display: flex;
         flex-direction: column;
     }
-
+    
     .profile-img-div{
         width: 400px;
         height: 350px;
@@ -235,6 +235,7 @@ nav {
         img{
             width:400px;
             height:350px;
+            object-fit: cover;
         }
     }
 

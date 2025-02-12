@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
 using System.Security.Claims;
+using DotNetEnv;
+
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
+    options => options.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"))
 );
 Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 

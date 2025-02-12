@@ -7,9 +7,11 @@
 .login-container {
     background-color: white;
     width: 500px;
-    border-radius: 4px;
+    border-radius: 16px;
     padding: 10px;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
 }
 
 .input-container {
@@ -176,4 +178,57 @@ p {
 .checkbox-wrapper-32 input[type="checkbox"]:checked ~ svg path {
     stroke-dashoffset: 0;
     stroke-width: calc(var(--size) / 2);
+}
+.box {
+    position: relative;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.box::before {
+    content: "";
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background-image: conic-gradient(
+        transparent,
+        transparent,
+        transparent,
+        #ffffff
+    );
+    animation: animate 4s linear infinite;
+}
+.box::after {
+    content: "";
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background-image: conic-gradient(
+        transparent,
+        transparent,
+        transparent,
+        #ffffff
+    );
+    animation: animate 4s linear infinite;
+    animation-delay: -2s;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+span {
+    position: absolute;
+    inset: 5px;
+    background: white;
+    border-radius: 16px;
+    z-index: 1;
 }

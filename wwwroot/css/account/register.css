@@ -7,10 +7,10 @@
 .register-container {
     background-color: white;
     width: 800px;
-    border-radius: 4px;
-    padding: 5px;
+    border-radius: 16px;
+    padding: 18px;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
-    
+    z-index: 2;
 }
 .info-container {
     width: 42%;
@@ -127,8 +127,12 @@ a {
 }
 
 @media screen and (max-width: 820px) {
-    .register-container {
+    .box {
         width: 80%;
+    }
+
+    .register-container {
+        width: 100%;
     }
     .info-container {
         width: 80%;
@@ -150,7 +154,7 @@ a {
         border: 1px solid #c3c3c3;
         border-radius: 5px;
         padding: 5px;
-        margin-bottom: 32px;
+        margin-bottom: 10px;
         margin-top: 6px;
     }
     button[type="submit"] {
@@ -166,7 +170,7 @@ a {
         cursor: pointer;
     }
     p {
-        margin-top: 30px;
+        margin-top: 10px;
     }
     a {
         color: #2b4faa;
@@ -182,4 +186,57 @@ a {
     margin-bottom: 4px;
     padding: 0;
     display: none;
+}
+.box {
+    position: relative;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.box::before {
+    content: "";
+    position: absolute;
+    width: 1000px;
+    height: 1000px;
+    background-image: conic-gradient(
+        transparent,
+        transparent,
+        transparent,
+        #ffffff
+    );
+    animation: animate 4s linear infinite;
+}
+.box::after {
+    content: "";
+    position: absolute;
+    width: 1000px;
+    height: 1000px;
+    background-image: conic-gradient(
+        transparent,
+        transparent,
+        transparent,
+        #ffffff
+    );
+    animation: animate 4s linear infinite;
+    animation-delay: -2s;
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.span-box {
+    position: absolute;
+    inset: 5px;
+    background: white;
+    border-radius: 16px;
+    z-index: 1;
 }

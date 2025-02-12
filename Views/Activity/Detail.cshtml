@@ -13,10 +13,10 @@
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
-            <button>
+            <button onclick="location.href='@Url.Action("Create", "Activity")'">
                 <i class="fa-solid fa-plus"></i>
                 สร้างกิจกรรม
-            </button>
+            </onclick=>
             <button>
                 <i class="fa-regular fa-bell"></i>
                 การเเจ้งเตือน
@@ -27,8 +27,7 @@
 
     <main>
         <div class="activity-img">
-            <img src="@Model.Activity.ActivityImageUrl"
-                alt="">
+            <img src="@Model.Activity.ActivityImageUrl" alt="">
         </div>
         <div class="content">
             <div class="activity-details">
@@ -36,7 +35,9 @@
                     <span class="tag-topic">@Model.Activity.ActivityTagId</span>
                 </div>
                 <h4 class="start-datetime">
-
+                    @Model.Activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartTime.ToString(@"hh\:mm") น.
                 </h4>
                 <br>
                 <h3 class="topic">

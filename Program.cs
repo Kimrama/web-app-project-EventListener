@@ -17,7 +17,6 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"))
 );
-Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

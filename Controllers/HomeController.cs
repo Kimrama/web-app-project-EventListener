@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace EventListener.Controllers;
 public class HomeController : Controller
@@ -26,6 +27,8 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+
+        
         var activities = await _context.Activities
         .Include(a => a.ActivityTag)
         .Include(b => b.UserJoinActivities)
@@ -33,7 +36,7 @@ public class HomeController : Controller
         
         var activityViewModels = activities.Select(c => new ActivityViewModel
         {
-            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fffffff")),
+            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss.fffffff", new CultureInfo("en-US"))),
             ActivityTagId = c.ActivityTagId,
             ActivityName = c.ActivityName,
             Location = c.Location,

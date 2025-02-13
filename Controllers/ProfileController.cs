@@ -162,7 +162,7 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(EditProfileViewModel model)
+    public async Task<IActionResult> EditProfile(EditProfileViewModel model,string InterestTags)
     {
 
         // if (!ModelState.IsValid)
@@ -179,10 +179,26 @@ public class ProfileController : Controller
 
         user.Firstname = model.User.Firstname;
         user.Lastname = model.User.Lastname;
+        user.Nickname = model.User.Nickname;
         user.Birthday = model.User.Birthday;
         user.Sex = model.User.Sex;
         user.About = model.User.About;
+        var existingTags = await _context.UserInterestActivityTags
+                            .Where(t => t.UserId == username)
+                            .ToListAsync();
+    _context.UserInterestActivityTags.RemoveRange(existingTags);
 
+    if (!string.IsNullOrEmpty(InterestTags))
+    {
+        var tagsList = InterestTags.Split(',').ToList();
+        var newTags = tagsList.Select(tag => new UserInterestActivityTag
+        {
+            UserId = username,
+            ActivityTagId = tag
+        }).ToList();
+
+        _context.UserInterestActivityTags.AddRange(newTags);
+    }
 
         _context.Update(user);
         await _context.SaveChangesAsync();

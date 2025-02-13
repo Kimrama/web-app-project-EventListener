@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
 using System.Security.Claims;
+using EventListener.Services;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +15,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
+    options => options.UseSqlServer(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"))
 );
-Console.WriteLine(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -32,6 +35,14 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
 });
+
+// Load Cloudinary settings Environment
+builder.Configuration["Cloudinary:CloudName"] = Environment.GetEnvironmentVariable("CLOUD_NAME");
+builder.Configuration["Cloudinary:ApiKey"] = Environment.GetEnvironmentVariable("API_KEY");
+builder.Configuration["Cloudinary:ApiSecret"] = Environment.GetEnvironmentVariable("API_SECRET");
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<CloudinaryService>();
 
 var app = builder.Build();
 

@@ -95,7 +95,7 @@ nav {
         height:28.8vw;
         max-width: 400px;
         max-height: 350px;
-        object-fit: fill;
+        object-fit: cover;
     }
 }
 

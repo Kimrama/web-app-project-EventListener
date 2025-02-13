@@ -14,15 +14,26 @@
             </div>
         </div>
         <div class="buttongroup-and-user">
-            <button>
-                <i class="fa-solid fa-plus"></i>
-                สร้างกิจกรรม
-            </button>
-            <button>
-                <i class="fa-regular fa-bell"></i>
-                การเเจ้งเตือน
-            </button>
-            <img src="https://imgcdn.stablediffusionweb.com/2024/2/24/31aad3d9-a853-4296-88d7-58b3104a0527.jpg" alt="">
+            @if (User.Identity != null && User.Identity.IsAuthenticated) {
+                <button class="create-activity">
+                    <i class="fa-solid fa-plus"></i>
+                    สร้างกิจกรรม
+                </button>
+                <button class="notification">
+                    <i class="fa-regular fa-bell"></i>
+                    การเเจ้งเตือน
+                </button>
+                <div class="dropdown">
+                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt="avatar-img" class="avatar-img"></button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a asp-controller="profile" asp-action="me">โปรไฟล์</a>
+                        <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
+                    </div>
+                </div>
+            } else {
+                <a asp-controller="account" asp-action="login"><button class="un-auth-btn login"><div>Login</div></button></a>
+                <a asp-controller="account" asp-action="register"><button class="un-auth-btn register"><div>Register</div></button></a>
+            }
         </div>
     </nav>
     <div class="activity-card-container">
@@ -108,3 +119,4 @@
         </div>
     </div>
 </div>
+<script src="~/js/home/dropdown.js" asp-append-version="true"></script>

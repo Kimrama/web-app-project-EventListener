@@ -1,4 +1,4 @@
-﻿@model List<Activity>
+﻿@model List<ActivityViewModel>
 
 <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
 <div>
@@ -40,14 +40,14 @@
     </nav>
     <div class="activity-card-container">
         @foreach (var activity in Model) {
-            <div class="activity-card">
-                @if (activity.ActivityTag.Category == "Education") {
+            <a class="activity-card" asp-controller="activity" asp-action="detail" asp-route-activityIdHash="@activity.ActivityIdEncode">
+                @if (activity.ActivityTagCategory == "Education") {
                     <div class="header-tag-card education">Education</div>
-                } else if (activity.ActivityTag.Category == "Sport & Fitness") {
+                } else if (activity.ActivityTagCategory == "Sport & Fitness") {
                     <div class="header-tag-card sport-n-fitness">Sport & Fitness</div>
-                } else if (activity.ActivityTag.Category == "Arts & Culture") {
+                } else if (activity.ActivityTagCategory == "Arts & Culture") {
                     <div class="header-tag-card arts-n-culture">Arts & Culture</div>
-                } else if (activity.ActivityTag.Category == "Social") {
+                } else if (activity.ActivityTagCategory == "Social") {
                     <div class="header-tag-card social">Social</div>
                 }
                 <div class="body-card">
@@ -62,12 +62,12 @@
                             <article>@activity.ActivityName</article>
                             <span class="location">@activity.Location</span>
                             <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                            <span class="participant-info">?/@activity.ParticipantLimit คนจะไป</span>
+                            <span class="participant-info">@activity.UserJoinActivityCount/@activity.ParticipantLimit คนจะไป</span>
                         </div> 
                         <img src="@activity.ActivityImageUrl" alt="activity picture">
                     </div>
                 </div>
-            </div>
+            </a>
         }
     </div>
 </div>

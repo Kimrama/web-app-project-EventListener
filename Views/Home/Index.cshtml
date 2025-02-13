@@ -1,4 +1,6 @@
-﻿<link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
+﻿@model List<Activity>
+
+<link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
 <div>
     <nav>
         <div class="left-container">
@@ -37,86 +39,36 @@
         </div>
     </nav>
     <div class="activity-card-container">
-        <div class="activity-card">
-            <div class="header-tag-card">Sport & Fitness</div>
-            <div class="body-card">
-                <div class="tag-line">
-                    <span class="tag">Weight trainning</span>
-                </div>
-                <div class="time-info">
-                    <span>วันจันทร์, 13 ม.ค. 2025, 17.00</span><span>จะเริ่มวันพรุ่งนี้</span>
-                </div>
-                <div class="card-info">
-                    <div class="info">
-                        <article>activity-card Topic</article>
-                        <span class="location">King Mongkut’s institude of tecnology Ladkrabang</span>
-                        <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                        <span class="participant-info">6/7 คนจะไป</span>
+        @foreach (var activity in Model) {
+            <div class="activity-card">
+                @if (activity.ActivityTag.Category == "Education") {
+                    <div class="header-tag-card education">Education</div>
+                } else if (activity.ActivityTag.Category == "Sport & Fitness") {
+                    <div class="header-tag-card sport-n-fitness">Sport & Fitness</div>
+                } else if (activity.ActivityTag.Category == "Arts & Culture") {
+                    <div class="header-tag-card arts-n-culture">Arts & Culture</div>
+                } else if (activity.ActivityTag.Category == "Social") {
+                    <div class="header-tag-card social">Social</div>
+                }
+                <div class="body-card">
+                    <div class="tag-line">
+                        <span class="tag">@activity.ActivityTagId</span>
                     </div>
-                    <img src="https://globaluniversity.edu/wp-content/uploads/2020/03/multiethnic-group-young-people-studying-together.jpg" alt="">
+                    <div class="time-info">
+                        <span>@activity.StartDate, @activity.StartTime</span><span>จะเริ่มวันพรุ่งนี้</span>
+                    </div>
+                    <div class="card-info">
+                        <div class="info">
+                            <article>@activity.ActivityName</article>
+                            <span class="location">@activity.Location</span>
+                            <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
+                            <span class="participant-info">?/@activity.ParticipantLimit คนจะไป</span>
+                        </div> 
+                        <img src="@activity.ActivityImageUrl" alt="activity picture">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="activity-card">
-            <div class="header-tag-card">Sport & Fitness</div>
-            <div class="body-card">
-                <div class="tag-line">
-                    <span class="tag">Weight trainning</span>
-                </div>
-                <div class="time-info">
-                    <span>วันจันทร์, 13 ม.ค. 2025, 17.00</span><span>จะเริ่มวันพรุ่งนี้</span>
-                </div>
-                <div class="card-info">
-                    <div class="info">
-                        <article>activity-card Topic</article>
-                        <span class="location">King Mongkut’s institude of tecnology Ladkrabang</span>
-                        <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                        <span class="participant-info">6/7 คนจะไป</span>
-                    </div>
-                    <img src="https://globaluniversity.edu/wp-content/uploads/2020/03/multiethnic-group-young-people-studying-together.jpg" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="activity-card">
-            <div class="header-tag-card">Sport & Fitness</div>
-            <div class="body-card">
-                <div class="tag-line">
-                    <span class="tag">Weight trainning</span>
-                </div>
-                <div class="time-info">
-                    <span>วันจันทร์, 13 ม.ค. 2025, 17.00</span><span>จะเริ่มวันพรุ่งนี้</span>
-                </div>
-                <div class="card-info">
-                    <div class="info">
-                        <article>activity-card Topic</article>
-                        <span class="location">King Mongkut’s institude of tecnology Ladkrabang</span>
-                        <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                        <span class="participant-info">6/7 คนจะไป</span>
-                    </div>
-                    <img src="https://globaluniversity.edu/wp-content/uploads/2020/03/multiethnic-group-young-people-studying-together.jpg" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="activity-card">
-            <div class="header-tag-card">Sport & Fitness</div>
-            <div class="body-card">
-                <div class="tag-line">
-                    <span class="tag">Weight trainning</span>
-                </div>
-                <div class="time-info">
-                    <span>วันจันทร์, 13 ม.ค. 2025, 17.00</span><span>จะเริ่มวันพรุ่งนี้</span>
-                </div>
-                <div class="card-info">
-                    <div class="info">
-                        <article>activity-card Topic</article>
-                        <span class="location">King Mongkut’s institude of tecnology Ladkrabang</span>
-                        <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                        <span class="participant-info">6/7 คนจะไป</span>
-                    </div>
-                    <img src="https://globaluniversity.edu/wp-content/uploads/2020/03/multiethnic-group-young-people-studying-together.jpg" alt="">
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 <script src="~/js/home/dropdown.js" asp-append-version="true"></script>

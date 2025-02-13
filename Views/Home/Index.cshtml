@@ -17,14 +17,18 @@
         </div>
         <div class="buttongroup-and-user">
             @if (User.Identity != null && User.Identity.IsAuthenticated) {
-                <button class="create-activity">
-                    <i class="fa-solid fa-plus"></i>
-                    สร้างกิจกรรม
-                </button>
-                <button class="notification">
-                    <i class="fa-regular fa-bell"></i>
-                    การเเจ้งเตือน
-                </button>
+                <a asp-controller="activity" asp-action="create">
+                    <button class="create-activity">
+                        <i class="fa-solid fa-plus"></i>
+                        สร้างกิจกรรม
+                    </button>
+                </a>
+                <a asp-controller="notification" asp-action="notification">
+                    <button class="notification">
+                        <i class="fa-regular fa-bell"></i>
+                        การเเจ้งเตือน
+                    </button>
+                </a>
                 <div class="dropdown">
                     <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt="avatar-img" class="avatar-img"></button>
                     <div id="myDropdown" class="dropdown-content">

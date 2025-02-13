@@ -48,7 +48,7 @@
             <div class="rowq">
                 <div class="question">
                         <label for="bdate">Birthdate: @Model.User.Birthday</label>
-                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday?.ToString("yyyy-MM-dd")" required>
+                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday.ToString("yyyy-MM-dd")" required>
                 </div>
                 <div class="question">
                         <label for="sex">sex</label>

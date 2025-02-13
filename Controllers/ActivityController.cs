@@ -30,11 +30,11 @@ public class ActivityController : Controller
     }
 
     public string DecodeBase64(string input)
-{
-    string decodedInput = Uri.UnescapeDataString(input); 
-    var bytes = Convert.FromBase64String(decodedInput);
-    return System.Text.Encoding.UTF8.GetString(bytes);
-}
+    {
+        string decodedInput = Uri.UnescapeDataString(input); 
+        var bytes = Convert.FromBase64String(decodedInput);
+        return System.Text.Encoding.UTF8.GetString(bytes);
+    }
 
     [HttpGet]
     [Route("Activity/Detail/{activityIdHash}")]

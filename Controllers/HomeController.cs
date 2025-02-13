@@ -23,10 +23,6 @@ public class HomeController : Controller
         var activities = await _context.Activities
         .Include(a => a.ActivityTag)
         .Include(b => b.UserJoinActivities)
-        .Select(a => new {
-            ActivityName = a.ActivityName,
-            JoinCount = a.UserJoinActivities.Count()
-        })
         .ToListAsync();
         return View(activities);
     }

@@ -71,7 +71,6 @@ nav {
     justify-content: center;
     align-self: center;
     flex:2;
-    margin-right: 5vh
 }
 
 .zone2 {
@@ -97,7 +96,7 @@ nav {
     margin-bottom: 1vh;
 }
 
-.question input,select {
+.question input {
     padding: 1.5vh;
     border: 0.2vh solid #ccc;
     border-radius: 1vh;
@@ -229,14 +228,13 @@ nav {
     align-items : center; 
     justify-content : center; 
     text-align : center;
-    user-select: none;
 }
 
 @media screen and (max-width: 1000px) {
     .form_body {
         flex-direction: column;
-        align-items: stretch;
-        height: auto;
+        align-items: stretch; /* ทำให้ zone1 และ zone2 ขยายเต็มหน้าจอ */
+        height: auto; /* ปรับความสูงอัตโนมัติ */
     }
 
     .zone1, .zone2 {

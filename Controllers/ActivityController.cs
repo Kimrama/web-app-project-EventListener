@@ -73,11 +73,20 @@ public class ActivityController : Controller
         )
         .CountAsync();
 
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        var isUserJoin = await _context.UserJoinActivities.AnyAsync(
+            uja => uja.UserId == username &&
+            uja.ActivityOwnerId == keys[0] &&
+            uja.ActivityCreatedAt.ToString() == keys[1]
+        );
+
         var model = new ActivityDetailViewModel
         {
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
-            UserJoinActivityCount = userJoinActivityCount
+            UserJoinActivityCount = userJoinActivityCount,
+            isUserJoin = isUserJoin
         };
 
         return View(model);

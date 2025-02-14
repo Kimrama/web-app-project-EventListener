@@ -26,7 +26,8 @@
                     การเเจ้งเตือน
                 </button>
                 <div class="user-dropdown">
-                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt="" class="avatar-img"></button>
+                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
+                            class="avatar-img"></button>
                     <div id="dropdown-content" class="dropdown-content">
                         <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
@@ -77,10 +78,46 @@
                     รายละเอียด : @Model.Activity.Detail
                 </p>
                 <br>
-                <button>
-                    <i class="fa-solid fa-right-to-bracket fa-lg"></i>
-                    <span>เข้าร่วม</span>
-                </button>
+                <div class="btn-group-for-owner-or-user">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.Identity.Name == Model.Activity.User.UserName)
+                        {
+                            <button class="chat-btn">
+                                <i class="fa-regular fa-comment fa-lg"></i>
+                                <span>เเชท</span>
+                            </button>
+                            <button class="edit-activity-btn">
+                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                                <span>เเก้ไข</span>
+                            </button>
+                        }
+                        else
+                        {
+                            @if (Model.isUserJoin)
+                            {
+                                <button class="chat-btn">
+                                    <i class="fa-regular fa-comment fa-lg"></i>
+                                    <span>เเชท</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="join-btn">
+                                    <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                    <span>เข้าร่วม</span>
+                                </button>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <button class="join-btn">
+                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                            <span>เข้าร่วม</span>
+                        </button>
+                    }
+                </div>
             </div>
             <div class="owner">
                 <h3>เจ้าของ</h3>

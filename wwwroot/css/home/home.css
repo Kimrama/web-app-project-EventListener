@@ -133,7 +133,7 @@ nav {
         .arts-culture {
             background-color: #04bb7b;
         }
-        .socail {
+        .social {
             background-color: #b750d9;
         }
         .body-card {
@@ -172,7 +172,9 @@ nav {
                     gap: 20px;
                 }
                 img {
-                    width: 180px;
+                    width: 200px;
+                    height: 140px;
+                    overflow: hidden;
                     object-fit: cover;
                     border-radius: 8px;
                 }

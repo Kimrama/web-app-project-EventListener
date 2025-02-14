@@ -16,15 +16,15 @@
             </button>
         </div>
     </nav>
-    <form id="edit_profile_form"class="form_body" asp-action="EditProfile" method="post">
+    <form id="edit_profile_form"class="form_body" asp-action="EditProfile" method="post" enctype="multipart/form-data">
          <div class="zone1">
             <div class="imgquestion">
                 <div class="imgdiv">
-                    <img id="previewImage" style="display: none;">
+                    <img id="previewImage" src="@Model.User.UserImageUrl" alt=""> 
                 </div>
                 <div class="imgreq">
                     <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <input type="file" id="file" name="file" accept="image/*">
                 </div>
             </div>
             <div class="rowq">
@@ -88,7 +88,7 @@
 </div>
 
 <script>
-    document.getElementById("imageUpload").addEventListener("change", function(event) {
+    document.getElementById("file").addEventListener("change", function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();

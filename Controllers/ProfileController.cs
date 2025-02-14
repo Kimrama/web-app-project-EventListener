@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using EventListener.Models;
+using EventListener.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -13,11 +14,13 @@ public class ProfileController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly CloudinaryService _cloudinaryService;
 
-    public ProfileController(ApplicationDbContext context, UserManager<User> userManager)
+    public ProfileController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
         _context = context;
         _userManager = userManager;
+         _cloudinaryService = cloudinaryService;
     }
 
     public async Task<IActionResult> Index()
@@ -151,6 +154,7 @@ public class ProfileController : Controller
             .Include(u => u.ActivityTag)
             .ToListAsync();
 
+
         var model = new EditProfileViewModel
         {
             User = user,
@@ -162,7 +166,7 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(EditProfileViewModel model)
+    public async Task<IActionResult> EditProfile(EditProfileViewModel model,string InterestTags, IFormFile file)
     {
 
         // if (!ModelState.IsValid)
@@ -176,17 +180,41 @@ public class ProfileController : Controller
         string username = HttpContext.User.Identity?.Name;
         var user = await _context.Users.FindAsync(username);
         if (user == null) return NotFound();
+        var uploadResult = await _cloudinaryService.UploadImageAsync(file);
+            if (uploadResult == null)
+            {
+                ModelState.AddModelError("", "อัปโหลดไม่สำเร็จ");
+                return View();
+            }
 
         user.Firstname = model.User.Firstname;
         user.Lastname = model.User.Lastname;
+        user.Nickname = model.User.Nickname;
         user.Birthday = model.User.Birthday;
         user.Sex = model.User.Sex;
         user.About = model.User.About;
+        user.UserImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        var existingTags = await _context.UserInterestActivityTags
+                            .Where(t => t.UserId == username)
+                            .ToListAsync();
+        _context.UserInterestActivityTags.RemoveRange(existingTags);
 
+        if (!string.IsNullOrEmpty(InterestTags))
+        {
+            var tagsList = InterestTags.Split(',').ToList();
+            var newTags = tagsList.Select(tag => new UserInterestActivityTag
+            {
+                UserId = username,
+                ActivityTagId = tag
+            }).ToList();
+
+
+            _context.UserInterestActivityTags.AddRange(newTags);
+        }
 
         _context.Update(user);
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Me"); 
+        return RedirectToAction("Index"); 
     }
 }

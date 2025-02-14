@@ -10,21 +10,21 @@
             </button>
         <h2 class="title">แก้ไขโปรไฟล์ (user: @Model.User.UserName)</h2>
         <div class="buttongroup-and-user">
-            <button class="confirm-button">
+            <button class="confirm-button" id="submitBtn" form="edit_profile_form">
                 <i class="fa-solid fa-check"></i>
                 ยืนยัน
             </button>
         </div>
     </nav>
-    <form class="form_body" asp-action="Edit" method="post">
+    <form id="edit_profile_form"class="form_body" asp-action="EditProfile" method="post" enctype="multipart/form-data">
          <div class="zone1">
             <div class="imgquestion">
                 <div class="imgdiv">
-                    <img id="previewImage" style="display: none;">
+                    <img id="previewImage" src="@Model.User.UserImageUrl" alt=""> 
                 </div>
                 <div class="imgreq">
                     <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <input type="file" id="file" name="file" accept="image/*">
                 </div>
             </div>
             <div class="rowq">
@@ -41,18 +41,22 @@
                     <label for="nname">Nickname: </label>
                     <input class=nickname type="text" id="nname" asp-for="User.Nickname" required value="@Model.User.Nickname">
             </div>
-             <button type="submit">Update</button>
+
 
         </div>
         <div class="zone2">
             <div class="rowq">
                 <div class="question">
-                        <label for="bdate">Birthdate:</label>
-                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday" required>
+                        <label for="bdate">Birthdate: @Model.User.Birthday</label>
+                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday.ToString("yyyy-MM-dd")" required>
                 </div>
                 <div class="question">
                         <label for="sex">sex</label>
-                        <input type="text" id="sex" asp-for="User.Sex" value ="@Model.User.Sex" required>
+                        <select id="sex" asp-for="User.Sex" class="form-control">
+                        <option value="">-- กรุณาเลือก --</option>
+                        <option value="Male" selected="@(Model.User.Sex == "Male" ? "selected" : null)">ชาย</option>
+                        <option value="Female" selected="@(Model.User.Sex == "Female" ? "selected" : null)">หญิง</option>
+                    </select>
                 </div>
             </div>
             <div class="question">
@@ -84,7 +88,7 @@
 </div>
 
 <script>
-    document.getElementById("imageUpload").addEventListener("change", function(event) {
+    document.getElementById("file").addEventListener("change", function(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -102,7 +106,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const source = document.querySelector(".source");
         const destination = document.querySelector(".destination");
-        tags = Array.from(source.children);
+        tags = (Array.from(source.children)).concat(Array.from(destination.children));;
         tags.forEach(e => {
             e.setAttribute("draggable", true);
             e.addEventListener("dragstart", dragStart);
@@ -118,7 +122,6 @@
 
         destination.addEventListener("drop", function (event) {
             event.preventDefault();
-
             let data = event.dataTransfer.getData("text/plain");
             let draggedTag = Array.from(source.children).find(tag => tag.textContent === data);
             let checkedTag = Array.from(destination.children).find(tag => tag.textContent === data);
@@ -132,17 +135,10 @@
 
             let newTag = document.createElement("div");
             newTag.textContent = data;
-            newTag.style.padding = "10px";
-            newTag.style.margin = "5px";
-            newTag.style.background = "green";
-            newTag.style.color = "white";
-            newTag.style.borderRadius = "10px";
-            newTag.style.cursor = "grab";
-            newTag.style.width = "15%"
-            newTag.style.height = "10%"
-            newTag.setAttribute("draggable", true);
+            newTag.classList.add("tag");
+            newTag.setAttribute("draggable", true); 
             newTag.addEventListener("dragstart", dragStart);
-
+            newTag.style.userSelect = "none"; 
             destination.appendChild(newTag);
         });
 
@@ -167,25 +163,30 @@
 
             let newTag = document.createElement("div");
             newTag.textContent = data;
-            newTag.style.padding = "10px";
-            newTag.style.margin = "5px";
-            newTag.style.background = "#007bff";
-            newTag.style.color = "white";
-            newTag.style.borderRadius = "10px";
-            newTag.style.cursor = "grab";
-            newTag.style.width = "15%"
-            newTag.style.height = "10%"
-            newTag.style.display = "flex";  
-            newTag.style.alignItems = "center"; 
-            newTag.style.justifyContent = "center"; 
-            newTag.style.textAlign = "center";
-
-            newTag.setAttribute("draggable", true);
+            newTag.classList.add("tag");
+            newTag.setAttribute("draggable", true); 
             newTag.addEventListener("dragstart", dragStart);
             source.appendChild(newTag);
         });
 
 
     })
-
+    document.getElementById("submitBtn").addEventListener("click", function () {
+        form = document.getElementById("edit_profile_form");
+        if (!form.checkValidity()) {
+        form.reportValidity(); // 🔹 แสดงข้อความแจ้งเตือน required
+        return;
+    }
+        let oldInput = document.getElementById("tempInterestTags");
+        if (oldInput) oldInput.remove();
+        let tags = Array.from(document.querySelector(".destination").children)
+                        .map(tag => tag.textContent.trim());
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "InterestTags";
+        input.value = tags.join(",");
+        input.id = "tempInterestTags";
+        form.appendChild(input);
+        form.submit();
+        });
 </script>

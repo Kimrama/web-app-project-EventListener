@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Security.Claims;
+using System.Xml.Schema;
 using EventListener.Data;
 using EventListener.Models;
 using EventListener.Services;
@@ -40,40 +41,52 @@ public class ActivityController : Controller
     [Route("Activity/Detail/{activityIdHash}")]
     public async Task<IActionResult> Detail(string activityIdHash)
     {
+        Console.WriteLine(activityIdHash);
+
         var activityId = DecodeBase64(activityIdHash);
+        Console.WriteLine(activityId);
 
         var keys = activityId.Split(" ", 2);
-
-        var activityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss.fffffff", CultureInfo.InvariantCulture);
+        Console.WriteLine(keys[0]);
+        Console.WriteLine(keys[1]);
 
         var activity = await _context.Activities
         .Include(a => a.User)
         .FirstOrDefaultAsync
         (
             a => a.OwnerId == keys[0] &&
-            a.CreatedAt == activityCreatedAt
+            a.CreatedAt.ToString() == keys[1]
         );
 
         var usersJoinActivity = await _context.UserJoinActivities
         .Include(u => u.User)
         .Where(
             u => u.ActivityOwnerId == keys[0] &&
-            u.ActivityCreatedAt == activityCreatedAt
+            u.ActivityCreatedAt.ToString() == keys[1]
         )
         .ToListAsync();
 
         var userJoinActivityCount = await _context.UserJoinActivities
         .Where(
             u => u.ActivityOwnerId == keys[0] &&
-            u.ActivityCreatedAt == activityCreatedAt
+            u.ActivityCreatedAt.ToString() == keys[1]
         )
         .CountAsync();
+
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        var isUserJoin = await _context.UserJoinActivities.AnyAsync(
+            uja => uja.UserId == username &&
+            uja.ActivityOwnerId == keys[0] &&
+            uja.ActivityCreatedAt.ToString() == keys[1]
+        );
 
         var model = new ActivityDetailViewModel
         {
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
-            UserJoinActivityCount = userJoinActivityCount
+            UserJoinActivityCount = userJoinActivityCount,
+            isUserJoin = isUserJoin
         };
 
         return View(model);
@@ -131,8 +144,6 @@ public class ActivityController : Controller
             ModelState.AddModelError("", "อัปโหลดไม่สำเร็จ");
             return View();
         }
-
-        Console.WriteLine(user.UserName);
 
         var activity = new Activity
         {

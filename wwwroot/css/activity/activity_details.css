@@ -4,7 +4,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     border-bottom: 0.25px solid black;
-    padding: 16px;
+    padding: 13px;
     position: fixed;
     top: 0;
     left: 0;
@@ -20,6 +20,7 @@ nav {
         font-size: 24px;
         font-weight: bold;
     }
+    margin-left: 12px;
 }
 
 .buttongroup-and-user {
@@ -28,7 +29,7 @@ nav {
     gap: 16px;
 
     button {
-        padding: 9px 18px;
+        padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
         cursor: pointer;
@@ -163,15 +164,33 @@ main {
     button {
         font-size: 16px;
         padding: 10px 20px;
-        background-color: #9381ff;
         color: white;
-        border: 1px solid #9381ff;
-        border-radius: 12px;
+        border-radius: 16px;
         cursor: pointer;
 
         i {
             margin-right: 5px;
         }
+    }
+
+    .btn-group-for-owner-or-user {
+        display: flex;
+        gap: 20px;
+    }
+
+    .chat-btn {
+        background-color: #9381ff;
+        border: 1px solid #9381ff;
+    }
+
+    .edit-activity-btn {
+        background-color: #FF9D23;
+        border: 1px solid #FF9D23;
+    }
+
+    .join-btn {
+        background-color: #2973B2;
+        border: 1px solid #2973B2;
     }
 }
 

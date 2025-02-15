@@ -33,6 +33,14 @@ namespace EventListener.Data
             modelBuilder.Entity<Activity>()
             .HasIndex(a => new { a.OwnerId, a.CreatedAt })
             .IsUnique();
+
+            modelBuilder.Entity<Activity>()
+            .Property(a => a.StartTime)
+            .HasColumnType("time(0)");
+
+            modelBuilder.Entity<Activity>()
+            .Property(a => a.CreatedAt)
+            .HasColumnType("datetime2(0)");
             
             //ActivityTag Entity
             modelBuilder.Entity<ActivityTag>()
@@ -46,9 +54,21 @@ namespace EventListener.Data
             modelBuilder.Entity<Notification>()
             .HasKey(n => n.NotificationId);
 
+            modelBuilder.Entity<Notification>()
+            .Property(n => n.ReceiveDate)
+            .HasColumnType("datetime2(0)");
+
             //ChatMessage Entity
             modelBuilder.Entity<ChatMessage>()
             .HasKey(c => c.ChatMessageId);
+
+            modelBuilder.Entity<ChatMessage>()
+            .Property(c => c.ActivityCreatedAt)
+            .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<ChatMessage>()
+            .Property(c => c.SendDate)
+            .HasColumnType("datetime2(0)");
             
             //UserInterestActivityTag Entity
             modelBuilder.Entity<UserInterestActivityTag>()
@@ -65,6 +85,18 @@ namespace EventListener.Data
             modelBuilder.Entity<UserJoinActivity>()
             .HasIndex(u => new { u.UserId, u.ActivityOwnerId, u.ActivityCreatedAt })
             .IsUnique();
+
+            modelBuilder.Entity<UserJoinActivity>()
+            .Property(u => u.ActivityCreatedAt)
+            .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<UserJoinActivity>()
+            .Property(u => u.RequestJoinDate)
+            .HasColumnType("datetime2(0)");
+
+            modelBuilder.Entity<UserJoinActivity>()
+            .Property(u => u.JoinDate)
+            .HasColumnType("datetime2(0)");
 
             //user create activity relationship
             modelBuilder.Entity<Activity>()

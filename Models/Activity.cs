@@ -12,6 +12,7 @@ public class Activity
     public string Detail { get; set; }
     public int ParticipantLimit { get; set; }
     public string ActivityImageUrl { get; set; }
+    public bool? IsApproveBeforeJoinActivity { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public User User { get; set; }

@@ -44,6 +44,7 @@ namespace EventListener.Controllers
 
             var activity = await _context.Activities
                 .Include(a => a.ChatMessages)
+                .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(a => a.OwnerId == ownerId && a.CreatedAt.ToString() == createdAt);
 
             if (activity == null)

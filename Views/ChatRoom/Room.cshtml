@@ -11,7 +11,7 @@
 
 
 <nav>
-    <span class="span-left"><a href=""><i class="fa-solid fa-arrow-left"></i>&nbsp&nbspกลับ</a></span>
+    <span class="span-left"><a asp-controller="Activity" asp-action="detail" asp-route-activityIdHash="@roomId"><i class="fa-solid fa-arrow-left"></i>&nbsp&nbspกลับ</a></span>
     <div class="room-info">
         <h1 class="title">@Model.ActivityName</h1>
         <div class="username"><i class="fa-solid fa-circle" style="color: #63E6BE;"></i><h2>@currentUser</h2></div>
@@ -19,23 +19,38 @@
     <span class="span-right"></span>
 </nav>
 
-<div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
-    <ul id="messages-box">
-        @foreach (var message in Model.ChatMessages)
-        {
-            <li><strong>@message.SenderId</strong>: @message.Message</li>
+<div id="messages-container">
+    @foreach (var message in Model.ChatMessages)
+    {
+        
+        @if (@message.SenderId == @currentUser) {
+            <div class="chat-box my-chat">
+                <div class="chat">@message.Message</div>
+                @if (@message.User.UserImageUrl == null){
+                    <img src="~/user.png" alt="">
+                }
+            </div>
+        } else {
+            <div class="chat-box other-chat">
+                @if (@message.User.UserImageUrl == null){
+                    <img src="~/user.png" alt="">
+                }
+                <div class="chat">@message.Message</div>
+            </div>
         }
-    </ul>
+    }
 </div>
 
-<input type="text" id="messageInput" placeholder="Type a message..." />
-<button onclick="sendMessage()">Send</button>
+<div class="input-message-container">
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()"><i class="fa-regular fa-paper-plane" style="color: #32a482;"></i></button>
+</div>
 
 <script>
     const roomId = "@roomId";
     const userId = "@currentUser";
     const socket = new WebSocket(`ws://localhost:5198/ws/chat/${roomId}/${userId}`);
-    const messageBox = document.getElementById("messages-box");
+    const messageContainer = document.getElementById("messages-container");
 
     socket.onopen = function(event) {
         console.log("WebSocket connected to room:", roomId);
@@ -46,7 +61,7 @@
         console.log("Received message:", message);
         const li = document.createElement("li");
         li.innerHTML = event.data;
-        messageBox.appendChild(li);
+        messageContainer.appendChild(li);
 
     };
 

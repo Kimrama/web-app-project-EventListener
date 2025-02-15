@@ -35,6 +35,17 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
 });
+builder.Services.AddScoped<ChatWebSocketService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // หรือ URL ของแอปที่เชื่อมต่อ
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Load Cloudinary settings Environment
 builder.Configuration["Cloudinary:CloudName"] = Environment.GetEnvironmentVariable("CLOUD_NAME");
@@ -44,7 +55,11 @@ builder.Configuration["Cloudinary:ApiSecret"] = Environment.GetEnvironmentVariab
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddScoped<CloudinaryService>();
 
+builder.Services.AddScoped<Base64Helper>();
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -63,4 +78,28 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+app.UseWebSockets();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/ws/chat"))
+    {
+        var segments = context.Request.Path.Value.Split('/');
+        foreach (var seg in segments) {
+            Console.WriteLine(seg);
+        }
+        if (segments.Length == 5)
+        {
+            var roomId = segments[3];
+            var userId = segments[4];
+            var chatService = context.RequestServices.GetRequiredService<ChatWebSocketService>();
+            await chatService.HandleWebSocketAsync(context, roomId, userId);
+        }
+    }
+    else
+    {
+        await next();
+    }
+});
+
 app.Run();

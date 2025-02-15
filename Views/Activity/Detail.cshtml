@@ -103,7 +103,7 @@
                             }
                             else
                             {
-                                <button class="join-btn">
+                                <button class="join-btn" onclick="join_activity('@Model.ActivityId')">
                                     <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                     <span>เข้าร่วม</span>
                                 </button>
@@ -112,7 +112,7 @@
                     }
                     else
                     {
-                        <button class="join-btn">
+                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                             <span>เข้าร่วม</span>
                         </button>
@@ -126,8 +126,8 @@
             </div>
         </div>
         <div class="participant-container">
-            <h2>@Model.UserJoinActivityCount ผู้เข้าร่วม</h2>
-            <div class="all-participant">
+            <h2 id="userJoinActivityCount">@Model.UserJoinActivityCount ผู้เข้าร่วม</h2>
+            <div class="all-participant" id="all-participant">
                 @foreach (var p in Model.UserJoinActivity)
                 {
                     <div class="participant">
@@ -141,4 +141,5 @@
     </main>
 </div>
 
-<script src="~/js/activity/activity_details.js" asp-append-version="true"></script>
+<script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script src="~/js/activity/join_activity.js" asp-append-version="true"></script>

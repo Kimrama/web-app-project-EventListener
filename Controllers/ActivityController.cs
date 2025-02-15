@@ -32,7 +32,7 @@ public class ActivityController : Controller
 
     public string DecodeBase64(string input)
     {
-        string decodedInput = Uri.UnescapeDataString(input); 
+        string decodedInput = Uri.UnescapeDataString(input);
         var bytes = Convert.FromBase64String(decodedInput);
         return System.Text.Encoding.UTF8.GetString(bytes);
     }
@@ -41,14 +41,9 @@ public class ActivityController : Controller
     [Route("Activity/Detail/{activityIdHash}")]
     public async Task<IActionResult> Detail(string activityIdHash)
     {
-        Console.WriteLine(activityIdHash);
-
         var activityId = DecodeBase64(activityIdHash);
-        Console.WriteLine(activityId);
 
         var keys = activityId.Split(" ", 2);
-        Console.WriteLine(keys[0]);
-        Console.WriteLine(keys[1]);
 
         var activity = await _context.Activities
         .Include(a => a.User)
@@ -86,10 +81,63 @@ public class ActivityController : Controller
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
             UserJoinActivityCount = userJoinActivityCount,
-            isUserJoin = isUserJoin
+            isUserJoin = isUserJoin,
+            ActivityId = activityIdHash
         };
 
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> JoinActivity([FromBody] JoinActivityDto dto)
+    {
+        try
+        {
+            var username = User.FindFirstValue(ClaimTypes.Name);
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized();
+            }
+
+            var activityId = DecodeBase64(dto.ActivityIdHash);
+            var keys = activityId.Split(" ", 2);
+
+            var userJoinActivity = new UserJoinActivity
+            {
+                UserId = username,
+                ActivityOwnerId = keys[0],
+                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+            };
+
+            _context.UserJoinActivities.Add(userJoinActivity);
+            await _context.SaveChangesAsync();
+
+            var usersJoinActivity = await _context.UserJoinActivities
+            .Include(u => u.User)
+            .Where(
+                u => u.ActivityOwnerId == keys[0] &&
+                u.ActivityCreatedAt.ToString() == keys[1]
+            )
+            .ToListAsync();
+
+            var userJoinActivityCount = usersJoinActivity.Count;
+
+            return Ok(new
+            {
+                message = "Successfully joined!",
+                usersJoinActivity = usersJoinActivity.Select(
+                    u => new {
+                        u.User.UserName
+                    }
+                ),
+                userJoinActivityCount = userJoinActivityCount
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+        }
     }
 
     [Authorize]
@@ -155,7 +203,7 @@ public class ActivityController : Controller
             StartTime = startTime,
             Detail = model.Detail,
             ParticipantLimit = model.ParticipantLimit,
-            ActivityImageUrl = uploadResult.SecureUrl.AbsoluteUri
+            ActivityImageUrl = uploadResult.SecureUrl.AbsoluteUri,
         };
 
         _context.Activities.Add(activity);

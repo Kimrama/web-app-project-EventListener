@@ -36,7 +36,7 @@ public class HomeController : Controller
         
         var activityViewModels = activities.Select(c => new ActivityViewModel
         {
-            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss.fffffff", new CultureInfo("en-US"))),
+            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
             ActivityTagId = c.ActivityTagId,
             ActivityName = c.ActivityName,
             Location = c.Location,

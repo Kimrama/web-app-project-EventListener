@@ -6,4 +6,5 @@ public class ActivityDetailViewModel
     public List<UserJoinActivity> UserJoinActivity { get; set; }
     public int UserJoinActivityCount { get; set; }
     public bool isUserJoin { get; set; }
+    public string ActivityId { get; set; }
 }

@@ -55,7 +55,6 @@ builder.Configuration["Cloudinary:ApiSecret"] = Environment.GetEnvironmentVariab
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddScoped<CloudinaryService>();
 
-builder.Services.AddScoped<Base64Helper>();
 
 var app = builder.Build();
 

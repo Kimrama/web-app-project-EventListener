@@ -1,0 +1,47 @@
+h1 {
+    text-align: center;
+    font-size: 48px;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 40px;
+    max-width: 90%;
+}
+
+.table {
+    margin: 0 0 40px 0;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: table;
+}
+
+.row {
+    width: 400px;
+    display: table-row;
+    background: #f6f6f6;
+}
+
+.row:nth-of-type(odd) {
+    background: #e9e9e9;
+}
+
+.row.header {
+    font-weight: 900;
+    color: #ffffff;
+    background: #ea6153;
+}
+
+.row.green {
+    background: #27ae60;
+}
+
+.row.blue {
+    background: #2980b9;
+}
+
+.cell {
+    width: 400px;
+    padding: 6px 12px;
+    display: table-cell;
+}

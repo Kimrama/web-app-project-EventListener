@@ -19,6 +19,18 @@ namespace EventListener.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Detail() {
+            var activities = await _context.Activities.Select(a => new ChatroomListFromActivity {
+                ActivityName = a.ActivityName,
+                ActivityOwnerId = a.OwnerId,
+                ActivityCreateAt = a.CreatedAt,
+                RoomIdHash = Base64Helper.EncodeBase64(a.OwnerId + " " + a.CreatedAt.ToString())
+            }).ToListAsync();
+
+            return View(activities);
+        }
+
+        [HttpGet]
         [Route("Chatroom/Room/{roomId}")]
         public async Task<IActionResult> Room(string roomId)
         {

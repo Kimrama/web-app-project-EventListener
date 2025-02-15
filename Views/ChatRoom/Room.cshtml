@@ -1,0 +1,62 @@
+@model EventListener.Models.Activity
+
+@{
+    ViewData["Title"] = "Chat Room";
+    var roomId = @ViewData["RoomId"];
+    var currentUser = User.Identity.Name;
+}
+
+<h2>Chat Room: @Model.ActivityName</h2>
+
+<div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+    <ul id="messages-box">
+        @foreach (var message in Model.ChatMessages)
+        {
+            <li><strong>@message.SenderId</strong>: @message.Message</li>
+        }
+    </ul>
+</div>
+
+<input type="text" id="messageInput" placeholder="Type a message..." />
+<button onclick="sendMessage()">Send</button>
+
+<script>
+    const roomId = "@roomId";
+    const userId = "@currentUser";
+    const socket = new WebSocket(`ws://localhost:5198/ws/chat/${roomId}/${userId}`);
+    const messageBox = document.getElementById("messages-box");
+
+    socket.onopen = function(event) {
+        console.log("WebSocket connected to room:", roomId);
+    };
+
+    socket.onmessage = function(event) {
+        const message = event.data;
+        console.log("Received message:", message);
+        const li = document.createElement("li");
+        li.innerHTML = event.data;
+        messageBox.appendChild(li);
+
+    };
+
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed");
+    };
+
+    socket.onerror = function(error) {
+        console.error("WebSocket Error:", error);
+    };
+
+    function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value.trim(); // ตัดช่องว่างหน้า-หลัง
+        if (message && socket.readyState === WebSocket.OPEN) {
+            socket.send(message);
+            console.log("📤 Sent:", message);
+            messageInput.value = ""; // ล้าง input หลังส่ง
+        } else {
+            console.error("WebSocket is not open or message is empty.");
+        }
+    }
+
+</script>

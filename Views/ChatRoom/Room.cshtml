@@ -6,7 +6,18 @@
     var currentUser = User.Identity.Name;
 }
 
-<h2>Chat Room: @Model.ActivityName</h2>
+
+<link rel="stylesheet" href="~/css/ChatRoom/Room.css" asp-append-version="true">
+
+
+<nav>
+    <span class="span-left"><a href=""><i class="fa-solid fa-arrow-left"></i>&nbsp&nbspกลับ</a></span>
+    <div class="room-info">
+        <h1 class="title">@Model.ActivityName</h1>
+        <div class="username"><i class="fa-solid fa-circle" style="color: #63E6BE;"></i><h2>@currentUser</h2></div>
+    </div>
+    <span class="span-right"></span>
+</nav>
 
 <div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
     <ul id="messages-box">

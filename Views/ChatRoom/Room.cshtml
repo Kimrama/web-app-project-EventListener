@@ -49,11 +49,11 @@
 
     function sendMessage() {
         const messageInput = document.getElementById("messageInput");
-        const message = messageInput.value.trim(); // ตัดช่องว่างหน้า-หลัง
+        const message = messageInput.value.trim();
         if (message && socket.readyState === WebSocket.OPEN) {
             socket.send(message);
             console.log("📤 Sent:", message);
-            messageInput.value = ""; // ล้าง input หลังส่ง
+            messageInput.value = "";
         } else {
             console.error("WebSocket is not open or message is empty.");
         }

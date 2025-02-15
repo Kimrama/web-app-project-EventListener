@@ -13,6 +13,7 @@ nav {
     align-items: center;
     position: sticky;
     top: 0;
+    margin-bottom: 20px;
 
     .span-left {
         position: relative;
@@ -38,6 +39,73 @@ nav {
         .username {
             display: flex;
             gap: 10px;
+        }
+    }
+}
+#messages-container {
+    margin: 0 10%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+
+    .chat-box {
+        display: flex;
+        gap: 14px;
+        width: 100%;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+    }
+    .chat {
+        padding: 10px 15px;
+        color: black;
+        border-radius: 8px;
+        width: max-content;
+        max-width: 30%;
+        line-height: 20px;
+    }
+    .my-chat {
+        justify-content: end;
+        .chat {
+            background-color: #05b29d;
+        }
+    }
+
+    .other-chat {
+        justify-content: start;
+        .chat {
+            background-color: #e5e4e2;
+        }
+    }
+}
+
+.input-message-container {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    input {
+        height: 36px;
+        font-size: 28px;
+        width: 50%;
+        padding: 10px;
+        border-radius: 16px;
+    }
+    i {
+        font-size: 30px;
+    }
+
+    button {
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+            transform: scale(1.3);
         }
     }
 }

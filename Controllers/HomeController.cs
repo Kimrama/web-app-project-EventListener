@@ -27,6 +27,8 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+
+        
         var activities = await _context.Activities
         .Include(a => a.ActivityTag)
         .Include(b => b.UserJoinActivities)

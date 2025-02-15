@@ -223,7 +223,7 @@ nav {
     color : white;
     border-radius : 10px;
     cursor : grab;
-    width : 15%;
+    width : auto;
     height : 10%;
     display : flex;  
     align-items : center; 

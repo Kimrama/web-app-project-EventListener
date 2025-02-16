@@ -66,11 +66,18 @@
 
     socket.onmessage = function(event) {
         const message = event.data;
-        console.log(message);
+        const messageObj = JSON.parse(message)
 
-        let data = message.split(": ")
-        const sender = data.shift();
-        const text = data.join(": ")
+        @* messageObj at backend*@
+        @* var chatMessage = new 
+        {
+            SenderId = senderId,
+            senderImageUrl = senderImageUrl,
+            Message = text,
+            
+        }; *@
+        
+        console.log(messageObj);
 
         const chatBox = document.createElement("div");
         chatBox.classList.add("chat-box")
@@ -78,22 +85,29 @@
         nameSpan.textContent = "You";
         const chatDiv = document.createElement("div")
         chatDiv.classList.add("chat");
-        chatDiv.textContent = text;
-        console.log(`sen: ${sender} user: ${userId}`);
+        chatDiv.textContent = messageObj.Message;
 
 
         chatBox.appendChild(nameSpan);
         chatBox.appendChild(chatDiv);
 
+        const userImg = document.createElement("img")
+        if (messageObj.senderImageUrl === "NULL") {
+            userImg.src = "/user.png";
+        } else {
+            userImg.src = messageObj.senderImageUrl;
+        }
 
-        if (sender == userId) {
+
+        if (messageObj.SenderId == userId) {
             const myChatContainer = document.createElement("div");
             myChatContainer.classList.add("chat-container");
             myChatContainer.classList.add("my-chat");
 
             myChatContainer.appendChild(chatBox);
-
+            myChatContainer.appendChild(userImg);
             chatLine.appendChild(myChatContainer);
+            
         }
 
 

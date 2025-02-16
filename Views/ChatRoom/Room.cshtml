@@ -66,10 +66,36 @@
 
     socket.onmessage = function(event) {
         const message = event.data;
-        console.log("Received message:", message);
-        const li = document.createElement("li");
-        li.innerHTML = event.data;
-        chatLine.appendChild(li);
+
+        let data = message.split(": ")
+        const sender = data.shift();
+        const text = data.join(": ")
+
+        const chatBox = document.createElement("div");
+        chatBox.classList.add("chat-box")
+        const nameSpan = document.createElement("span")
+        nameSpan.textContent = "You";
+        const chatDiv = document.createElement("div")
+        chatDiv.classList.add("chat");
+        chatDiv.textContent = text;
+        console.log(`sen: ${sender} user: ${userId}`);
+
+
+        chatBox.appendChild(nameSpan);
+        chatBox.appendChild(chatDiv);
+
+
+        if (sender == userId) {
+            const myChatContainer = document.createElement("div");
+            myChatContainer.classList.add("chat-container");
+            myChatContainer.classList.add("my-chat");
+
+            myChatContainer.appendChild(chatBox);
+
+            chatLine.appendChild(myChatContainer);
+        }
+
+
 
     };
 

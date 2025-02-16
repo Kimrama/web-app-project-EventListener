@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using EventListener.Data;
 using EventListener.Models;
 using System.Globalization;
-
+using System.Text.Json;
 namespace EventListener.Services;
 
 public class ChatWebSocketService
@@ -103,12 +103,34 @@ public class ChatWebSocketService
     private async Task BroadcastMessageAsync(string roomId, string message)
     {
         if (!RoomConnections.ContainsKey(roomId)) return;
+        var key = message.Split(": ", 2);
+        var senderId = key[0];
+        var text = key[1];
+
+        
+        var sender = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName == senderId);
+        var senderImageUrl = "";
+        if (sender != null) {
+            if(sender.UserImageUrl == null) {
+                senderImageUrl = "NULL";
+            } else {
+                senderImageUrl = sender.UserImageUrl;
+            }
+        }
+        var chatMessage = new 
+        {
+            SenderId = senderId,
+            senderImageUrl = senderImageUrl,
+            Message = text,
+            
+        };
+        string jsonMessage = JsonSerializer.Serialize(chatMessage);
 
         var tasks = RoomConnections[roomId]
             .Where(ws => ws.State == WebSocketState.Open)
             .Select(async ws =>
             {
-                var bytes = Encoding.UTF8.GetBytes(message);
+                var bytes = Encoding.UTF8.GetBytes(jsonMessage);
                 await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
             });
 

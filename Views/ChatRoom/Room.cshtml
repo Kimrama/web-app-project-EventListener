@@ -77,12 +77,10 @@
             
         }; *@
         
-        console.log(messageObj);
 
         const chatBox = document.createElement("div");
         chatBox.classList.add("chat-box")
         const nameSpan = document.createElement("span")
-        nameSpan.textContent = "You";
         const chatDiv = document.createElement("div")
         chatDiv.classList.add("chat");
         chatDiv.textContent = messageObj.Message;
@@ -101,6 +99,7 @@
 
         if (messageObj.SenderId == userId) {
             const myChatContainer = document.createElement("div");
+            nameSpan.textContent = "You";
             myChatContainer.classList.add("chat-container");
             myChatContainer.classList.add("my-chat");
 
@@ -108,6 +107,15 @@
             myChatContainer.appendChild(userImg);
             chatLine.appendChild(myChatContainer);
             
+        } else {
+            const otherChatContainer = document.createElement("div");
+            nameSpan.textContent = messageObj.SenderId;
+            otherChatContainer.classList.add("chat-container");
+            otherChatContainer.classList.add("other-chat");
+
+            otherChatContainer.appendChild(userImg);
+            otherChatContainer.appendChild(chatBox);
+            chatLine.appendChild(otherChatContainer);
         }
 
 
@@ -127,7 +135,7 @@
         const message = messageInput.value.trim();
         if (message && socket.readyState === WebSocket.OPEN) {
             socket.send(message);
-            console.log("📤 Sent:", message);
+            console.log("Sent:", message);
             messageInput.value = "";
         } else {
             console.error("WebSocket is not open or message is empty.");

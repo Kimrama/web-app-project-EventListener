@@ -13,7 +13,8 @@ nav {
     align-items: center;
     position: sticky;
     top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
+    z-index: 99;
 
     .span-left {
         position: relative;
@@ -42,40 +43,66 @@ nav {
         }
     }
 }
-#messages-container {
-    margin: 0 10%;
+#chat-line {
+    padding: 0 10%;
     display: flex;
     gap: 10px;
     flex-direction: column;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
 
-    .chat-box {
-        display: flex;
-        gap: 14px;
+    .chat-container {
         width: 100%;
+        display: flex;
+        gap: 10px;
+
         img {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
+        }
+
+        .sendate {
+            font-size: 10px;
         }
     }
+
     .chat {
-        padding: 10px 15px;
-        color: black;
+        padding: 10px;
         border-radius: 8px;
-        width: max-content;
         max-width: 30%;
-        line-height: 20px;
+        line-height: 18px;
     }
+
     .my-chat {
         justify-content: end;
-        .chat {
-            background-color: #05b29d;
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            justify-content: end;
+            width: 100%;
+            gap: 6px;
+
+            .chat {
+                background-color: #83c7ff;
+            }
         }
     }
 
     .other-chat {
         justify-content: start;
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: end;
+            width: 100%;
+            gap: 6px;
+        }
         .chat {
-            background-color: #e5e4e2;
+            background-color: #ddeefc;
         }
     }
 }
@@ -84,14 +111,15 @@ nav {
     position: fixed;
     left: 0;
     bottom: 0;
-    padding: 20px;
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 16px;
+    background-color: white;
+    padding: 10px;
     input {
         height: 36px;
-        font-size: 28px;
+        font-size: 22px;
         width: 50%;
         padding: 10px;
         border-radius: 16px;
@@ -104,6 +132,7 @@ nav {
         border: none;
         cursor: pointer;
         transition: 0.3s;
+        background-color: transparent;
         &:hover {
             transform: scale(1.3);
         }

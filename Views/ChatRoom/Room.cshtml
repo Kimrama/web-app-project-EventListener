@@ -14,28 +14,36 @@
     <span class="span-left"><a asp-controller="Activity" asp-action="detail" asp-route-activityIdHash="@roomId"><i class="fa-solid fa-arrow-left"></i>&nbsp&nbspกลับ</a></span>
     <div class="room-info">
         <h1 class="title">@Model.ActivityName</h1>
-        <div class="username"><i class="fa-solid fa-circle" style="color: #63E6BE;"></i><h2>@currentUser</h2></div>
+        <div class="username"><i class="fa-solid fa-circle" style="color: #008cff;"></i><h2>@currentUser</h2></div>
     </div>
     <span class="span-right"></span>
 </nav>
 
-<div id="messages-container">
+<div id="chat-line">
     @foreach (var message in Model.ChatMessages)
     {
         
         @if (@message.SenderId == @currentUser) {
-            <div class="chat-box my-chat">
-                <div class="chat">@message.Message</div>
+            <div class="chat-container my-chat">
+                <div class="chat-box">
+                    <span>You</span>
+                    <div class="chat">@message.Message</div>
+                    <span class="sendate">@message.SendDate</span>
+                </div>
                 @if (@message.User.UserImageUrl == null){
                     <img src="~/user.png" alt="">
                 }
             </div>
         } else {
-            <div class="chat-box other-chat">
+            <div class="chat-container other-chat">
                 @if (@message.User.UserImageUrl == null){
                     <img src="~/user.png" alt="">
                 }
-                <div class="chat">@message.Message</div>
+                <div class="chat-box">
+                    <span>@message.SenderId</span>
+                    <div class="chat">@message.Message</div>
+                    <span class="sendate">@message.SendDate</span>
+                </div>
             </div>
         }
     }
@@ -50,7 +58,14 @@
     const roomId = "@roomId";
     const userId = "@currentUser";
     const socket = new WebSocket(`ws://localhost:5198/ws/chat/${roomId}/${userId}`);
-    const messageContainer = document.getElementById("messages-container");
+    const chatLine = document.getElementById("chat-line");
+
+    function scrollToBottom() {
+        const lastMessage = chatLine.lastElementChild;
+        if (lastMessage) {
+            lastMessage.scrollIntoView({ behavior: "smooth" });
+        }
+    }
 
     socket.onopen = function(event) {
         console.log("WebSocket connected to room:", roomId);
@@ -58,11 +73,38 @@
 
     socket.onmessage = function(event) {
         const message = event.data;
-        console.log("Received message:", message);
-        const li = document.createElement("li");
-        li.innerHTML = event.data;
-        messageContainer.appendChild(li);
+        const messageObj = JSON.parse(message);
 
+        const chatBox = document.createElement("div");
+        chatBox.classList.add("chat-box");
+        const nameSpan = document.createElement("span");
+        const chatDiv = document.createElement("div");
+        chatDiv.classList.add("chat");
+        chatDiv.textContent = messageObj.Message;
+
+        chatBox.appendChild(nameSpan);
+        chatBox.appendChild(chatDiv);
+
+        const userImg = document.createElement("img");
+        userImg.src = messageObj.senderImageUrl === "NULL" ? "/user.png" : messageObj.senderImageUrl;
+
+        if (messageObj.SenderId == userId) {
+            const myChatContainer = document.createElement("div");
+            nameSpan.textContent = "You";
+            myChatContainer.classList.add("chat-container", "my-chat");
+            myChatContainer.appendChild(chatBox);
+            myChatContainer.appendChild(userImg);
+            chatLine.appendChild(myChatContainer);
+        } else {
+            const otherChatContainer = document.createElement("div");
+            nameSpan.textContent = messageObj.SenderId;
+            otherChatContainer.classList.add("chat-container", "other-chat");
+            otherChatContainer.appendChild(userImg);
+            otherChatContainer.appendChild(chatBox);
+            chatLine.appendChild(otherChatContainer);
+        }
+
+        scrollToBottom();
     };
 
     socket.onclose = function(event) {
@@ -78,7 +120,7 @@
         const message = messageInput.value.trim();
         if (message && socket.readyState === WebSocket.OPEN) {
             socket.send(message);
-            console.log("📤 Sent:", message);
+            console.log("Sent:", message);
             messageInput.value = "";
         } else {
             console.error("WebSocket is not open or message is empty.");

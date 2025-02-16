@@ -60,66 +60,51 @@
     const socket = new WebSocket(`ws://localhost:5198/ws/chat/${roomId}/${userId}`);
     const chatLine = document.getElementById("chat-line");
 
+    function scrollToBottom() {
+        const lastMessage = chatLine.lastElementChild;
+        if (lastMessage) {
+            lastMessage.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
     socket.onopen = function(event) {
         console.log("WebSocket connected to room:", roomId);
     };
 
     socket.onmessage = function(event) {
         const message = event.data;
-        const messageObj = JSON.parse(message)
-
-        @* messageObj at backend*@
-        @* var chatMessage = new 
-        {
-            SenderId = senderId,
-            senderImageUrl = senderImageUrl,
-            Message = text,
-            
-        }; *@
-        
+        const messageObj = JSON.parse(message);
 
         const chatBox = document.createElement("div");
-        chatBox.classList.add("chat-box")
-        const nameSpan = document.createElement("span")
-        const chatDiv = document.createElement("div")
+        chatBox.classList.add("chat-box");
+        const nameSpan = document.createElement("span");
+        const chatDiv = document.createElement("div");
         chatDiv.classList.add("chat");
         chatDiv.textContent = messageObj.Message;
-
 
         chatBox.appendChild(nameSpan);
         chatBox.appendChild(chatDiv);
 
-        const userImg = document.createElement("img")
-        if (messageObj.senderImageUrl === "NULL") {
-            userImg.src = "/user.png";
-        } else {
-            userImg.src = messageObj.senderImageUrl;
-        }
-
+        const userImg = document.createElement("img");
+        userImg.src = messageObj.senderImageUrl === "NULL" ? "/user.png" : messageObj.senderImageUrl;
 
         if (messageObj.SenderId == userId) {
             const myChatContainer = document.createElement("div");
             nameSpan.textContent = "You";
-            myChatContainer.classList.add("chat-container");
-            myChatContainer.classList.add("my-chat");
-
+            myChatContainer.classList.add("chat-container", "my-chat");
             myChatContainer.appendChild(chatBox);
             myChatContainer.appendChild(userImg);
             chatLine.appendChild(myChatContainer);
-            
         } else {
             const otherChatContainer = document.createElement("div");
             nameSpan.textContent = messageObj.SenderId;
-            otherChatContainer.classList.add("chat-container");
-            otherChatContainer.classList.add("other-chat");
-
+            otherChatContainer.classList.add("chat-container", "other-chat");
             otherChatContainer.appendChild(userImg);
             otherChatContainer.appendChild(chatBox);
             chatLine.appendChild(otherChatContainer);
         }
 
-
-
+        scrollToBottom();
     };
 
     socket.onclose = function(event) {

@@ -106,7 +106,8 @@ public class ActivityController : Controller
             {
                 UserId = username,
                 ActivityOwnerId = keys[0],
-                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                Status = "wait"
             };
 
             _context.UserJoinActivities.Add(userJoinActivity);
@@ -139,6 +140,55 @@ public class ActivityController : Controller
             return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
         }
     }
+
+   [HttpPost]
+    public async Task<IActionResult> UpdateParticipantStatus()
+    {
+        try
+        {
+            var userId = Request.Form["userId"].ToString();
+            var activityOwnerId = Request.Form["activityOwnerId"].ToString();
+            var activityCreatedAtStr = Request.Form["activityCreatedAt"].ToString(); // ✅ แปลงเป็น string
+            var status = Request.Form["status"].ToString();
+
+            Console.WriteLine($"UserID: {userId}");
+            Console.WriteLine($"ActivityOwnerID: {activityOwnerId}");
+            Console.WriteLine($"ActivityCreatedAt: {activityCreatedAtStr}");
+            Console.WriteLine($"Status: {status}");
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(activityOwnerId) || string.IsNullOrEmpty(activityCreatedAtStr) || string.IsNullOrEmpty(status))
+            {
+                return BadRequest(new { message = "ข้อมูลไม่ครบถ้วน" });
+            }
+
+            if (!DateTime.TryParseExact(activityCreatedAtStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime activityCreatedAt))
+            {
+                return BadRequest(new { message = "รูปแบบของวันที่ไม่ถูกต้อง" });
+            }
+            var participant = await _context.UserJoinActivities
+                .FirstOrDefaultAsync(u =>
+                    u.UserId == userId &&
+                    u.ActivityOwnerId == activityOwnerId &&
+                    u.ActivityCreatedAt == activityCreatedAt
+                );
+
+            if (participant == null)
+            {
+                return NotFound(new { message = "ไม่พบผู้เข้าร่วมกิจกรรม" });
+            }
+
+            participant.Status = status;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "อัปเดตสถานะสำเร็จ" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "เกิดข้อผิดพลาด", error = ex.Message });
+        }
+    }
+
+
 
     [Authorize]
     [HttpGet]

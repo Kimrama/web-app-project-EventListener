@@ -22,13 +22,23 @@
                         สร้างกิจกรรม
                     </button>
                 </a>
-                <button class="noti-btn">
-                    <i class="fa-regular fa-bell"></i>
-                    การเเจ้งเตือน
-                </button>
+                <a asp-controller="Notification" asp-action="Notification">
+                    <button class="noti-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        การเเจ้งเตือน
+                    </button>
+                </a>
                 <div class="user-dropdown">
-                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
-                            class="avatar-img"></button>
+                    <button class="user-avatar-btn" onclick="drop()">
+                        @if (Model.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="" class="avatar-img">
+                        }
+                        else
+                        {
+                            <img src="@Model.UserImageUrl" alt="" class="avatar-img">
+                        }
+                    </button>
                     <div id="dropdown-content" class="dropdown-content">
                         <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
@@ -56,7 +66,14 @@
             <div class="profile-div">
                 <div class="profile-img_rect-div">
                     <div class="profile-img-div">
-                        <img src=@Model.UserImageUrl alt="me_profile_picture" >
+                        @if(Model.UserImageUrl == null)
+                        {
+                            <img src="https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg" alt="me_profile_picture" >
+                        }
+                        else
+                        {
+                            <img src=@Model.UserImageUrl alt="me_profile_picture" >
+                        }
                     </div>
                     <div class="sex-rect" style="background-color: @Model.SexColor;"></div>
                 </div>

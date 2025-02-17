@@ -1,69 +1,143 @@
 nav {
     background-color: white;
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 0.25px solid black; 
-    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
+    padding: 13px;
+    /* position: fixed; */
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 .logo {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 16px;
-
     span {
         font-size: 24px;
         font-weight: bold;
     }
+    margin-left: 12px;
 }
 
 .buttongroup-and-user {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     gap: 16px;
 
-    button:nth-child(1) {
-        padding: 8px 18px; 
+    button {
+        padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
-        border: 1px solid #E232BC;
-        background-color: #E232BC;
-        color: white;
-
-        span {
-            margin-left: 5px;
-        }
-    }
-
-    button:nth-child(1) :hover {
         cursor: pointer;
     }
 
-    button:nth-child(2) {
-        padding: 8px 18px; 
-        font-size: 16px;
-        border-radius: 12px;
-        border: 1px solid #FF713E;
-        background-color: #FF713E;
-        color: white;
+    button:hover {
+        transform: translateY(-2px);
+        opacity: 0.8;
+    }
 
-        span {
-            margin-left: 5px;
+    .create-activity-btn {
+        border: 1px solid #e232bc;
+        background-color: #e232bc;
+        color: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+
+        i {
+            margin-right: 5px;
         }
     }
 
-    button:nth-child(2) :hover {
-        cursor: pointer;
+    .noti-btn {
+        border: 1px solid #ff713e;
+        background-color: #ff713e;
+        color: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+
+        i {
+            margin-right: 5px;
+        }
     }
 
+    .user-avatar-btn {
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+    }
+
+    .login-btn {
+        border: 1px solid #4f46e5;
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+        width: 120px;
+    }
+
+    .register-btn {
+        background-color: white;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+        width: 120px;
+    }
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+    }
+}
+
+.user-avatar-btn {
+    border: none;
+    background-color: white;
+    border-radius: 100%;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
 }
 
 /* (width=1388px,height=838px for calculate vw and vh)  */
 
 .profile-main-div{
-    padding: 50px 100px 50px 100px;
+    /* margin: 144px 100px 50px 100px; */
+    margin: 50px 100px 50px 100px;
 }
 
 .profile-div{
@@ -97,7 +171,7 @@ nav {
         height:28.8vw;
         max-width: 400px;
         max-height: 350px;
-        object-fit: fill;
+        object-fit: cover;
     }
 }
 
@@ -188,7 +262,7 @@ nav {
 
     li:nth-child(n):hover{
         cursor: pointer;
-        background-color: gray;
+        background-color:lightslategray;
         transition: 0.25s;
     }
 }
@@ -210,6 +284,7 @@ nav {
     align-items: center;
     justify-content: center;
     width:100%;
+    transition: all 0.5s;
     height:40px;
     background-color: #4F46E5;
     border:none;
@@ -219,7 +294,7 @@ nav {
 
 .edit-btn:hover{
     cursor: pointer;
-    background-color:darkblue;
+    transform:scale(1.025);
 }
 
 
@@ -264,11 +339,6 @@ nav {
         p:nth-child(n){
             align-self: center;
         }
-
-        p:nth-child(5){
-            width:410px;
-        }
-
     }
 
     .id_birthday-div{
@@ -286,6 +356,7 @@ nav {
 
         p:first-child{
             align-self: center;
+            padding: 10px 0px 15px 0px;
         }
     }
 

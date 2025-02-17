@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Security.Claims;
-using System.Xml.Schema;
 using EventListener.Data;
 using EventListener.Models;
 using EventListener.Services;
@@ -16,6 +15,7 @@ public class ActivityController : Controller
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
     private readonly CloudinaryService _cloudinaryService;
+    private User? _user;
 
     public ActivityController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
@@ -31,6 +31,12 @@ public class ActivityController : Controller
         var activityId = Base64Helper.DecodeBase64(activityIdHash);
 
         var keys = activityId.Split(" ", 2);
+
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        if(username != null){
+            _user = await _userManager.FindByNameAsync(username);
+        }
 
         var activity = await _context.Activities
         .Include(a => a.User)
@@ -55,21 +61,22 @@ public class ActivityController : Controller
         )
         .CountAsync();
 
-        var username = User.FindFirstValue(ClaimTypes.Name);
-
         var isUserJoin = await _context.UserJoinActivities.AnyAsync(
             uja => uja.UserId == username &&
             uja.ActivityOwnerId == keys[0] &&
             uja.ActivityCreatedAt.ToString() == keys[1]
         );
 
+
         var model = new ActivityDetailViewModel
         {
+
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
             UserJoinActivityCount = userJoinActivityCount,
             isUserJoin = isUserJoin,
-            ActivityId = activityIdHash
+            ActivityId = activityIdHash,
+            UserImageUrl = _user?.UserImageUrl
         };
 
         return View(model);
@@ -115,7 +122,8 @@ public class ActivityController : Controller
                 message = "Successfully joined!",
                 usersJoinActivity = usersJoinActivity.Select(
                     u => new {
-                        u.User.UserName
+                        u.User.UserName,
+                        u.User.UserImageUrl,
                     }
                 ),
                 userJoinActivityCount = userJoinActivityCount

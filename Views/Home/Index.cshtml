@@ -30,9 +30,13 @@
                     </button>
                 </a>
                 <div class="dropdown">
-                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt="avatar-img" class="avatar-img"></button>
+                    @if (ViewData["avatarUrl"] == "NULL") {
+                        <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt="avatar-img" class="avatar-img"></button>
+                    } else {
+                        <button class="user-avatar-btn" onclick="drop()"><img src="@ViewData["avatarUrl"]" alt="avatar-img" class="avatar-img"></button>
+                    }
                     <div id="myDropdown" class="dropdown-content">
-                        <a asp-controller="profile" asp-action="me">โปรไฟล์</a>
+                        <a asp-controller="profile">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
                     </div>
                 </div>

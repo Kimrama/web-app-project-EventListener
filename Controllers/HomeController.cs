@@ -48,6 +48,19 @@ public class HomeController : Controller
             UserJoinActivityCount = c.UserJoinActivities.Count()
         }).ToList();
 
+        if (User.Identity.IsAuthenticated) {
+            var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            
+            if (currentUser != null) {
+                ViewData["avatarUrl"] = currentUser.UserImageUrl;
+            } else {
+                return NotFound("User not found");
+            }
+        } else {
+
+            ViewData["avatarUrl"] = "NULL";
+        }
+ 
         return View(activityViewModels);
     }
 }

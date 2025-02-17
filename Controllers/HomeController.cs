@@ -53,6 +53,7 @@ public class HomeController : Controller
             
             if (currentUser != null) {
                 ViewData["avatarUrl"] = currentUser.UserImageUrl;
+                
             } else {
                 return NotFound("User not found");
             }

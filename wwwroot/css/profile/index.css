@@ -339,6 +339,10 @@ nav {
         p:nth-child(n){
             align-self: center;
         }
+
+        p:nth-child(5){
+            text-align: center;
+        }
     }
 
     .id_birthday-div{

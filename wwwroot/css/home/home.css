@@ -255,6 +255,10 @@ a:active {
     padding: 0;
     cursor: pointer;
     position: relative;
+
+    img {
+        object-fit: cover;
+    }
 }
 .dropdown {
     position: relative;

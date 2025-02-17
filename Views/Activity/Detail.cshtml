@@ -19,7 +19,6 @@
                     <button class="create-activity-btn">
                         <i class="fa-solid fa-plus"></i>
                         สร้างกิจกรรม
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
                     </button>
                 </a>
                 <button class="noti-btn">
@@ -146,29 +145,29 @@
         @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Activity.User.UserName)
         {
             <div class="participant-container">
-            <h2 id="userJoinActivityCount">@Model.UserJoinActivityCount คำขอเข้าร่วม</h2>
-            <div class="all-participant" id="all-participant">
-                @foreach (var p in Model.UserJoinActivity)
-                {
-                    @if(p.Status == "wait"){
-                        <div class="participant">
+                <h2 id="userJoinActivityCount">@Model.UserJoinActivityCount คำขอเข้าร่วม</h2>
+                <div class="all-participant" id="all-participant">
+                    @foreach (var p in Model.UserJoinActivity)
+                    {
+                        @if (p.Status == "wait")
+                        {
+                            
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
+                                <h4>@p.User.UserName</h4>
+                                
+                                @{
+                                    string formatDate = p.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss"); // ✅ แปลง Format ให้เป็น String
+                                }
 
-                    <div class="participant" onclick="window.location.href = '@Url.Action("person","profile",new {usernameparam = p.User.UserName.ToString()})'">
+                                <span>@formatDate</span>
 
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s"
-                            alt="">
-                        <h4>@p.User.UserName</h4>
-                        @{
-                        string formatDate = p.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss"); // แปลง Format ให้เป็น String
+                                <button onclick="manage_submit('@p.UserId', '@p.ActivityOwnerId', '@formatDate', 'Accept')">Accept</button>
+                                <button onclick="manage_submit('@p.UserId', '@p.ActivityOwnerId', '@formatDate', 'Deny')">Deny</button>
+                            </div>
                         }
-                        <span>@p.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</span>
-                        <button onclick="manage_submit('@p.UserId', '@p.ActivityOwnerId', '@formatDate', 'Accept' )">Accept</button>
-                        <button onclick="manage_submit('@p.UserId', @p.ActivityOwnerId, @formatDate, 'Deny' )">Deny</button>
-                    </div>
                     }
-                }
+                </div>
             </div>
-        </div>
         }
     </main>
 </div>

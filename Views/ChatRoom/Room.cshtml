@@ -32,12 +32,16 @@
                 </div>
                 @if (@message.User.UserImageUrl == null){
                     <img src="~/user.png" alt="">
+                } else {
+                    <img src="@message.User.UserImageUrl" alt="">
                 }
             </div>
         } else {
             <div class="chat-container other-chat">
                 @if (@message.User.UserImageUrl == null){
                     <img src="~/user.png" alt="">
+                } else {
+                    <img src="@message.User.UserImageUrl" alt="">
                 }
                 <div class="chat-box">
                     <span>@message.SenderId</span>

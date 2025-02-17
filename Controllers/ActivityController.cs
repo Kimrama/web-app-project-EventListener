@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Security.Claims;
-using System.Xml.Schema;
 using EventListener.Data;
 using EventListener.Models;
 using EventListener.Services;
@@ -45,6 +44,10 @@ public class ActivityController : Controller
 
         var keys = activityId.Split(" ", 2);
 
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        var user = await _userManager.FindByNameAsync(username);
+
         var activity = await _context.Activities
         .Include(a => a.User)
         .FirstOrDefaultAsync
@@ -68,8 +71,6 @@ public class ActivityController : Controller
         )
         .CountAsync();
 
-        var username = User.FindFirstValue(ClaimTypes.Name);
-
         var isUserJoin = await _context.UserJoinActivities.AnyAsync(
             uja => uja.UserId == username &&
             uja.ActivityOwnerId == keys[0] &&
@@ -78,11 +79,13 @@ public class ActivityController : Controller
 
         var model = new ActivityDetailViewModel
         {
+
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
             UserJoinActivityCount = userJoinActivityCount,
             isUserJoin = isUserJoin,
-            ActivityId = activityIdHash
+            ActivityId = activityIdHash,
+            UserImageUrl = user.UserImageUrl
         };
 
         return View(model);

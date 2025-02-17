@@ -25,7 +25,7 @@ public class ProfileController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var username = User.FindFirstValue(ClaimTypes.Name);//inspect login user
+        var username = User.FindFirstValue(ClaimTypes.Name); //inspect login user
 
         if (string.IsNullOrEmpty(username))
         {

@@ -10,7 +10,7 @@
             </div>
             <div class="filter-container">
                 <div class="date-input">
-                    <i class="fa-regular fa-calendar"></i><button>1 jan 2025 - 5 jan 2025</button>
+                    <i class="fa-regular fa-calendar"></i><button onclick="openPopup()">all</button>
                 </div>
                 <div class="filter"><i class="fa-solid fa-sliders"></i><button> all</button></div>
             </div>
@@ -59,11 +59,13 @@
                         <span class="tag">@activity.ActivityTagId</span>
                     </div>
                     <div class="time-info">
-                        <span>@activity.StartDate, @activity.StartTime</span><span>จะเริ่มวันพรุ่งนี้</span>
+                        <span>@activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th"))
+                            @activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th"))
+                            , @activity.StartTime.ToString(@"hh\:mm") น.</span><span>จะเริ่มวันพรุ่งนี้</span>
                     </div>
                     <div class="card-info">
                         <div class="info">
-                            <article>@activity.ActivityName</article>
+                            <article class="activity-name">@activity.ActivityName</article>
                             <span class="location">@activity.Location</span>
                             <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
                             <span class="participant-info">@activity.UserJoinActivityCount/@activity.ParticipantLimit คนจะไป</span>
@@ -75,4 +77,17 @@
         }
     </div>
 </div>
+
+<div class="popup-overlay" id="popupOverlay" onclick="openPopup(event)">
+    <div class="popup" onclick="event.stopPropagation()">
+        <h3>เลือกช่วงเวลาของกิจกรรมที่จะค้นหา</h3>
+        <div class="date-input-container">
+            <div><h4>เริ่มต้น</h4><input type="date" id="start-date"></div>
+            <div>-></div>
+            <div><h4>สิ้นสุด</h4><input type="date" id="end-date"></div>
+        </div>
+        <button class="close-btn" onclick="closePopup()">เลือก</button>
+    </div>
+</div>
 <script src="~/js/home/dropdown.js" asp-append-version="true"></script>
+<script src="~/js/home/filter.js" asp-append-version="true"></script>

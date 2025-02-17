@@ -19,6 +19,7 @@
                     <button class="create-activity-btn">
                         <i class="fa-solid fa-plus"></i>
                         สร้างกิจกรรม
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
                     </button>
                 </a>
                 <button class="noti-btn">
@@ -130,7 +131,7 @@
             <div class="all-participant" id="all-participant">
                 @foreach (var p in Model.UserJoinActivity)
                 {
-                    <div class="participant">
+                    <div class="participant" onclick="window.location.href = '@Url.Action("person","profile",new {usernameparam = p.User.UserName.ToString()})'">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s"
                             alt="">
                         <h4>@p.User.UserName</h4>

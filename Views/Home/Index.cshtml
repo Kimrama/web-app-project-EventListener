@@ -10,7 +10,7 @@
             </div>
             <div class="filter-container">
                 <div class="date-input">
-                    <i class="fa-regular fa-calendar"></i><button onclick="openPopup()">all</button>
+                    <i class="fa-regular fa-calendar"></i><button onclick="openPopup()" id="date-filter">all</button>
                 </div>
                 <div class="filter"><i class="fa-solid fa-sliders"></i><button> all</button></div>
             </div>
@@ -36,7 +36,7 @@
                         <button class="user-avatar-btn" onclick="drop()"><img src="@ViewData["avatarUrl"]" alt="avatar-img" class="avatar-img"></button>
                     }
                     <div id="myDropdown" class="dropdown-content">
-                        <a asp-controller="profile">โปรไฟล์</a>
+                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
                     </div>
                 </div>

@@ -14,23 +14,50 @@
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
-            <button>
-                <i class="fa-solid fa-plus"></i> 
-                <span>สร้างกิจกรรม</span>
-            </button>
-            <button>
-                <i class="fa-regular fa-bell"></i>
-                <span>การเเจ้งเตือน</span>
-            </button>
-            <i class="fa-solid fa-circle-user fa-3x"></i>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="activity" asp-action="create">
+                    <button class="create-activity-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        สร้างกิจกรรม
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
+                    </button>
+                </a>
+                <button class="noti-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    การเเจ้งเตือน
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
+                            class="avatar-img"></button>
+                    <div id="dropdown-content" class="dropdown-content">
+                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
+                        <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="account" asp-action="login">
+                    <button class="login-btn">
+                        Login
+                    </button>
+                </a>
+                <a asp-controller="account" asp-action="register">
+                    <button class="register-btn">
+                        Register
+                    </button>
+                </a>
+            }
         </div>
     </nav>
+
     <body>
         <div class="profile-main-div">
             <div class="profile-div">
                 <div class="profile-img_rect-div">
                     <div class="profile-img-div">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="me_profile_picture" >
+                        <img src=@Model.UserImageUrl alt="me_profile_picture" >
                     </div>
                     <div class="sex-rect" style="background-color: @Model.SexColor;"></div>
                 </div>
@@ -42,7 +69,7 @@
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
                         <i class="fa-solid fa-user"></i>
-                        <p>call me as : @Model.Nickname</p>
+                        <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
                     <p>
@@ -61,10 +88,12 @@
             </div>
             <div class="edit-btn-div">
             </div>
-            <a href="./profile/edit" class="edit-btn">แก้ไขโปรไฟล์</a>
+            <a asp-controller="profile" asp-action="edit" class="edit-btn">แก้ไขโปรไฟล์</a>
         </div>
     </body>
 </div>
+
+<script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
 
 
 

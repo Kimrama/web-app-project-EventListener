@@ -23,24 +23,11 @@ public class ActivityController : Controller
         _cloudinaryService = cloudinaryService;
     }
 
-    public string EncodeBase64(string input)
-    {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
-        return Convert.ToBase64String(bytes);
-    }
-
-    public string DecodeBase64(string input)
-    {
-        string decodedInput = Uri.UnescapeDataString(input);
-        var bytes = Convert.FromBase64String(decodedInput);
-        return System.Text.Encoding.UTF8.GetString(bytes);
-    }
-
     [HttpGet]
     [Route("Activity/Detail/{activityIdHash}")]
     public async Task<IActionResult> Detail(string activityIdHash)
     {
-        var activityId = DecodeBase64(activityIdHash);
+        var activityId = Base64Helper.DecodeBase64(activityIdHash);
 
         var keys = activityId.Split(" ", 2);
 
@@ -102,14 +89,15 @@ public class ActivityController : Controller
                 return Unauthorized();
             }
 
-            var activityId = DecodeBase64(dto.ActivityIdHash);
+            var activityId = Base64Helper.DecodeBase64(dto.ActivityIdHash);
             var keys = activityId.Split(" ", 2);
 
             var userJoinActivity = new UserJoinActivity
             {
                 UserId = username,
                 ActivityOwnerId = keys[0],
-                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                Status = "wait"
             };
 
             _context.UserJoinActivities.Add(userJoinActivity);
@@ -142,6 +130,55 @@ public class ActivityController : Controller
             return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
         }
     }
+
+   [HttpPost]
+    public async Task<IActionResult> UpdateParticipantStatus()
+    {
+        try
+        {
+            var userId = Request.Form["userId"].ToString();
+            var activityOwnerId = Request.Form["activityOwnerId"].ToString();
+            var activityCreatedAtStr = Request.Form["activityCreatedAt"].ToString(); // ✅ แปลงเป็น string
+            var status = Request.Form["status"].ToString();
+
+            Console.WriteLine($"UserID: {userId}");
+            Console.WriteLine($"ActivityOwnerID: {activityOwnerId}");
+            Console.WriteLine($"ActivityCreatedAt: {activityCreatedAtStr}");
+            Console.WriteLine($"Status: {status}");
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(activityOwnerId) || string.IsNullOrEmpty(activityCreatedAtStr) || string.IsNullOrEmpty(status))
+            {
+                return BadRequest(new { message = "ข้อมูลไม่ครบถ้วน" });
+            }
+
+            if (!DateTime.TryParseExact(activityCreatedAtStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime activityCreatedAt))
+            {
+                return BadRequest(new { message = "รูปแบบของวันที่ไม่ถูกต้อง" });
+            }
+            var participant = await _context.UserJoinActivities
+                .FirstOrDefaultAsync(u =>
+                    u.UserId == userId &&
+                    u.ActivityOwnerId == activityOwnerId &&
+                    u.ActivityCreatedAt == activityCreatedAt
+                );
+
+            if (participant == null)
+            {
+                return NotFound(new { message = "ไม่พบผู้เข้าร่วมกิจกรรม" });
+            }
+
+            participant.Status = status;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "อัปเดตสถานะสำเร็จ" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "เกิดข้อผิดพลาด", error = ex.Message });
+        }
+    }
+
+
 
     [Authorize]
     [HttpGet]

@@ -48,7 +48,9 @@ nav {
         border: none;
         padding: 6px 12px;
         cursor: pointer;
-        width: 100px;
+    }
+
+    #date-filter {
     }
 }
 
@@ -199,11 +201,6 @@ nav {
                 }
             }
         }
-        article {
-            font-size: 30px;
-            font-weight: bolder;
-        }
-
         &:hover {
             transform: scale(1.02);
         }
@@ -214,7 +211,10 @@ a {
     color: inherit;
     text-decoration: none;
 }
-
+article {
+    font-size: 30px;
+    font-weight: bolder;
+}
 a:hover,
 a:visited,
 a:active {
@@ -353,5 +353,15 @@ a:active {
         .activity-card {
             height: 280px;
         }
+    }
+    article {
+        font-size: 26px;
+        font-weight: bolder;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

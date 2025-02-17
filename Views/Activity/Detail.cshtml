@@ -21,16 +21,20 @@
                         สร้างกิจกรรม
                     </button>
                 </a>
-                <button class="noti-btn">
-                    <i class="fa-regular fa-bell"></i>
-                    การเเจ้งเตือน
-                </button>
+                <a asp-controller="notification" asp-action="notification">
+                    <button class="noti-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        การเเจ้งเตือน
+                    </button>
+                </a>
                 <div class="user-dropdown">
                     <button class="user-avatar-btn" onclick="drop()">
-                        @if(Model.UserImageUrl == null){
+                        @if (Model.UserImageUrl == null)
+                        {
                             <img src="~/user.png" alt="" class="avatar-img">
                         }
-                        else{
+                        else
+                        {
                             <img src="@Model.UserImageUrl" alt="" class="avatar-img">
                         }
                     </button>
@@ -55,7 +59,7 @@
             }
         </div>
     </nav>
-    
+
     <main>
         <div class="activity-img">
             <img src="@Model.Activity.ActivityImageUrl" alt="">
@@ -137,8 +141,14 @@
                 @foreach (var p in Model.UserJoinActivity)
                 {
                     <div class="participant">
-                        <img src="@p.User.UserImageUrl"
-                            alt="">
+                        @if (p.User.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="">
+                        }
+                        else
+                        {
+                            <img src="@p.User.UserImageUrl" alt="">
+                        }
                         <h4>@p.User.UserName</h4>
                     </div>
                 }

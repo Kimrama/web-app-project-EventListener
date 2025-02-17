@@ -15,6 +15,7 @@ public class ActivityController : Controller
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
     private readonly CloudinaryService _cloudinaryService;
+    private User? _user;
 
     public ActivityController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
@@ -33,7 +34,9 @@ public class ActivityController : Controller
 
         var username = User.FindFirstValue(ClaimTypes.Name);
 
-        var user = await _userManager.FindByNameAsync(username);
+        if(username != null){
+            _user = await _userManager.FindByNameAsync(username);
+        }
 
         var activity = await _context.Activities
         .Include(a => a.User)
@@ -64,6 +67,7 @@ public class ActivityController : Controller
             uja.ActivityCreatedAt.ToString() == keys[1]
         );
 
+
         var model = new ActivityDetailViewModel
         {
 
@@ -72,7 +76,7 @@ public class ActivityController : Controller
             UserJoinActivityCount = userJoinActivityCount,
             isUserJoin = isUserJoin,
             ActivityId = activityIdHash,
-            UserImageUrl = user.UserImageUrl
+            UserImageUrl = _user?.UserImageUrl
         };
 
         return View(model);
@@ -118,7 +122,8 @@ public class ActivityController : Controller
                 message = "Successfully joined!",
                 usersJoinActivity = usersJoinActivity.Select(
                     u => new {
-                        u.User.UserName
+                        u.User.UserName,
+                        u.User.UserImageUrl,
                     }
                 ),
                 userJoinActivityCount = userJoinActivityCount

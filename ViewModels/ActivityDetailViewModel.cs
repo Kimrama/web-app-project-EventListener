@@ -7,5 +7,5 @@ public class ActivityDetailViewModel
     public int UserJoinActivityCount { get; set; }
     public bool isUserJoin { get; set; }
     public string ActivityId { get; set; }
-    public string UserImageUrl { get; set; }
+    public string? UserImageUrl { get; set; }
 }

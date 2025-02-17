@@ -21,6 +21,8 @@ async function join_activity(activityIdHash) {
 
         const data = await response.json();
 
+        console.log(data);
+
         const buttonGroupForOwnerOrUserDiv = document.querySelector(".btn-group-for-owner-or-user");
         buttonGroupForOwnerOrUserDiv.innerHTML = `
              <button class="chat-btn">
@@ -38,7 +40,12 @@ async function join_activity(activityIdHash) {
             participantDiv.classList.add("participant");
 
             const userImg = document.createElement("img");
-            userImg.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s";
+            if(u.userImageUrl != null){
+                userImg.src = u.userImageUrl;
+            }
+            else{
+                userImg.src = "/user.png";
+            }
             participantDiv.appendChild(userImg);
 
             const username = document.createElement("h4");

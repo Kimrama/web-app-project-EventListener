@@ -24,24 +24,11 @@ public class ActivityController : Controller
         _cloudinaryService = cloudinaryService;
     }
 
-    public string EncodeBase64(string input)
-    {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
-        return Convert.ToBase64String(bytes);
-    }
-
-    public string DecodeBase64(string input)
-    {
-        string decodedInput = Uri.UnescapeDataString(input);
-        var bytes = Convert.FromBase64String(decodedInput);
-        return System.Text.Encoding.UTF8.GetString(bytes);
-    }
-
     [HttpGet]
     [Route("Activity/Detail/{activityIdHash}")]
     public async Task<IActionResult> Detail(string activityIdHash)
     {
-        var activityId = DecodeBase64(activityIdHash);
+        var activityId = Base64Helper.DecodeBase64(activityIdHash);
 
         var keys = activityId.Split(" ", 2);
 
@@ -99,7 +86,7 @@ public class ActivityController : Controller
                 return Unauthorized();
             }
 
-            var activityId = DecodeBase64(dto.ActivityIdHash);
+            var activityId = Base64Helper.DecodeBase64(dto.ActivityIdHash);
             var keys = activityId.Split(" ", 2);
 
             var userJoinActivity = new UserJoinActivity

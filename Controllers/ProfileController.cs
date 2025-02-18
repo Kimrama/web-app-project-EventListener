@@ -25,7 +25,7 @@ public class ProfileController : Controller
     [Authorize]
     public async Task<IActionResult> Index()
     {
-        var username = User.FindFirstValue(ClaimTypes.Name);//inspect login user
+        var username = User.FindFirstValue(ClaimTypes.Name); //inspect login user
 
         if (string.IsNullOrEmpty(username))
         {
@@ -53,9 +53,9 @@ public class ProfileController : Controller
             SexColor = "",
             About = "",
             InterestTags = userInterestTag,
-            UserImageUrl = "https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg"
+            UserImageUrl = user.UserImageUrl
         };
-
+        
         var intmonth = user.Birthday.Month;
         string strmonth = null;
         switch (intmonth) 

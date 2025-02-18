@@ -34,7 +34,8 @@ public class HomeController : Controller
         .Include(b => b.UserJoinActivities)
         .ToListAsync();
         
-        var activityViewModels = activities.Select(c => new ActivityViewModel
+        var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)
+        .Select(c => new ActivityViewModel
         {
             ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
             ActivityTagId = c.ActivityTagId,

@@ -5,12 +5,12 @@ nav {
     padding: 16px;
     width: 100%;
     background-color: white;
-    border-bottom: 1px solid black;
     height: 97px;
     margin-bottom: 36px;
     position: sticky;
     top: 0;
     z-index: 2;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .left-container {
     i {

@@ -34,6 +34,10 @@ function closePopup(event) {
     const startDate = new Date(startDateInp.value);
     const endDate = new Date(endDateInp.value);
 
+    if (startDate == "Invalid Date" && endDate == "Invalid Date") {
+        return;
+    }
+
     if (startDate > endDate) {
         alert("INVALID DATE FILTER");
         startDateInp.value = "";

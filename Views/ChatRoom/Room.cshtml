@@ -6,9 +6,7 @@
     var currentUser = User.Identity.Name;
 }
 
-
 <link rel="stylesheet" href="~/css/ChatRoom/Room.css" asp-append-version="true">
-
 
 <nav>
     <span class="span-left"><a asp-controller="Activity" asp-action="detail" asp-route-activityIdHash="@roomId"><i class="fa-solid fa-arrow-left"></i>&nbsp&nbspกลับ</a></span>
@@ -63,6 +61,8 @@
     const userId = "@currentUser";
     const socket = new WebSocket(`ws://localhost:5198/ws/chat/${roomId}/${userId}`);
     const chatLine = document.getElementById("chat-line");
+
+    scrollToBottom()
 
     function scrollToBottom() {
         const lastMessage = chatLine.lastElementChild;

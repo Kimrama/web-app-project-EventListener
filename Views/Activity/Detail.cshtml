@@ -136,11 +136,13 @@
             </div>
         </div>
         <div class="participant-container">
-            <h2 id="userJoinActivityCount">@Model.UserJoinActivityCount ผู้เข้าร่วม </h2>
-            <div class="all-participant" id="all-participant">
+            <h2 id="userJoinActivityCount-accept"> </h2>
+            <div class="all-participant" id="accept-participant">
                 @foreach (var p in Model.UserJoinActivity)
                 {
-                    <div class="participant">
+                    @if(p.Status == "Accept")
+                    {
+                        <div class="participant">
                         @if (p.User.UserImageUrl == null)
                         {
                             <img src="~/user.png" alt="">
@@ -151,6 +153,32 @@
                         }
                         <h4>@p.User.UserName</h4>
                     </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="participant-container">
+            <h2 id="userJoinActivityCount-wait"></h2>
+            <div class="all-participant" id="req-participant">
+                @foreach (var p in Model.UserJoinActivity)
+                {
+                    @if(p.Status == "wait")
+                    {
+                        <div class="participant" id="participant-@p.UserId">
+
+                        @if (p.User.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="">
+                        }
+                        else
+                        {
+                            <img src="@p.User.UserImageUrl" alt="">
+                        }
+                        <h4>@p.User.UserName</h4>
+                        <button class="accept-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
+                        <button class="deny-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
+                    </div>
+                    }
                 }
             </div>
         </div>
@@ -159,3 +187,46 @@
 
 <script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
 <script src="~/js/activity/join_activity.js" asp-append-version="true"></script>
+<script>
+
+    function updateParticipantCount() {
+        let accept_paticipants = document.getElementById("accept-participant");
+        let wait_paicipant = document.getElementById("req-participant");
+        let accept_count = accept_paticipants.querySelectorAll(".participant").length;
+        let wait_count = wait_paicipant.querySelectorAll(".participant").length;
+        document.getElementById("userJoinActivityCount-accept").textContent = `${accept_count} ผู้เข้าร่วม`;
+        document.getElementById("userJoinActivityCount-wait").textContent = `${wait_count} คำขอเข้าร่วม`;
+    }
+
+    document.addEventListener("DOMContentLoaded", updateParticipantCount);
+
+    async function updateStatus(ownerId, createDate, joinUser, status) {
+        let formData = new FormData();
+        formData.append("ownerId", ownerId);
+        formData.append("createDate", createDate);
+        formData.append("joinUser", joinUser);
+        formData.append("status", status);
+
+        try {
+            let response = await fetch('/Activity/UpdateJoinStatus', {
+                method: 'POST',
+                body: formData
+            });
+
+            let result = await response.json();
+            
+            if (result.success) {
+                temp = document.getElementById(`participant-${joinUser}`);
+                document.getElementById(`participant-${joinUser}`).remove();
+                temp.getElementByTagsName("button").remove();
+                document.getElementById("accept-participant").appendChild(temp)
+                alert("ส่งข้อมูลสำเร็จ")
+            } else {
+                alert("ไม่สามารถอัปเดตสถานะได้ โปรดลองอีกครั้ง");
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+        }
+    }
+</script>

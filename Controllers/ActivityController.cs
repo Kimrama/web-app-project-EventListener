@@ -136,53 +136,29 @@ public class ActivityController : Controller
         }
     }
 
-   [HttpPost]
-    public async Task<IActionResult> UpdateParticipantStatus()
+    [HttpPost]
+    public JsonResult UpdateJoinStatus(string ownerId, DateTime createDate, string joinUser, string status)
     {
         try
         {
-            var userId = Request.Form["userId"].ToString();
-            var activityOwnerId = Request.Form["activityOwnerId"].ToString();
-            var activityCreatedAtStr = Request.Form["activityCreatedAt"].ToString(); // ✅ แปลงเป็น string
-            var status = Request.Form["status"].ToString();
+            var userActivity = _context.UserJoinActivities
+                .FirstOrDefault(a => a.ActivityOwnerId == ownerId &&
+                                    a.ActivityCreatedAt == createDate &&
+                                    a.UserId == joinUser);
 
-            Console.WriteLine($"UserID: {userId}");
-            Console.WriteLine($"ActivityOwnerID: {activityOwnerId}");
-            Console.WriteLine($"ActivityCreatedAt: {activityCreatedAtStr}");
-            Console.WriteLine($"Status: {status}");
-
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(activityOwnerId) || string.IsNullOrEmpty(activityCreatedAtStr) || string.IsNullOrEmpty(status))
+            if (userActivity != null)
             {
-                return BadRequest(new { message = "ข้อมูลไม่ครบถ้วน" });
+                userActivity.Status = status;
+                _context.SaveChanges();
+                return Json(new { success = true });
             }
-
-            if (!DateTime.TryParseExact(activityCreatedAtStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime activityCreatedAt))
-            {
-                return BadRequest(new { message = "รูปแบบของวันที่ไม่ถูกต้อง" });
-            }
-            var participant = await _context.UserJoinActivities
-                .FirstOrDefaultAsync(u =>
-                    u.UserId == userId &&
-                    u.ActivityOwnerId == activityOwnerId &&
-                    u.ActivityCreatedAt == activityCreatedAt
-                );
-
-            if (participant == null)
-            {
-                return NotFound(new { message = "ไม่พบผู้เข้าร่วมกิจกรรม" });
-            }
-
-            participant.Status = status;
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "อัปเดตสถานะสำเร็จ" });
+            return Json(new { success = false, message = "User not found" });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "เกิดข้อผิดพลาด", error = ex.Message });
+            return Json(new { success = false, message = "Error: " + ex.Message });
         }
     }
-
 
 
     [Authorize]

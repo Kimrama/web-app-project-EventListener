@@ -31,7 +31,7 @@ async function join_activity(activityIdHash) {
             </button>
         `;
 
-        document.getElementById("userJoinActivityCount").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
+        document.getElementById("userJoinActivityCount-wait").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
 
         const allParticipant = document.getElementById("all-participant");
         allParticipant.innerHTML = '';

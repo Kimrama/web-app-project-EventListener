@@ -288,6 +288,34 @@ main {
     display: block;
 }
 
+.accept-button{
+    background-color: green;
+    border: 1px solid green;
+    font-size: 16px;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 16px;
+    cursor: pointer;
+
+    i {
+        margin-right: 5px;
+    }
+}
+
+.deny-button{
+    background-color: red;
+    border: 1px solid red;
+    font-size: 16px;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 16px;
+    cursor: pointer;
+
+    i {
+        margin-right: 5px;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     main {
         width: 85%;

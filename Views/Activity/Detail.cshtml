@@ -108,17 +108,24 @@
                         {
                             @if (Model.isUserJoin)
                             {
-                                @foreach(var p in Model.UserJoinActivity){
-                                    @if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "Accept"){
-                                        <button class="chat-btn">
-                                            <i class="fa-regular fa-comment fa-lg"></i>
-                                            <span>เเชท</span>
-                                        </button>
+                                @foreach (var p in Model.UserJoinActivity)
+                                {
+                                    @if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                                        Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "Accept")
+                                    {
+                                        <a asp-controller="Chatroom" asp-action="Room" asp-route-id="@Model.ActivityId">
+                                            <button class="chat-btn">
+                                                <i class="fa-regular fa-comment fa-lg"></i>
+                                                <span>เเชท</span>
+                                            </button>
+                                        </a>
                                     }
-                                    else if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait"){
-                                        <button class="chat-btn">
-                                        <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                        <span>กำลังรออนุมัตื</span>
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait")
+                                    {
+                                        <button class="wait-btn">
+                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <span>รอการอนุมัติ</span>
                                         </button>
                                     }
                                 }

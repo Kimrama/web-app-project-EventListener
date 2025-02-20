@@ -120,4 +120,5 @@ form {
     display: block;
     margin-top: 2vh;
     align-self: center;
+    object-fit: cover;
 }

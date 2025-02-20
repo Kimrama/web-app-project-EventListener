@@ -31,10 +31,11 @@ public class HomeController : Controller
         
         var activities = await _context.Activities
         .Include(a => a.ActivityTag)
-        .Include(b => b.UserJoinActivities)
+        .Include(b => b.UserJoinActivities.Where(uja => uja.Status == "Accept"))
         .ToListAsync();
         
-        var activityViewModels = activities.Select(c => new ActivityViewModel
+        var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)
+        .Select(c => new ActivityViewModel
         {
             ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
             ActivityTagId = c.ActivityTagId,

@@ -9,7 +9,7 @@
 <div>
     <nav>
         <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+            <i class="fa-solid fa-ear-listen fa-3x"></i>
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
@@ -93,10 +93,12 @@
                     {
                         @if (User.Identity.Name == Model.Activity.User.UserName)
                         {
-                            <button class="chat-btn">
-                                <i class="fa-regular fa-comment fa-lg"></i>
-                                <span>เเชท</span>
-                            </button>
+                            <a asp-controller="Chatroom" asp-action="Room" asp-route-id="@Model.ActivityId">
+                                <button class="chat-btn">
+                                    <i class="fa-regular fa-comment fa-lg"></i>
+                                    <span>เเชท</span>
+                                </button>
+                            </a>
                             <button class="edit-activity-btn">
                                 <i class="fa-regular fa-pen-to-square fa-lg"></i>
                                 <span>เเก้ไข</span>
@@ -106,15 +108,18 @@
                         {
                             @if (Model.isUserJoin)
                             {
-                                @foreach(var p in Model.UserJoinActivity){
-                                    @if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId){
+                                @foreach (var p in Model.UserJoinActivity)
+                                {
+                                    @if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                                        Model.Activity.OwnerId == p.ActivityOwnerId)
+                                    {
                                         <button class="chat-btn">
-                                        <i class="fa-regular fa-comment fa-lg"></i>
-                                        <span>เเชท</span>
+                                            <i class="fa-regular fa-comment fa-lg"></i>
+                                            <span>เเชท</span>
                                         </button>
                                     }
                                 }
-                                
+
                             }
                             else
                             {
@@ -145,65 +150,69 @@
             <div class="all-participant" id="accept-participant">
                 @foreach (var p in Model.UserJoinActivity)
                 {
-                    @if(p.Status == "Accept")
+                    @if (p.Status == "Accept")
                     {
                         <div class="participant">
-                        @if (p.User.UserImageUrl == null)
-                        {
-                            <img src="~/user.png" alt="">
-                        }
-                        else
-                        {
-                            <img src="@p.User.UserImageUrl" alt="">
-                        }
-                        <h4>@p.User.UserName</h4>
-                    </div>
+                            @if (p.User.UserImageUrl == null)
+                            {
+                                <img src="~/user.png" alt="">
+                            }
+                            else
+                            {
+                                <img src="@p.User.UserImageUrl" alt="">
+                            }
+                            <h4>@p.User.UserName</h4>
+                        </div>
                     }
                 }
             </div>
         </div>
-          @if(User.Identity.Name == Model.Activity.User.UserName){
+        @if (User.Identity.Name == Model.Activity.User.UserName)
+        {
             <div class="participant-container">
-            <h2 id="userJoinActivityCount-wait"></h2>
-            <div class="all-participant" id="req-participant">
-                @foreach (var p in Model.UserJoinActivity)
-                {
-                    @if(p.Status == "wait")
+                <h2 id="userJoinActivityCount-wait"></h2>
+                <div class="all-participant" id="req-participant">
+                    @foreach (var p in Model.UserJoinActivity)
                     {
-                        <div class="participant" id="participant-@p.UserId">
+                        @if (p.Status == "wait")
+                        {
+                            <div class="participant" id="participant-@p.UserId">
 
-                        @if (p.User.UserImageUrl == null)
-                        {
-                            <img src="~/user.png" alt="">
+                                @if (p.User.UserImageUrl == null)
+                                {
+                                    <img src="~/user.png" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@p.User.UserImageUrl" alt="">
+                                }
+                                <h4>@p.User.UserName</h4>
+                                <button class="accept-button" id="accept-button"
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
+                                <button class="deny-button" id="deny-button"
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
+                            </div>
                         }
-                        else
-                        {
-                            <img src="@p.User.UserImageUrl" alt="">
-                        }
-                        <h4>@p.User.UserName</h4>
-                        <button class="accept-button" id="accept-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
-                        <button class="deny-button" id="deny-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
-                    </div>
                     }
-                }
+                </div>
             </div>
-        </div>
-        } 
+        }
     </main>
 </div>
 
 <script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
 <script src="~/js/activity/join_activity.js" asp-append-version="true"></script>
+
 <script>
 
     function updateParticipantCount() {
         let accept_paticipants = document.getElementById("accept-participant");
         let wait_paicipant = document.getElementById("req-participant");
-        if (accept_paticipants){
+        if (accept_paticipants) {
             let accept_count = accept_paticipants.querySelectorAll(".participant").length;
             document.getElementById("userJoinActivityCount-accept").textContent = `${accept_count} ผู้เข้าร่วม`;
         }
-        if (wait_paicipant){
+        if (wait_paicipant) {
             let wait_count = wait_paicipant.querySelectorAll(".participant").length;
             document.getElementById("userJoinActivityCount-wait").textContent = `${wait_count} คำขอเข้าร่วม`;
         }
@@ -225,7 +234,7 @@
             });
 
             let result = await response.json();
-            
+
             if (result.success) {
                 temp = document.getElementById(`participant-${joinUser}`);
                 accept_button = document.getElementById("accept-button");

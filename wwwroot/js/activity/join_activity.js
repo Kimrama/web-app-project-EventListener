@@ -26,8 +26,8 @@ async function join_activity(activityIdHash) {
         const buttonGroupForOwnerOrUserDiv = document.querySelector(".btn-group-for-owner-or-user");
         buttonGroupForOwnerOrUserDiv.innerHTML = `
              <button class="chat-btn">
-                <i class="fa-regular fa-comment fa-lg"></i>
-                <span>กำรังรอนุมัติ</span>
+                <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                <span>กำลังรอการอนุมัติ</span>
             </button>
         `;
 

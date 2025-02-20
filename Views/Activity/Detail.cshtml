@@ -106,10 +106,15 @@
                         {
                             @if (Model.isUserJoin)
                             {
-                                <button class="chat-btn">
-                                    <i class="fa-regular fa-comment fa-lg"></i>
-                                    <span>เเชท</span>
-                                </button>
+                                @foreach(var p in Model.UserJoinActivity){
+                                    @if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId){
+                                        <button class="chat-btn">
+                                        <i class="fa-regular fa-comment fa-lg"></i>
+                                        <span>เเชท</span>
+                                        </button>
+                                    }
+                                }
+                                
                             }
                             else
                             {
@@ -136,7 +141,7 @@
             </div>
         </div>
         <div class="participant-container">
-            <h2 id="userJoinActivityCount-accept"> </h2>
+            <h2 id="userJoinActivityCount-accept">Hello there</h2>
             <div class="all-participant" id="accept-participant">
                 @foreach (var p in Model.UserJoinActivity)
                 {
@@ -157,7 +162,8 @@
                 }
             </div>
         </div>
-        <div class="participant-container">
+          @if(User.Identity.Name == Model.Activity.User.UserName){
+            <div class="participant-container">
             <h2 id="userJoinActivityCount-wait"></h2>
             <div class="all-participant" id="req-participant">
                 @foreach (var p in Model.UserJoinActivity)
@@ -175,13 +181,14 @@
                             <img src="@p.User.UserImageUrl" alt="">
                         }
                         <h4>@p.User.UserName</h4>
-                        <button class="accept-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
-                        <button class="deny-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
+                        <button class="accept-button" id="accept-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
+                        <button class="deny-button" id="deny-button" onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
                     </div>
                     }
                 }
             </div>
         </div>
+        } 
     </main>
 </div>
 
@@ -192,10 +199,14 @@
     function updateParticipantCount() {
         let accept_paticipants = document.getElementById("accept-participant");
         let wait_paicipant = document.getElementById("req-participant");
-        let accept_count = accept_paticipants.querySelectorAll(".participant").length;
-        let wait_count = wait_paicipant.querySelectorAll(".participant").length;
-        document.getElementById("userJoinActivityCount-accept").textContent = `${accept_count} ผู้เข้าร่วม`;
-        document.getElementById("userJoinActivityCount-wait").textContent = `${wait_count} คำขอเข้าร่วม`;
+        if (accept_paticipants){
+            let accept_count = accept_paticipants.querySelectorAll(".participant").length;
+            document.getElementById("userJoinActivityCount-accept").textContent = `${accept_count} ผู้เข้าร่วม`;
+        }
+        if (wait_paicipant){
+            let wait_count = wait_paicipant.querySelectorAll(".participant").length;
+            document.getElementById("userJoinActivityCount-wait").textContent = `${wait_count} คำขอเข้าร่วม`;
+        }
     }
 
     document.addEventListener("DOMContentLoaded", updateParticipantCount);
@@ -217,10 +228,12 @@
             
             if (result.success) {
                 temp = document.getElementById(`participant-${joinUser}`);
+                accept_button = document.getElementById("accept-button");
+                deny_button = document.getElementById("deny-button");
+                temp.removeChild(accept_button);
+                temp.removeChild(deny_button);
                 document.getElementById(`participant-${joinUser}`).remove();
-                temp.getElementByTagsName("button").remove();
-                document.getElementById("accept-participant").appendChild(temp)
-                alert("ส่งข้อมูลสำเร็จ")
+                document.getElementById("accept-participant").appendChild(temp);
             } else {
                 alert("ไม่สามารถอัปเดตสถานะได้ โปรดลองอีกครั้ง");
             }
@@ -228,5 +241,6 @@
             console.error("Error updating status:", error);
             alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
         }
+        updateParticipantCount();
     }
 </script>

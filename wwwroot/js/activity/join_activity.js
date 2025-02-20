@@ -27,7 +27,7 @@ async function join_activity(activityIdHash) {
         buttonGroupForOwnerOrUserDiv.innerHTML = `
              <button class="chat-btn">
                 <i class="fa-regular fa-comment fa-lg"></i>
-                <span>เเชท</span>
+                <span>กำรังรอนุมัติ</span>
             </button>
         `;
 

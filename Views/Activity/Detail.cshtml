@@ -107,10 +107,16 @@
                             @if (Model.isUserJoin)
                             {
                                 @foreach(var p in Model.UserJoinActivity){
-                                    @if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId){
+                                    @if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "Accept"){
                                         <button class="chat-btn">
                                         <i class="fa-regular fa-comment fa-lg"></i>
                                         <span>เเชท</span>
+                                        </button>
+                                    }
+                                    else if(User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt && Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait"){
+                                        <button class="chat-btn">
+                                        <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                        <span>กำลังรออนุมัตื</span>
                                         </button>
                                     }
                                 }

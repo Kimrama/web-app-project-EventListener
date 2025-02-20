@@ -10,7 +10,14 @@ async function join_activity(activityIdHash) {
 
         if (response.status == 401) {
             window.location.href = "/account/login";
-            return
+            return;
+        }
+
+        if(response.status == 400){
+            const err = await response.json();
+            console.log(err);
+            alert(err.message);
+            return;
         }
 
         if (!response.ok) {
@@ -18,10 +25,6 @@ async function join_activity(activityIdHash) {
             console.log(err);
             return;
         }
-
-        const data = await response.json();
-
-        console.log(data);
 
         const buttonGroupForOwnerOrUserDiv = document.querySelector(".btn-group-for-owner-or-user");
         buttonGroupForOwnerOrUserDiv.innerHTML = `
@@ -31,29 +34,28 @@ async function join_activity(activityIdHash) {
             </button>
         `;
 
-        document.getElementById("userJoinActivityCount-wait").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
+        // document.getElementById("userJoinActivityCount-wait").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
 
-        const allParticipant = document.getElementById("all-participant");
-        allParticipant.innerHTML = '';
-        data.usersJoinActivity.forEach(u => {
-            const participantDiv = document.createElement("div");
-            participantDiv.classList.add("participant");
+        // const allParticipant = document.getElementById("all-participant");
+        // allParticipant.innerHTML = '';
+        // data.usersJoinActivity.forEach(u => {
+        //     const participantDiv = document.createElement("div");
+        //     participantDiv.classList.add("participant");
 
-            const userImg = document.createElement("img");
-            if(u.userImageUrl != null){
-                userImg.src = u.userImageUrl;
-            }
-            else{
-                userImg.src = "/user.png";
-            }
-            participantDiv.appendChild(userImg);
+        //     const userImg = document.createElement("img");
+        //     if(u.userImageUrl != null){
+        //         userImg.src = u.userImageUrl;
+        //     }
+        //     else{
+        //         userImg.src = "/user.png";
+        //     }
+        //     participantDiv.appendChild(userImg);
 
-            const username = document.createElement("h4");
-            username.textContent = u.userName;
-            participantDiv.appendChild(username);
+        //     const username = document.createElement("h4");
+        //     username.textContent = u.userName;
+        //     participantDiv.appendChild(username);
 
-            allParticipant.appendChild(participantDiv);
-        });
+        //     allParticipant.appendChild(participantDiv);
     }
     catch (error) {
         console.log(error);

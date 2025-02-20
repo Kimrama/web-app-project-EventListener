@@ -31,7 +31,7 @@ public class HomeController : Controller
         
         var activities = await _context.Activities
         .Include(a => a.ActivityTag)
-        .Include(b => b.UserJoinActivities)
+        .Include(b => b.UserJoinActivities.Where(uja => uja.Status == "Accept"))
         .ToListAsync();
         
         var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)

@@ -27,11 +27,11 @@ async function join_activity(activityIdHash) {
         buttonGroupForOwnerOrUserDiv.innerHTML = `
              <button class="chat-btn">
                 <i class="fa-regular fa-comment fa-lg"></i>
-                <span>เเชท</span>
+                <span>กำรังรอนุมัติ</span>
             </button>
         `;
 
-        document.getElementById("userJoinActivityCount").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
+        document.getElementById("userJoinActivityCount-wait").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
 
         const allParticipant = document.getElementById("all-participant");
         allParticipant.innerHTML = '';

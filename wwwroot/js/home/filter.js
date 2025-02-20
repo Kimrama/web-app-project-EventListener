@@ -34,10 +34,30 @@ function closePopup(event) {
     const startDate = new Date(startDateInp.value);
     const endDate = new Date(endDateInp.value);
 
+    if (startDate == "Invalid Date" && endDate == "Invalid Date") {
+        return;
+    }
+
     if (startDate > endDate) {
         alert("INVALID DATE FILTER");
         startDateInp.value = "";
         endDateInp.value = "";
+    } else if (startDate == "Invalid Date") {
+        dateFilterBtn.textContent =
+            "ไม่เกิน " +
+            String(endDate.getUTCDate()) +
+            " " +
+            String(month[endDate.getUTCMonth()]) +
+            " " +
+            String(endDate.getUTCFullYear());
+    } else if (endDate == "Invalid Date") {
+        dateFilterBtn.textContent =
+            "ตั้งแต่  " +
+            String(startDate.getUTCDate()) +
+            " " +
+            String(month[startDate.getUTCMonth()]) +
+            " " +
+            String(startDate.getUTCFullYear());
     } else {
         dateFilterBtn.textContent =
             String(startDate.getUTCDate()) +
@@ -51,6 +71,5 @@ function closePopup(event) {
             String(month[endDate.getUTCMonth()]) +
             " " +
             String(endDate.getUTCFullYear());
-        +" - ";
     }
 }

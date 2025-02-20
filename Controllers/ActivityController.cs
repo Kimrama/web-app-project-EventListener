@@ -95,16 +95,12 @@ public class ActivityController : Controller
             var activityId = Base64Helper.DecodeBase64(dto.ActivityIdHash);
             var keys = activityId.Split(" ", 2);
 
-            var userJoinActivity = new UserJoinActivity
-            {
-                UserId = username,
-                ActivityOwnerId = keys[0],
-                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                Status = "wait"
-            };
-
-            _context.UserJoinActivities.Add(userJoinActivity);
-            await _context.SaveChangesAsync();
+            var activity = await _context.Activities
+            .Where(
+                a => a.OwnerId == keys[0] &&
+                a.CreatedAt.ToString() == keys[1]
+            )
+            .FirstOrDefaultAsync();
 
             var usersJoinActivity = await _context.UserJoinActivities
             .Include(u => u.User)
@@ -116,17 +112,26 @@ public class ActivityController : Controller
 
             var userJoinActivityCount = usersJoinActivity.Count;
 
-            return Ok(new
+            if(userJoinActivityCount == activity.ParticipantLimit){
+                Console.WriteLine("test");
+                return BadRequest(new
+                {
+                    message = "ไม่สามารถเข้าร่วมกิจกรรมได้ เนื่องจากสมาชิกครบเเล้ว"
+                });
+            }
+
+            var userJoinActivity = new UserJoinActivity
             {
-                message = "Successfully joined!",
-                usersJoinActivity = usersJoinActivity.Select(
-                    u => new {
-                        u.User.UserName,
-                        u.User.UserImageUrl,
-                    }
-                ),
-                userJoinActivityCount = userJoinActivityCount
-            });
+                UserId = username,
+                ActivityOwnerId = keys[0],
+                ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                Status = "wait"
+            };
+
+            _context.UserJoinActivities.Add(userJoinActivity);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
         catch (Exception ex)
         {

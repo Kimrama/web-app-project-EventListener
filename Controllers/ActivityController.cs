@@ -70,7 +70,6 @@ public class ActivityController : Controller
 
         var model = new ActivityDetailViewModel
         {
-
             Activity = activity,
             UserJoinActivity = usersJoinActivity,
             UserJoinActivityCount = userJoinActivityCount,

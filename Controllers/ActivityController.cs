@@ -34,7 +34,8 @@ public class ActivityController : Controller
 
         var username = User.FindFirstValue(ClaimTypes.Name);
 
-        if(username != null){
+        if (username != null)
+        {
             _user = await _userManager.FindByNameAsync(username);
         }
 
@@ -106,13 +107,15 @@ public class ActivityController : Controller
             .Include(u => u.User)
             .Where(
                 u => u.ActivityOwnerId == keys[0] &&
-                u.ActivityCreatedAt.ToString() == keys[1]
+                u.ActivityCreatedAt.ToString() == keys[1] &&
+                u.Status == "Accept"
             )
             .ToListAsync();
 
             var userJoinActivityCount = usersJoinActivity.Count;
 
-            if(userJoinActivityCount == activity.ParticipantLimit){
+            if (userJoinActivityCount == activity.ParticipantLimit)
+            {
                 Console.WriteLine("test");
                 return BadRequest(new
                 {
@@ -235,5 +238,16 @@ public class ActivityController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction("Index", "Home");
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Edit()
+    {
+        var activityTags = await _context.ActivityTags.ToListAsync();
+
+        ViewBag.activityTags = activityTags;
+
+        return View();
     }
 }

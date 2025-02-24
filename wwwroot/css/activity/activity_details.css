@@ -4,7 +4,8 @@ nav {
     justify-content: space-between;
     align-items: center;
     border-bottom: 0.25px solid black;
-    padding: 13px;
+    padding: 0 16px;
+    height: 100px;
     position: fixed;
     top: 0;
     left: 0;
@@ -19,7 +20,7 @@ nav {
     span {
         font-size: 24px;
         font-weight: bold;
-        margin-top: 5px;
+        margin-top: 6px;
     }
     margin-left: 12px;
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using EventListener.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using EventListener.Services;
 
 namespace EventListener.Controllers;
 public class HomeController : Controller
@@ -19,11 +20,6 @@ public class HomeController : Controller
         _userManager = userManager;
         _context = context;
     }
-    public string EncodeBase64(string input)
-    {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
-        return Convert.ToBase64String(bytes);
-    }
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -37,7 +33,7 @@ public class HomeController : Controller
         var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)
         .Select(c => new ActivityViewModel
         {
-            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
+            ActivityIdEncode = Base64Helper.EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
             ActivityTagId = c.ActivityTagId,
             ActivityName = c.ActivityName,
             Location = c.Location,
@@ -67,27 +63,30 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public async Task<JsonResult> fetchActivityData() {
+    public async Task<JsonResult> FetchActivityData()
+    {
         var activities = await _context.Activities
-        .Include(a => a.ActivityTag)
-        .Include(b => b.UserJoinActivities.Where(uja => uja.Status == "Accept"))
-        .ToListAsync();
-    
-        var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)
-        .Select(c => new ActivityViewModel
-        {
-            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
-            ActivityTagId = c.ActivityTagId,
-            ActivityName = c.ActivityName,
-            Location = c.Location,
-            StartDate = c.StartDate,
-            StartTime = c.StartTime,
-            ParticipantLimit = c.ParticipantLimit,
-            ActivityImageUrl = c.ActivityImageUrl,
-            ActivityTagCategory = c.ActivityTag.Category,
-            UserJoinActivityCount = c.UserJoinActivities.Count()
-        }).ToList();
+            .Include(a => a.ActivityTag)
+            .Include(a => a.UserJoinActivities.Where(uja => uja.Status == "Accept")) 
+                .ThenInclude(uja => uja.User)
+            .OrderByDescending(a => a.CreatedAt)
+            .Select(c => new ActivityViewModel
+            {
+                ActivityIdEncode = Base64Helper.EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
+                ActivityTagId = c.ActivityTagId,
+                ActivityName = c.ActivityName,
+                Location = c.Location,
+                StartDate = c.StartDate,
+                StartTime = c.StartTime,
+                ParticipantLimit = c.ParticipantLimit,
+                ActivityImageUrl = c.ActivityImageUrl,
+                ActivityTagCategory = c.ActivityTag.Category,
+                UserJoinActivityCount = c.UserJoinActivities.Count(),
+                UserJoinActivity = c.UserJoinActivities.ToList()
+            })
+            .ToListAsync();
 
-    return Json(activityViewModels);
+        return Json(activities);
     }
+
 }

@@ -62,31 +62,37 @@ public class HomeController : Controller
         return View(activityViewModels);
     }
 
-    [HttpGet]
-    public async Task<JsonResult> FetchActivityData()
-    {
-        var activities = await _context.Activities
-            .Include(a => a.ActivityTag)
-            .Include(a => a.UserJoinActivities.Where(uja => uja.Status == "Accept")) 
-                .ThenInclude(uja => uja.User)
-            .OrderByDescending(a => a.CreatedAt)
-            .Select(c => new ActivityViewModel
+[HttpGet]
+public async Task<JsonResult> FetchActivityData()
+{
+    var activities = await _context.Activities
+        .Include(a => a.ActivityTag)
+        .Include(a => a.UserJoinActivities.Where(uja => uja.Status == "Accept"))
+            .ThenInclude(uja => uja.User)
+        .OrderByDescending(a => a.CreatedAt)
+        .Select(c => new ActivityViewModel
+        {
+            ActivityIdEncode = Base64Helper.EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
+            ActivityTagId = c.ActivityTagId,
+            ActivityName = c.ActivityName,
+            Location = c.Location,
+            StartDate = c.StartDate,
+            StartTime = c.StartTime,
+            ParticipantLimit = c.ParticipantLimit,
+            ActivityImageUrl = c.ActivityImageUrl,
+            ActivityTagCategory = c.ActivityTag.Category,
+            UserJoinActivityCount = c.UserJoinActivities.Count(),
+            UserJoinActivity = c.UserJoinActivities.Select(uja => new UserJoinActivity
             {
-                ActivityIdEncode = Base64Helper.EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
-                ActivityTagId = c.ActivityTagId,
-                ActivityName = c.ActivityName,
-                Location = c.Location,
-                StartDate = c.StartDate,
-                StartTime = c.StartTime,
-                ParticipantLimit = c.ParticipantLimit,
-                ActivityImageUrl = c.ActivityImageUrl,
-                ActivityTagCategory = c.ActivityTag.Category,
-                UserJoinActivityCount = c.UserJoinActivities.Count(),
-                UserJoinActivity = c.UserJoinActivities.ToList()
-            })
-            .ToListAsync();
+                User = new User
+                {
+                    UserImageUrl = uja.User.UserImageUrl
+                }
+            }).ToList()
+        })
+        .ToListAsync();
 
-        return Json(activities);
-    }
+    return Json(activities);
+}
 
 }

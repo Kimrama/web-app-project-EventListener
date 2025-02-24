@@ -65,4 +65,29 @@ public class HomeController : Controller
  
         return View(activityViewModels);
     }
+
+    [HttpGet]
+    public async Task<JsonResult> fetchActivityData() {
+        var activities = await _context.Activities
+        .Include(a => a.ActivityTag)
+        .Include(b => b.UserJoinActivities.Where(uja => uja.Status == "Accept"))
+        .ToListAsync();
+    
+        var activityViewModels = activities.OrderByDescending(a => a.CreatedAt)
+        .Select(c => new ActivityViewModel
+        {
+            ActivityIdEncode = EncodeBase64(c.OwnerId + " " + c.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
+            ActivityTagId = c.ActivityTagId,
+            ActivityName = c.ActivityName,
+            Location = c.Location,
+            StartDate = c.StartDate,
+            StartTime = c.StartTime,
+            ParticipantLimit = c.ParticipantLimit,
+            ActivityImageUrl = c.ActivityImageUrl,
+            ActivityTagCategory = c.ActivityTag.Category,
+            UserJoinActivityCount = c.UserJoinActivities.Count()
+        }).ToList();
+
+    return Json(activityViewModels);
+    }
 }

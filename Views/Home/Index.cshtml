@@ -1,6 +1,5 @@
 ﻿@model List<ActivityViewModel>
 
-
 <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
 <div>
     <nav>
@@ -96,5 +95,77 @@
         <button class="close-btn" onclick="closePopup()">เลือก</button>
     </div>
 </div>
+
+
+<script>
+    async function fetchActivityData() {
+        try {
+            const response = await fetch("@Url.Action("fetchActivityData", "Home")");
+            if (!response.ok) throw new Error("Failed to fetch data");
+            
+            const data = await response.json();
+            console.log(data);
+
+            const container = document.querySelector(".activity-card-container");
+            container.innerHTML = "<p>กำลังโหลดกิจกรรม...</p>"; 
+
+            setTimeout(() => { 
+                container.innerHTML = "";
+
+                data.forEach(activity => {
+                    const card = document.createElement("a");
+                    card.classList.add("activity-card");
+                    card.href = `@Url.Action("detail", "Activity")?activityIdHash=${activity.activityIdEncode}`;
+
+                    let categoryClass = "";
+                    switch (activity.activityTagCategory) {
+                        case "Education": categoryClass = "education"; break;
+                        case "Exercise & Sports": categoryClass = "exercise-sports"; break;
+                        case "Arts & Culture": categoryClass = "arts-culture"; break;
+                        case "Social": categoryClass = "social"; break;
+                        default: categoryClass = "";
+                    }
+
+                    @* let formattedDate = new Date(Date.parse(activity.startDate)).toLocaleDateString("th-TH", {
+                        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                    });
+
+                    let formattedTime = activity.startTime.substring(0, 5) + " น."; *@
+
+                    card.innerHTML = `
+                        <div class="header-tag-card ${categoryClass}">${activity.activityTagCategory}</div>
+                        <div class="body-card">
+                            <div class="tag-line">
+                                <span class="tag">${activity.activityTagId}</span>
+                            </div>
+                            <div class="time-info">
+                                <span>${activity.startDate}, ${activity.startTime}</span>
+                                <span>จะเริ่มวันพรุ่งนี้</span>
+                            </div>
+                            <div class="card-info">
+                                <div class="info">
+                                    <article class="activity-name">${activity.activityName}</article>
+                                    <span class="location">${activity.location}</span>
+                                    <div class="user-avatar">
+                                        <i class="fa-regular fa-user"></i>
+                                        <i class="fa-regular fa-user"></i>
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <span class="participant-info">${activity.userJoinActivityCount}/${activity.participantLimit} คนจะไป</span>
+                                </div>
+                                <img src="${activity.activityImageUrl}" alt="activity picture">
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }, 500);
+        } catch (error) {
+            console.error("Error fetching activities:", error);
+        }
+    }
+
+    fetchActivityData();
+</script>
 <script src="~/js/home/dropdown.js" asp-append-version="true"></script>
 <script src="~/js/home/filter.js" asp-append-version="true"></script>

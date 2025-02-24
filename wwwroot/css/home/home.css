@@ -49,9 +49,6 @@ nav {
         padding: 6px 12px;
         cursor: pointer;
     }
-
-    #date-filter {
-    }
 }
 
 .buttongroup-and-user {
@@ -111,10 +108,10 @@ nav {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    gap: 66px;
+    gap: 60px;
 
     .activity-card {
-        height: 256px;
+        /* height: 290px; */
         width: 75%;
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         cursor: pointer;
@@ -171,13 +168,20 @@ nav {
             .card-info {
                 display: flex;
                 justify-content: space-between;
+                height: auto;
 
                 .info {
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
+                    justify-content: space-between;
+
+                    .user-avatar {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
                 }
-                img {
+                .activity-img {
                     width: 200px;
                     height: 140px;
                     overflow: hidden;
@@ -192,14 +196,6 @@ nav {
                 }
                 .location {
                     color: #454545;
-                }
-                .user-avatar {
-                    display: flex;
-                    gap: 18px;
-
-                    i {
-                        font-size: 26px;
-                    }
                 }
             }
         }
@@ -366,4 +362,10 @@ a:active {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+}
+.participant-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 100%;
 }

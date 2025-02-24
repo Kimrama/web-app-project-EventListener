@@ -1,6 +1,5 @@
 ﻿@model List<ActivityViewModel>
 
-
 <link rel="stylesheet" href="~/css/home/home.css" asp-append-version="true">
 <div>
     <nav>
@@ -49,40 +48,7 @@
         </div>
     </nav>
     
-    <div class="activity-card-container">
-        @foreach (var activity in Model) {
-            <a class="activity-card" asp-controller="activity" asp-action="detail" asp-route-activityIdHash="@activity.ActivityIdEncode">
-                @if (activity.ActivityTagCategory == "Education") {
-                    <div class="header-tag-card education">Education</div>
-                } else if (activity.ActivityTagCategory == "Exercise & Sports") {
-                    <div class="header-tag-card exercise-sports">Exercise & Sports</div>
-                } else if (activity.ActivityTagCategory == "Arts & Culture") {
-                    <div class="header-tag-card arts-culture">Arts & Culture</div>
-                } else if (activity.ActivityTagCategory == "Social") {
-                    <div class="header-tag-card social">Social</div>
-                }
-                <div class="body-card">
-                    <div class="tag-line">
-                        <span class="tag">@activity.ActivityTagId</span>
-                    </div>
-                    <div class="time-info">
-                        <span>@activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th"))
-                            @activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th"))
-                            , @activity.StartTime.ToString(@"hh\:mm") น.</span><span>จะเริ่มวันพรุ่งนี้</span>
-                    </div>
-                    <div class="card-info">
-                        <div class="info">
-                            <article class="activity-name">@activity.ActivityName</article>
-                            <span class="location">@activity.Location</span>
-                            <div class="user-avatar"><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i><i class="fa-regular fa-user"></i></div>
-                            <span class="participant-info">@activity.UserJoinActivityCount/@activity.ParticipantLimit คนจะไป</span>
-                        </div> 
-                        <img src="@activity.ActivityImageUrl" alt="activity picture">
-                    </div>
-                </div>
-            </a>
-        }
-    </div>
+    <div class="activity-card-container"></div>
 </div>
 
 <div class="popup-overlay" id="popupOverlay" onclick="openPopup(event)">
@@ -96,5 +62,100 @@
         <button class="close-btn" onclick="closePopup()">เลือก</button>
     </div>
 </div>
+
+
+<script>
+
+    function getDaysToBegin(date) {
+        const timeDiff = Math.abs(date.getTime() - new Date().getTime());
+        return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    }
+    function createUserIcon(userJoinActivity, userJoinActivityCount) {
+        let iconList = userJoinActivity.map(uja => {
+            if (uja.user.userImageUrl == null) {
+                return `<img src="/user.png" alt="participant-img" class="participant-img">`
+            } else {
+                return `<img src="${uja.user.userImageUrl}" alt="participant-img" class="participant-img">`
+            }
+        })
+
+        iconList = iconList.slice(0, 3)
+
+        if (userJoinActivityCount > 4) {
+            iconList.push(`<span style="background-color: gray; padding: 14px; border-radius: 20px; font-size: 17px;"
+            ><i class="fa-regular fa-user" style="margin-right: 8px;"></i>${userJoinActivityCount - 4} +</span
+        >`)
+        }
+        return iconList.join("")
+
+    }
+
+    async function fetchActivityData() {
+        try {
+            const response = await fetch("@Url.Action("fetchActivityData", "Home")");
+            if (!response.ok) throw new Error("Failed to fetch data");
+            
+            const data = await response.json();
+            console.log(data);
+
+            const container = document.querySelector(".activity-card-container");
+            container.innerHTML = "<p>กำลังโหลดกิจกรรม...</p>"; 
+
+            setTimeout(() => { 
+                container.innerHTML = "";
+
+                data.forEach(activity => {
+                    const card = document.createElement("a");
+                    card.classList.add("activity-card");
+                    card.href = `activity/detail/${activity.activityIdEncode}`;
+
+                    let categoryClass = "";
+                    switch (activity.activityTagCategory) {
+                        case "Education": categoryClass = "education"; break;
+                        case "Exercise & Sports": categoryClass = "exercise-sports"; break;
+                        case "Arts & Culture": categoryClass = "arts-culture"; break;
+                        case "Social": categoryClass = "social"; break;
+                        default: categoryClass = "";
+                    }
+                    const startDate = new Date(Date.parse(activity.startDate))
+                    let formattedDate = startDate.toLocaleDateString("th-TH", {
+                        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                    });
+
+                    let formattedTime = activity.startTime.substring(0, 5) + " น.";
+
+                    card.innerHTML = `
+                        <div class="header-tag-card ${categoryClass}">${activity.activityTagCategory}</div>
+                        <div class="body-card">
+                            <div class="tag-line">
+                                <span class="tag">${activity.activityTagId}</span>
+                            </div>
+                            <div class="time-info">
+                                <span>${formattedDate}, ${formattedTime}</span>
+                                <span>จะเริ่ม${getDaysToBegin(startDate) == 1 ? "ในวันพรุ่งนี้" : "ในอีก " + String(getDaysToBegin(startDate)) + " วัน"}</span>
+                            </div>
+                            <div class="card-info">
+                                <div class="info">
+                                    <article class="activity-name">${activity.activityName}</article>
+                                    <span class="location">${activity.location}</span>
+                                    <div class="user-avatar">
+                                    ${createUserIcon(activity.userJoinActivity, activity.userJoinActivityCount)}
+                                    </div>
+                                    <span class="participant-info">${activity.userJoinActivityCount}/${activity.participantLimit} คนจะไป</span>
+                                </div>
+                                <img src="${activity.activityImageUrl}" alt="activity picture" class="activity-img">
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }, 500);
+        } catch (error) {
+            console.error("Error fetching activities:", error);
+        }
+    }
+
+    fetchActivityData();
+</script>
 <script src="~/js/home/dropdown.js" asp-append-version="true"></script>
 <script src="~/js/home/filter.js" asp-append-version="true"></script>

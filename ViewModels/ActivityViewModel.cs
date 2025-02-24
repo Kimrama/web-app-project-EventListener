@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace EventListener.Models;
 
 public class ActivityViewModel
@@ -12,4 +14,5 @@ public class ActivityViewModel
     public string ActivityImageUrl { get; set; }
     public string ActivityTagCategory { get; set; }
     public int UserJoinActivityCount { get; set; }
+    public List<UserJoinActivity> UserJoinActivity { get; set; }
 }

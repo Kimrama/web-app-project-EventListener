@@ -121,11 +121,31 @@
                                         </a>
                                     }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
-                                    Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait")
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3" )
                                     {
                                         <button class="wait-btn">
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
                                             <span>รอการอนุมัติ</span>
+                                        </button>
+                                        <button class="wait-btn" onclick="updateStatus()">
+                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <span>ยกเลิกคำขอ</span>
+                                        </button>
+                                    }
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny" || p.Status == "Deny2"))
+                                    {
+                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                            <span>เข้าร่วม</span>
+                                        </button>
+                                    }
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
+                                    {
+                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                            <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
                                         </button>
                                     }
                                 }
@@ -184,7 +204,7 @@
                 <div class="all-participant" id="req-participant">
                     @foreach (var p in Model.UserJoinActivity)
                     {
-                        @if (p.Status == "wait")
+                        @if (p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3")
                         {
                             <div class="participant" id="participant-@p.UserId">
 
@@ -246,13 +266,19 @@
             let result = await response.json();
 
             if (result.success) {
-                temp = document.getElementById(`participant-${joinUser}`);
-                accept_button = document.getElementById("accept-button");
-                deny_button = document.getElementById("deny-button");
-                temp.removeChild(accept_button);
-                temp.removeChild(deny_button);
-                document.getElementById(`participant-${joinUser}`).remove();
-                document.getElementById("accept-participant").appendChild(temp);
+                if (status == "Accept"){
+                    accept_button = document.getElementById("accept-button");
+                    deny_button = document.getElementById("deny-button");
+                    temp = document.getElementById(`participant-${joinUser}`);
+                    document.getElementById(`participant-${joinUser}`).remove();
+                    temp.removeChild(accept_button);
+                    temp.removeChild(deny_button);
+                    document.getElementById("accept-participant").appendChild(temp);
+        
+                }
+                else{
+                    document.getElementById(`participant-${joinUser}`).remove();
+                }
             } else {
                 alert("ไม่สามารถอัปเดตสถานะได้ โปรดลองอีกครั้ง");
             }

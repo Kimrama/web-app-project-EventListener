@@ -127,8 +127,21 @@ public class ActivityController : Controller
                 ActivityCreatedAt = DateTime.ParseExact(keys[1], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 Status = "wait"
             };
+            var existingJoinActivity = await _context.UserJoinActivities
+            .FirstOrDefaultAsync(u =>
+                u.UserId == userJoinActivity.UserId &&
+                u.ActivityOwnerId == userJoinActivity.ActivityOwnerId &&
+                u.ActivityCreatedAt == userJoinActivity.ActivityCreatedAt);
+                if(existingJoinActivity != null)
+                {
+                    if(existingJoinActivity.Status == "Deny"){existingJoinActivity.Status = "wait2";}
+                    else if(existingJoinActivity.Status == "Deny2"){existingJoinActivity.Status = "wait3";}
+                    _context.UserJoinActivities.Update(existingJoinActivity);
+                }
+                else{
+                    _context.UserJoinActivities.Add(userJoinActivity);
+                }
 
-            _context.UserJoinActivities.Add(userJoinActivity);
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -152,7 +165,16 @@ public class ActivityController : Controller
 
             if (userActivity != null)
             {
-                userActivity.Status = status;
+                if(status == "Accept")
+                {
+                    if(userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3"){userActivity.Status = "Accept";}
+                }
+                else if(status == "Deny")
+                {
+                    if(userActivity.Status == "wait"){userActivity.Status = "Deny";}
+                    else if(userActivity.Status == "wait2"){userActivity.Status = "Deny2";}
+                    if(userActivity.Status == "wait3"){userActivity.Status = "Deny3";}
+                }
                 _context.SaveChanges();
                 return Json(new { success = true });
             }

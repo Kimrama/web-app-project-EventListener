@@ -67,7 +67,7 @@ public async Task<JsonResult> FetchActivityData()
 {
     var activities = await _context.Activities
         .Include(a => a.ActivityTag)
-        .Include(a => a.UserJoinActivities.Where(uja => uja.Status == "Accept"))
+        .Include(a => a.UserJoinActivities)
             .ThenInclude(uja => uja.User)
         .OrderByDescending(a => a.CreatedAt)
         .Select(c => new ActivityViewModel
@@ -81,14 +81,17 @@ public async Task<JsonResult> FetchActivityData()
             ParticipantLimit = c.ParticipantLimit,
             ActivityImageUrl = c.ActivityImageUrl,
             ActivityTagCategory = c.ActivityTag.Category,
-            UserJoinActivityCount = c.UserJoinActivities.Count(),
-            UserJoinActivity = c.UserJoinActivities.Select(uja => new UserJoinActivity
-            {
-                User = new User
+            UserJoinActivityCount = c.UserJoinActivities.Count(uja => uja.Status == "Accept"), 
+            UserJoinActivity = c.UserJoinActivities
+                .Where(uja => uja.Status == "Accept")
+                .Select(uja => new UserJoinActivity
                 {
-                    UserImageUrl = uja.User.UserImageUrl
-                }
-            }).ToList()
+                    Status = uja.Status,
+                    User = new User
+                    {
+                        UserImageUrl = uja.User.UserImageUrl
+                    }
+                }).ToList()
         })
         .ToListAsync();
 

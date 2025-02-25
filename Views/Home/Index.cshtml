@@ -66,9 +66,22 @@
 
 <script>
 
-    function getDaysToBegin(date) {
-        const timeDiff = Math.abs(date.getTime() - new Date().getTime());
-        return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    function getDaysToBeginWord(date) {
+        const now = new Date()
+
+        if (date.getUTCDate() == now.getUTCDate()) {
+            return "กิจกรรมจะเกิดขึ้นวันนี้"
+        } else {
+            const timeDiff = date.getTime() - now.getTime();
+            const dateDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            if (timeDiff < 0) {
+                return "กิจกรรมเริ่มไปแล้ว"
+            } else if (timeDiff == 1) {
+                return "กิจกรรมจะเริ่มวันพรุ่งนี้"
+            } else {
+                return `กิจกรรมจะเริ่มในอีก ${dateDiff} วัน`
+            }
+        }
     }
     function createUserIcon(userJoinActivity, userJoinActivityCount) {
         let iconList = userJoinActivity.map(uja => {
@@ -132,7 +145,7 @@
                             </div>
                             <div class="time-info">
                                 <span>${formattedDate}, ${formattedTime}</span>
-                                <span>จะเริ่ม${getDaysToBegin(startDate) == 1 ? "ในวันพรุ่งนี้" : "ในอีก " + String(getDaysToBegin(startDate)) + " วัน"}</span>
+                                <span>${getDaysToBeginWord(startDate)}</span>
                             </div>
                             <div class="card-info">
                                 <div class="info">

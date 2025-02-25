@@ -92,11 +92,11 @@
             }
         })
 
-        iconList = iconList.slice(0, 3)
+        iconList = iconList.slice(0, 5)
 
-        if (userJoinActivityCount > 4) {
+        if (userJoinActivityCount > 5) {
             iconList.push(`<span style="background-color: gray; padding: 14px; border-radius: 20px; font-size: 17px;"
-            ><i class="fa-regular fa-user" style="margin-right: 8px;"></i>${userJoinActivityCount - 4} +</span
+            ><i class="fa-regular fa-user" style="margin-right: 8px;"></i>${userJoinActivityCount - 5} +</span
         >`)
         }
         return iconList.join("")

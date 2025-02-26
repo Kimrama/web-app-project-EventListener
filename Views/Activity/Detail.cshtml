@@ -8,10 +8,12 @@
 
 <div>
     <nav>
-        <div class="logo">
-            <i class="fa-solid fa-ear-listen fa-3x"></i>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+            <i class="fa-solid fa-ear-listen fa-4x"></i>
             <span>EventListener</span>
         </div>
+        </a>
         <div class="buttongroup-and-user">
             @if (User.Identity.IsAuthenticated)
             {
@@ -99,10 +101,12 @@
                                     <span>เเชท</span>
                                 </button>
                             </a>
-                            <button class="edit-activity-btn">
-                                <i class="fa-regular fa-pen-to-square fa-lg"></i>
-                                <span>เเก้ไข</span>
-                            </button>
+                            <a asp-controller="Activity" asp-action="Edit" asp-route-id="@Model.ActivityId">
+                                <button class="edit-activity-btn">
+                                    <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                                    <span>เเก้ไข</span>
+                                </button>
+                            </a>
                         }
                         else
                         {

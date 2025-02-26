@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EventListener.Controllers;
 
@@ -67,7 +68,6 @@ public class ActivityController : Controller
             uja.ActivityOwnerId == keys[0] &&
             uja.ActivityCreatedAt.ToString() == keys[1]
         );
-
 
         var model = new ActivityDetailViewModel
         {
@@ -135,15 +135,16 @@ public class ActivityController : Controller
                 u.UserId == userJoinActivity.UserId &&
                 u.ActivityOwnerId == userJoinActivity.ActivityOwnerId &&
                 u.ActivityCreatedAt == userJoinActivity.ActivityCreatedAt);
-                if(existingJoinActivity != null)
-                {
-                    if(existingJoinActivity.Status == "Deny"){existingJoinActivity.Status = "wait2";}
-                    else if(existingJoinActivity.Status == "Deny2"){existingJoinActivity.Status = "wait3";}
-                    _context.UserJoinActivities.Update(existingJoinActivity);
-                }
-                else{
-                    _context.UserJoinActivities.Add(userJoinActivity);
-                }
+            if (existingJoinActivity != null)
+            {
+                if (existingJoinActivity.Status == "Deny") { existingJoinActivity.Status = "wait2"; }
+                else if (existingJoinActivity.Status == "Deny2") { existingJoinActivity.Status = "wait3"; }
+                _context.UserJoinActivities.Update(existingJoinActivity);
+            }
+            else
+            {
+                _context.UserJoinActivities.Add(userJoinActivity);
+            }
 
             await _context.SaveChangesAsync();
 
@@ -168,15 +169,15 @@ public class ActivityController : Controller
 
             if (userActivity != null)
             {
-                if(status == "Accept")
+                if (status == "Accept")
                 {
-                    if(userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3"){userActivity.Status = "Accept";}
+                    if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3") { userActivity.Status = "Accept"; }
                 }
-                else if(status == "Deny")
+                else if (status == "Deny")
                 {
-                    if(userActivity.Status == "wait"){userActivity.Status = "Deny";}
-                    else if(userActivity.Status == "wait2"){userActivity.Status = "Deny2";}
-                    if(userActivity.Status == "wait3"){userActivity.Status = "Deny3";}
+                    if (userActivity.Status == "wait") { userActivity.Status = "Deny"; }
+                    else if (userActivity.Status == "wait2") { userActivity.Status = "Deny2"; }
+                    if (userActivity.Status == "wait3") { userActivity.Status = "Deny3"; }
                 }
                 _context.SaveChanges();
                 return Json(new { success = true });
@@ -264,12 +265,119 @@ public class ActivityController : Controller
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> Edit()
+    [Route("Activity/Edit/{activityIdHash}")]
+    public async Task<IActionResult> Edit(string activityIdHash)
     {
-        var activityTags = await _context.ActivityTags.ToListAsync();
 
+        var activityId = Base64Helper.DecodeBase64(activityIdHash);
+
+        var keys = activityId.Split(" ", 2);
+
+        var username = User.FindFirstValue(ClaimTypes.Name);
+
+        if (username != keys[0])
+        {
+            return Forbid();
+        }
+
+        var activityTags = await _context.ActivityTags.ToListAsync();
         ViewBag.activityTags = activityTags;
 
-        return View();
+        var activity = await _context.Activities
+        .Where(a => a.OwnerId == keys[0] && a.CreatedAt.ToString() == keys[1])
+        .Select(a => new { a.ActivityTagId, a.ActivityName, a.Location, a.StartDate, a.StartTime, a.ParticipantLimit, a.Detail, a.ActivityImageUrl })
+        .FirstOrDefaultAsync();
+
+        var model = new EditActivityViewModel
+        {
+            ActivityId = activityIdHash,
+            ActivityTag = activity.ActivityTagId,
+            ActivityName = activity.ActivityName,
+            Location = activity.Location,
+            StartDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime)),
+            ParticipantLimit = activity.ParticipantLimit,
+            Detail = activity.Detail,
+        };
+
+        ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
+
+        return View(model);
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("Activity/Edit/{activityIdHash}")]
+    public async Task<IActionResult> Edit(string activityIdHash, EditActivityViewModel model, IFormFile file)
+    {
+        var activityId = Base64Helper.DecodeBase64(activityIdHash);
+
+        var keys = activityId.Split(" ", 2);
+
+        var activity = await _context.Activities
+        .Where(a => a.OwnerId == keys[0] && a.CreatedAt.ToString() == keys[1])
+        .FirstOrDefaultAsync();
+
+        var oldDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
+        var newDateTime = model.StartDateTime;
+        var differentDateTime = newDateTime - oldDateTime;
+
+        var oldParticipantLimit = activity.ParticipantLimit;
+        var newParticipantLimit = model.ParticipantLimit;
+
+        if(differentDateTime.TotalHours < 3){
+            ModelState.AddModelError("StartDateTime", "ตั้งเวลาเริ่มกิจกรรมไม่น้อยกว่า 3 ชั่วโมงก่อนกิจกรรมเริ่ม");
+
+            var activityTags = await _context.ActivityTags.ToListAsync();
+
+            ViewBag.activityTags = activityTags;
+            ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
+
+            return View(model);
+        }
+
+        if(newParticipantLimit < oldParticipantLimit){
+            ModelState.AddModelError("ParticipantLimit", "ไม่สามารถตั้งจำนวนผู้เข้าร่วมน้อยกว่าเดิมได้");
+
+            var activityTags = await _context.ActivityTags.ToListAsync();
+
+            ViewBag.activityTags = activityTags;
+            ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
+
+            return View(model);
+        }
+
+        DateOnly startDate = DateOnly.FromDateTime(model.StartDateTime);
+        TimeSpan startTime = model.StartDateTime.TimeOfDay;
+
+        activity.ActivityTagId = model.ActivityTag;
+        activity.ActivityName = model.ActivityName;
+        activity.Location = model.Location;
+        activity.StartDate = startDate;
+        activity.StartTime = startTime;
+        activity.Detail = model.Detail;
+        activity.ParticipantLimit = model.ParticipantLimit;
+
+        if (file != null && file.Length != 0)
+        {
+            Console.WriteLine("test upload image to cloudinary");
+
+            var uploadResult = await _cloudinaryService.UploadImageAsync(file);
+            if (uploadResult == null)
+            {
+                Console.WriteLine("อัปโหลดรูปภาพไปยัง Cloudinary ไม่สำเร็จ");
+                ModelState.AddModelError("", "อัปโหลดรูปภาพไปยัง Cloudinary ไม่สำเร็จ");
+
+                return View(model);
+            }
+
+            Console.WriteLine("อัพโหลดรูปภาพไปยัง Cloudinary สำเร็จ");
+
+            activity.ActivityImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        }
+
+        _context.Activities.Update(activity);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Detail", "Activity", new { id = activityIdHash });
     }
 }

@@ -1,6 +1,4 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     display: flex;
@@ -121,4 +119,10 @@ form {
     margin-top: 2vh;
     align-self: center;
     object-fit: cover;
+}
+
+.validation-error {
+    color: red; 
+    font-size: 14px;
+    margin-top: 10px;
 }

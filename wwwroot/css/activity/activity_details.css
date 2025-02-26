@@ -3,24 +3,24 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 0.25px solid black;
-    padding: 0 16px;
+    padding: 16px;
     height: 100px;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 6px, rgba(0, 0, 0, 0.2) 0px 3px 6px;
 }
 
 .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
     span {
         font-size: 24px;
         font-weight: bold;
-        margin-top: 6px;
+        margin-top: 7px;
     }
     margin-left: 12px;
 }
@@ -28,7 +28,7 @@ nav {
 .buttongroup-and-user {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 
     button {
         padding: 8px 18px;

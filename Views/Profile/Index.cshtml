@@ -1,6 +1,17 @@
 @model ProfileViewModel
 @{
     ViewData["Title"] = "Your Profile";
+    int id = 0;
+    var pageparam = Context.Request.Query["page"];
+    if(pageparam.Count() == 0){//if pageparam is null
+        pageparam = "1";
+    }
+    var currentpage = Int32.Parse(pageparam);
+    string makePath(string ownerId,DateTime createdAt){
+        string ActivityIdEncode = EventListener.Services.Base64Helper.EncodeBase64(ownerId + " " + createdAt.ToString("yyyy-MM-dd HH:mm:ss", new System.Globalization.CultureInfo("en-US")));
+        return ActivityIdEncode;
+    }
+
 }
 
 <link rel="stylesheet" href="~/css/profile/index.css" asp-asp-append-version="true">
@@ -10,7 +21,7 @@
 <div>
     <nav>
         <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+            <i class="fa-solid fa-ear-listen fa-3x"></i>
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
@@ -102,6 +113,47 @@
                     </ul>
                 </div>
             </div>
+            <div class="activity-div">
+                <p>กิจกรรมที่เข้าร่วม</p>
+                <table>
+                    <tr>
+                        <th>ประเภท</th>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>Tag</th>
+                        <th>สถานที่</th>
+                        <th>วันที่เริ่มกิจกรรม</th>
+                    </tr>
+                    @foreach (var act in Model.JoinActivities)
+                    {
+                        var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                        <tr> 
+                            <td><div class="activity-category-circle" style="background-color: @Model.ActivityCategoryColor[id]"></div> @Model.ActivityCategory[id]</td>
+                            <td onclick="window.location.href = './activity/detail/' + '@makePath(act.OwnerId,act.CreatedAt)'"><i class="fa-solid fa-up-right-from-square"></i> @act.ActivityName</td>
+                            <td><div class="activity-tag-div">@act.ActivityTagId</div></td>
+                            <td>@act.Location</td>
+                            <td id=@id onmouseover="handleOver('@strdate',@id)" onmouseout="handleOut('@strdate',@id)"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
+                        </tr>
+                        id = id + 1;
+                    }
+                </table>
+
+                <div class="page-list-div">
+                    @if(Model.Numpage > 1){
+                        @for(int i=0;i<Model.Numpage;i++)
+                        {
+                            @if(currentpage == i+1)
+                            {
+                                <div style="background-color:grey"><a asp-controller="Profile" asp-action="Index" asp-route-page="@(i+1)"> </a></div>
+                            }
+                            else
+                            {
+                                <div><a asp-controller="Profile" asp-action="Index" asp-route-page="@(i+1)"></a></div>
+                            }
+                        }
+                    }
+                </div>
+
+            </div>
             <div class="edit-btn-div">
             </div>
             <a asp-controller="profile" asp-action="edit" class="edit-btn">แก้ไขโปรไฟล์</a>
@@ -110,6 +162,7 @@
 </div>
 
 <script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script src="~/js/profile/date_mouseover.js" asp-append-version="true"></script>
 
 
 

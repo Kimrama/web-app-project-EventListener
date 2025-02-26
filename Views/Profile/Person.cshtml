@@ -1,6 +1,17 @@
 @model ProfileViewModel
 @{
     ViewData["Title"] = @Model.Nickname + "'s Profile";
+    int id = 0;
+    var pageparam = Context.Request.Query["page"];
+    if(pageparam.Count() == 0){//if pageparam is null
+        pageparam = "1";
+    }
+    var currentpage = Int32.Parse(pageparam);
+    string ActivityIdEncode = null;
+    int makePath(string ownerId,DateTime createdAt){
+        ActivityIdEncode = EventListener.Services.Base64Helper.EncodeBase64(ownerId + " " + createdAt.ToString("yyyy-MM-dd HH:mm:ss", new System.Globalization.CultureInfo("en-US")));
+        return 0;
+    }
 }
 
 <link rel="stylesheet" href="~/css/profile/person.css" asp-asp-append-version="true">
@@ -10,7 +21,7 @@
 <div>
     <nav>
         <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+            <i class="fa-solid fa-ear-listen fa-3x"></i>
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
@@ -56,7 +67,12 @@
             <div class="profile-div">
                 <div class="profile-img_rect-div">
                     <div class="profile-img-div">
-                        <img src="@Model.UserImageUrl" alt="me_profile_picture" >
+                        @if(Model.UserImageUrl == null){
+                            <img src="https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg" alt="me_profile_picture" >
+                        }
+                        else{
+                            <img src="@Model.UserImageUrl" alt="me_profile_picture" >
+                        }
                     </div>
                     <div class="sex-rect" style="background-color:@Model.SexColor"></div>
                 </div>
@@ -87,11 +103,54 @@
                     </ul>
                 </div>
             </div>
+            <div class="activity-div">
+                <p>กิจกรรมที่เข้าร่วม</p>
+                <table>
+                    <tr>
+                        <th>ประเภท</th>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>Tag</th>
+                        <th>สถานที่</th>
+                        <th>วันที่เริ่มกิจกรรม</th>
+                    </tr>
+                        @foreach (var act in Model.JoinActivities)
+                        {   
+                            var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                            makePath(act.OwnerId,act.CreatedAt);
+                            <tr>
+                                <td><div class="activity-category-circle" style="background-color: @Model.ActivityCategoryColor[id]"></div> @Model.ActivityCategory[id]</td>
+                                <td><a asp-controller="activity" asp-action="detail" asp-route-activityIdHash=@ActivityIdEncode><i class="fa-solid fa-up-right-from-square"></i>  @act.ActivityName</a></td>
+                                <td><div class="activity-tag-div">@act.ActivityTagId</div></td>
+                                <td>@act.Location</td>
+                                <td id=@id onmouseover="handleOver('@strdate',@id)" onmouseout="handleOut('@strdate',@id)"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
+                            </tr>
+                            id = id + 1;
+                        }
+                </table>
+
+                <div class="page-list-div">
+                    @if(Model.Numpage > 1){
+                        @for(int i=0;i<Model.Numpage;i++)
+                        {
+                            @if(currentpage == i+1)
+                            {
+                                <div style="background-color:grey"><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"> </a></div>
+                            }
+                            else
+                            {
+                                <div><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"></a></div>
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
         </div>
     </body>
 </div>
 
 <script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script src="~/js/profile/date_mouseover.js" asp-append-version="true"></script>
 
 
 

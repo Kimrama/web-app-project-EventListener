@@ -6,6 +6,7 @@ using EventListener.Models;
 using EventListener.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Azure;
 
 namespace EventListener.Controllers;
 
@@ -23,7 +24,7 @@ public class ProfileController : Controller
     }
 
     [Authorize]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string page)
     {
         var username = User.FindFirstValue(ClaimTypes.Name); //inspect login user
 
@@ -122,6 +123,142 @@ public class ProfileController : Controller
         else{
             model.About = user.About;
         }
+        
+        int intpage = 1;
+        if(page == null || Int32.Parse(page) <= 0){
+            intpage = 1;
+        }
+        else{
+            intpage = Int32.Parse(page);
+        }
+        var userjoinactivity = await _context.UserJoinActivities
+            //Left SQL Join
+            .Join(
+                _context.Activities, 
+                u => u.ActivityCreatedAt, 
+                a => a.CreatedAt,
+                (u, a) => new ProfileFullJoinModel
+                    {
+                        UserId = u.UserId,
+                        ActivityOwnerId = u.Activity.OwnerId,
+                        Status = u.Status,
+                        OwnerId = a.OwnerId,
+                        ActivityTagId = a.ActivityTagId,
+                        ActivityName = a.ActivityName,
+                        Location = a.Location,
+                        StartDate = a.StartDate,
+                        CreatedAt = a.CreatedAt
+                    }
+                )
+            //Union with Right SQL Join to create full outer join table
+            .Union(
+                _context.Activities
+                    .Where(a => _context.UserJoinActivities
+                        .All(u => u.ActivityOwnerId != a.OwnerId)) // Ensures only unmatched activities
+                    .Join(
+                        _context.UserJoinActivities,
+                        a => a.CreatedAt,
+                        u => u.ActivityCreatedAt, 
+                        (a, u) => new ProfileFullJoinModel
+                        {
+                            UserId = u.UserId,
+                            ActivityOwnerId = u.Activity.OwnerId,
+                            Status = u.Status,
+                            OwnerId = a.OwnerId,
+                            ActivityTagId = a.ActivityTagId,
+                            ActivityName = a.ActivityName,
+                            Location = a.Location,
+                            StartDate = a.StartDate,
+                            CreatedAt = a.CreatedAt
+                        }
+                    )
+            )
+            .Where(u => u.UserId == username || u.OwnerId == username)
+            .Where(u => u.Status == "Accept")
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+
+        userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
+
+        model.Numpage = Math.Ceiling((Double)userjoinactivity.Count()/(Double)4);
+
+        userjoinactivity = await _context.UserJoinActivities
+            //Left SQL Join
+            .Join(
+                _context.Activities, 
+                u => u.ActivityCreatedAt, 
+                a => a.CreatedAt,
+                (u, a) => new ProfileFullJoinModel
+                    {
+                        UserId = u.UserId,
+                        ActivityOwnerId = u.Activity.OwnerId,
+                        Status = u.Status,
+                        OwnerId = a.OwnerId,
+                        ActivityTagId = a.ActivityTagId,
+                        ActivityName = a.ActivityName,
+                        Location = a.Location,
+                        StartDate = a.StartDate,
+                        CreatedAt = a.CreatedAt
+                    }
+                )
+            //Union with Right SQL Join to create full outer join table
+            .Union(
+                _context.Activities
+                    .Where(a => _context.UserJoinActivities
+                        .All(u => u.ActivityOwnerId != a.OwnerId)) // Ensures only unmatched activities
+                    .Join(
+                        _context.UserJoinActivities,
+                        a => a.CreatedAt,
+                        u => u.ActivityCreatedAt, 
+                        (a, u) => new ProfileFullJoinModel
+                        {
+                            UserId = u.UserId,
+                            ActivityOwnerId = u.Activity.OwnerId,
+                            Status = u.Status,
+                            OwnerId = a.OwnerId,
+                            ActivityTagId = a.ActivityTagId,
+                            ActivityName = a.ActivityName,
+                            Location = a.Location,
+                            StartDate = a.StartDate,
+                            CreatedAt = a.CreatedAt
+                        }
+                    )
+            )
+            .Where(u => u.UserId == username || u.OwnerId == username)
+            .Where(u => u.Status == "Accept")
+            .Skip(4*(intpage-1))
+            .Take(4) //LIMIT (skip,take)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+        userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
+        model.JoinActivities = userjoinactivity;
+
+        foreach(var act in userjoinactivity)
+        {
+            switch(act.ActivityTagId)
+            {
+                case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
+                    model.ActivityCategory.Add("Exercise & Sports");
+                    model.ActivityCategoryColor.Add("#ff9d00");
+                    break;
+                case "Sing" : case "Dance" : case "Painting":
+                    model.ActivityCategory.Add("Arts & Culture");
+                    model.ActivityCategoryColor.Add("#04bb7b");
+                    break;
+                case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
+                    model.ActivityCategory.Add("Social");
+                    model.ActivityCategoryColor.Add("#b750d9");
+                    break;
+                case "Tutoring" : case "Lab" : case "Hackathon":
+                    model.ActivityCategory.Add("Education");
+                    model.ActivityCategoryColor.Add("#008cff");
+                    break;
+                default:
+                    model.ActivityCategory.Add("Default");
+                    model.ActivityCategoryColor.Add("red");
+                    break;
+            }
+        }
 
         return View(model);
     }
@@ -129,7 +266,7 @@ public class ProfileController : Controller
     [AllowAnonymous]
     [HttpGet]
     [Route("Profile/Person/{usernameparam}")]
-    public async Task<IActionResult> Person(string usernameparam)
+    public async Task<IActionResult> Person(string usernameparam,string page)
     {
         var username = User.FindFirstValue(ClaimTypes.Name);//inspect login user
         var user = await _userManager.FindByNameAsync(usernameparam);//fetch db ready to use
@@ -158,7 +295,7 @@ public class ProfileController : Controller
             SexColor = "",
             About = "",
             InterestTags = userInterestTag,
-            UserImageUrl = "https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg"
+            UserImageUrl = user.UserImageUrl
         };
 
         var intmonth = user.Birthday.Month;
@@ -230,6 +367,144 @@ public class ProfileController : Controller
             model.About = user.About;
         }
 
+        int intpage = 1;
+        if(page == null || Int32.Parse(page) <= 0){
+            intpage = 1;
+        }
+        else{
+            intpage = Int32.Parse(page);
+        }
+
+       var userjoinactivity = await _context.UserJoinActivities
+            //Left SQL Join
+            .Join(
+                _context.Activities, 
+                u => u.ActivityCreatedAt, 
+                a => a.CreatedAt,
+                (u, a) => new ProfileFullJoinModel
+                    {
+                        UserId = u.UserId,
+                        ActivityOwnerId = u.Activity.OwnerId,
+                        Status = u.Status,
+                        OwnerId = a.OwnerId,
+                        ActivityTagId = a.ActivityTagId,
+                        ActivityName = a.ActivityName,
+                        Location = a.Location,
+                        StartDate = a.StartDate,
+                        CreatedAt = a.CreatedAt
+                    }
+                )
+            //Union with Right SQL Join to create full outer join table
+            .Union(
+                _context.Activities
+                    .Where(a => _context.UserJoinActivities
+                        .All(u => u.ActivityOwnerId != a.OwnerId)) // Ensures only unmatched activities
+                    .Join(
+                        _context.UserJoinActivities,
+                        a => a.CreatedAt,
+                        u => u.ActivityCreatedAt, 
+                        (a, u) => new ProfileFullJoinModel
+                        {
+                            UserId = u.UserId,
+                            ActivityOwnerId = u.Activity.OwnerId,
+                            Status = u.Status,
+                            OwnerId = a.OwnerId,
+                            ActivityTagId = a.ActivityTagId,
+                            ActivityName = a.ActivityName,
+                            Location = a.Location,
+                            StartDate = a.StartDate,
+                            CreatedAt = a.CreatedAt
+                        }
+                    )
+            )
+            .Where(u => u.UserId == usernameparam || u.OwnerId == usernameparam)
+            .Where(u => u.Status == "Accept")
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+
+        userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
+
+        model.Numpage = Math.Ceiling((Double)userjoinactivity.Count()/(Double)4);
+
+        userjoinactivity = await _context.UserJoinActivities
+            //Left SQL Join
+            .Join(
+                _context.Activities, 
+                u => u.ActivityCreatedAt, 
+                a => a.CreatedAt,
+                (u, a) => new ProfileFullJoinModel
+                    {
+                        UserId = u.UserId,
+                        ActivityOwnerId = u.Activity.OwnerId,
+                        Status = u.Status,
+                        OwnerId = a.OwnerId,
+                        ActivityTagId = a.ActivityTagId,
+                        ActivityName = a.ActivityName,
+                        Location = a.Location,
+                        StartDate = a.StartDate,
+                        CreatedAt = a.CreatedAt
+                    }
+                )
+            //Union with Right SQL Join to create full outer join table
+            .Union(
+                _context.Activities
+                    .Where(a => _context.UserJoinActivities
+                        .All(u => u.ActivityOwnerId != a.OwnerId)) // Ensures only unmatched activities
+                    .Join(
+                        _context.UserJoinActivities,
+                        a => a.CreatedAt,
+                        u => u.ActivityCreatedAt, 
+                        (a, u) => new ProfileFullJoinModel
+                        {
+                            UserId = u.UserId,
+                            ActivityOwnerId = u.Activity.OwnerId,
+                            Status = u.Status,
+                            OwnerId = a.OwnerId,
+                            ActivityTagId = a.ActivityTagId,
+                            ActivityName = a.ActivityName,
+                            Location = a.Location,
+                            StartDate = a.StartDate,
+                            CreatedAt = a.CreatedAt
+                        }
+                    )
+            )
+            .Where(u => u.UserId == usernameparam || u.OwnerId == usernameparam)
+            .Where(u => u.Status == "Accept")
+            .Skip(4*(intpage-1))
+            .Take(4) //LIMIT (skip,take)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+
+        userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
+
+        model.JoinActivities = userjoinactivity;
+
+        foreach(var act in userjoinactivity)
+        {
+            switch(act.ActivityTagId)
+            {
+                case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
+                    model.ActivityCategory.Add("Exercise & Sports");
+                    model.ActivityCategoryColor.Add("#ff9d00");
+                    break;
+                case "Sing" : case "Dance" : case "Painting":
+                    model.ActivityCategory.Add("Arts & Culture");
+                    model.ActivityCategoryColor.Add("#04bb7b");
+                    break;
+                case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
+                    model.ActivityCategory.Add("Social");
+                    model.ActivityCategoryColor.Add("#b750d9");
+                    break;
+                case "Tutoring" : case "Lab" : case "Hackathon":
+                    model.ActivityCategory.Add("Education");
+                    model.ActivityCategoryColor.Add("#008cff");
+                    break;
+                default:
+                    model.ActivityCategory.Add("Default");
+                    model.ActivityCategoryColor.Add("red");
+                    break;
+            }
+        }
         return View(model);
     }
 

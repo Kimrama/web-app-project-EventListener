@@ -37,7 +37,7 @@
                         <button class="user-avatar-btn" onclick="drop()"><img src="@ViewData["avatarUrl"]" alt="avatar-img" class="avatar-img"></button>
                     }
                     <div id="myDropdown" class="dropdown-content">
-                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
+                        <a asp-controller="profile" asp-action="index" as>โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
                     </div>
                 </div>

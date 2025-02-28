@@ -24,15 +24,21 @@ function openPopupTag() {
 
 function showFilterList() {
     const tagFilterList = document.getElementById("tag-filter-list");
-    checkboxData.forEach((checkbox) => {
+
+    tagFilterList.innerHTML = "";
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
             const tag = document.createElement("div");
+            tag.innerHTML = `<i class="fa-solid fa-xmark"></i> ${checkbox.id}`;
             tag.classList.add("tag");
-            tag.textContent = checkbox.id;
             tagFilterList.appendChild(tag);
         }
     });
 }
+
 function debugInputTag() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 

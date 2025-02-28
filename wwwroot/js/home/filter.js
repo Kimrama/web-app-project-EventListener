@@ -13,8 +13,18 @@ const month = [
     "พ.ย.",
     "ธ.ค.",
 ];
-function openPopup() {
-    document.getElementById("popupOverlay").style.display = "flex";
+function openPopupDate() {
+    document.getElementById("popupOverlayDate").style.display = "flex";
+}
+function openPopupTag() {
+    document.getElementById("popupOverlayTag").style.display = "flex";
+    console.log("object");
+}
+
+function closePopupTag(event) {
+    if (!event || event.target === document.getElementById("popupOverlayTag")) {
+        document.getElementById("popupOverlayTag").style.display = "none";
+    }
 }
 function formatDate(dateStr) {
     let date = new Date(dateStr);
@@ -23,9 +33,12 @@ function formatDate(dateStr) {
     let year = date.getFullYear();
     return `${day} ${month} ${year}`;
 }
-function closePopup(event) {
-    if (!event || event.target === document.getElementById("popupOverlay")) {
-        document.getElementById("popupOverlay").style.display = "none";
+function closePopupDate(event) {
+    if (
+        !event ||
+        event.target === document.getElementById("popupOverlayDate")
+    ) {
+        document.getElementById("popupOverlayDate").style.display = "none";
     }
 
     const startDateInp = document.getElementById("start-date");

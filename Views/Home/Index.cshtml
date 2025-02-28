@@ -8,12 +8,6 @@
                 <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
                 <input type="text" name="search" id="">
             </div>
-            <div class="filter-container">
-                <div class="date-input">
-                    <i class="fa-regular fa-calendar"></i><button onclick="openPopup()" id="date-filter">all</button>
-                </div>
-                <div class="filter"><i class="fa-solid fa-sliders"></i><button> all</button></div>
-            </div>
         </div>
         <div class="buttongroup-and-user">
             @if (User.Identity != null && User.Identity.IsAuthenticated) {
@@ -47,11 +41,16 @@
             }
         </div>
     </nav>
-    
+    <div class="filter-container">
+        <div class="date-input">
+            <i class="fa-regular fa-calendar"></i><button onclick="openPopupDate()" id="date-filter">all</button>
+        </div>
+        <div class="filter"><i class="fa-solid fa-sliders"></i><button id="tag-filter" onclick="openPopupTag()"> all</button></div>
+    </div>
     <div class="activity-card-container"></div>
 </div>
 
-<div class="popup-overlay" id="popupOverlay" onclick="openPopup(event)">
+<div class="popup-overlay" id="popupOverlayDate" onclick="openPopupDate(event)">
     <div class="popup" onclick="event.stopPropagation()">
         <h3>เลือกช่วงเวลาของกิจกรรมที่จะค้นหา</h3>
         <div class="date-input-container">
@@ -59,7 +58,108 @@
             <div>-></div>
             <div><h4>สิ้นสุด</h4><input type="date" id="end-date"></div>
         </div>
-        <button class="close-btn" onclick="closePopup()">เลือก</button>
+        <button class="close-btn" onclick="closePopupDate()">เลือก</button>
+    </div>
+</div>
+
+<div class="popup-overlay" id="popupOverlayTag" onclick="openPopupTag(event)">
+    <div class="popup" onclick="event.stopPropagation()">
+        <h3>เลือกหมวดหมู่ที่จะกรอง</h3>
+            <div class="select-container">
+                <section class="sport-and-fitness">
+                    <h4>Exercise & Sports</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Football" />
+                            <span>Football</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Basketball" />
+                            <span>Basketball</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Badminton" />
+                            <span>Badminton</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Table tennis" />
+                            <span>Table tennis</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Running" />
+                            <span>Running</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Swimming" />
+                            <span>Swimming</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Cardio" />
+                            <span>Cardio</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Weight training" />
+                            <span>Weight training</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness">
+                    <h4>Arts & Culture</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Sing" />
+                            <span>Sing</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Dance" />
+                            <span>Dance</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Painting" />
+                            <span>Painting</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness">
+                    <h4>Social</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Food & Dining" />
+                            <span>Gaming</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Board Games" />
+                            <span>Board Games</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Gaming" />
+                            <span>Food & Dining</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Travel" />
+                            <span>Travel</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness">
+                    <h4>Education</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Tutoring" />
+                            <span>Tutoring</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Lab" />
+                            <span>Lab</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Interests" value="Hackathon" />
+                            <span>Hackathon</span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+        <button class="close-btn" onclick="closePopupTag()">เลือก</button>
     </div>
 </div>
 

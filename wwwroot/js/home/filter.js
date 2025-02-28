@@ -13,6 +13,7 @@ const month = [
     "พ.ย.",
     "ธ.ค.",
 ];
+let checkboxData = [];
 function openPopupDate() {
     document.getElementById("popupOverlayDate").style.display = "flex";
 }
@@ -21,10 +22,33 @@ function openPopupTag() {
     console.log("object");
 }
 
+function showFilterList() {
+    const tagFilterList = document.getElementById("tag-filter-list");
+    checkboxData.forEach((checkbox) => {
+        if (checkbox.checked) {
+            const tag = document.createElement("div");
+            tag.classList.add("tag");
+            tag.textContent = checkbox.id;
+            tagFilterList.appendChild(tag);
+        }
+    });
+}
+function debugInputTag() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    checkboxData = Array.from(checkboxes).map((checkbox) => ({
+        id: checkbox.id,
+        checked: checkbox.checked,
+    }));
+
+    console.log(checkboxData);
+    showFilterList();
+}
 function closePopupTag(event) {
     if (!event || event.target === document.getElementById("popupOverlayTag")) {
         document.getElementById("popupOverlayTag").style.display = "none";
     }
+    debugInputTag();
 }
 function formatDate(dateStr) {
     let date = new Date(dateStr);

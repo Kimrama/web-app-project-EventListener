@@ -45,7 +45,7 @@
         <div class="date-input">
             <i class="fa-regular fa-calendar"></i><button onclick="openPopupDate()" id="date-filter">all</button>
         </div>
-        <div class="filter"><i class="fa-solid fa-sliders"></i><button id="tag-filter" onclick="openPopupTag()"> all</button></div>
+        <div class="filter"><i class="fa-solid fa-sliders"></i><button id="tag-filter" onclick="openPopupTag()"> all</button><div id="tag-filter-list"></div></div>
     </div>
     <div class="activity-card-container"></div>
 </div>
@@ -70,35 +70,35 @@
                     <h4>Exercise & Sports</h4>
                     <div class="select-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Football" />
+                            <input type="checkbox" id="Football" />
                             <span>Football</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Basketball" />
+                            <input type="checkbox" id="Basketball" />
                             <span>Basketball</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Badminton" />
+                            <input type="checkbox" id="Badminton" />
                             <span>Badminton</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Table tennis" />
+                            <input type="checkbox" id="Table-tennis" />
                             <span>Table tennis</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Running" />
+                            <input type="checkbox" id="Running" />
                             <span>Running</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Swimming" />
+                            <input type="checkbox" id="Swimming" />
                             <span>Swimming</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Cardio" />
+                            <input type="checkbox" id="Cardio" />
                             <span>Cardio</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Weight training" />
+                            <input type="checkbox" id="Weight-training" />
                             <span>Weight training</span>
                         </label>
                     </div>
@@ -107,15 +107,15 @@
                     <h4>Arts & Culture</h4>
                     <div class="select-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Sing" />
+                            <input type="checkbox" id="Sing" />
                             <span>Sing</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Dance" />
+                            <input type="checkbox" id="Dance" />
                             <span>Dance</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Painting" />
+                            <input type="checkbox" id="Painting" />
                             <span>Painting</span>
                         </label>
                     </div>
@@ -124,19 +124,19 @@
                     <h4>Social</h4>
                     <div class="select-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Food & Dining" />
+                            <input type="checkbox" id="Food-Dining" />
                             <span>Gaming</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Board Games" />
+                            <input type="checkbox" id="Board-Games" />
                             <span>Board Games</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Gaming" />
+                            <input type="checkbox" id="Gaming" />
                             <span>Food & Dining</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Travel" />
+                            <input type="checkbox" id="Travel" />
                             <span>Travel</span>
                         </label>
                     </div>
@@ -145,21 +145,21 @@
                     <h4>Education</h4>
                     <div class="select-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Tutoring" />
+                            <input type="checkbox" id="Tutoring" />
                             <span>Tutoring</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Lab" />
+                            <input type="checkbox" id="Lab" />
                             <span>Lab</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="Interests" value="Hackathon" />
+                            <input type="checkbox" id="Hackathon" />
                             <span>Hackathon</span>
                         </label>
                     </div>
                 </section>
             </div>
-        <button class="close-btn" onclick="closePopupTag()">เลือก</button>
+        <button class="close-btn" onclick="closePopupTag()">ตกลง</button>
     </div>
 </div>
 

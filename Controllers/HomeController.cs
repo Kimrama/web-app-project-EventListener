@@ -121,14 +121,14 @@ public async Task<JsonResult> FilterActivityData(DateTime? startDate, DateTime? 
 
     if (tags != null && tags.Any())
     {
-        query = query.Where(a => tags.Contains(a.ActivityTagId));  // กรองตาม ActivityTagId
+        query = query.Where(a => tags.Contains(a.ActivityTagId)); 
     }
 
     if (!string.IsNullOrEmpty(searchWord))
     {
         query = query.Where(a => a.ActivityName.Contains(searchWord));
     }
-
+    
     var activities = await query.OrderByDescending(a => a.CreatedAt)
         .Select(c => new ActivityViewModel
         {

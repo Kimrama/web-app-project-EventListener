@@ -45,6 +45,7 @@ async function join_activity(activityIdHash,ownerId,createDate,userId,curStatus)
         if(curStatus == "exit"){button.setAttribute("data-curstatus", "wait");}
         else if(curStatus == "exit2"){button.setAttribute("data-curstatus", "wait2");}
         else if(curStatus == "exit3"){button.setAttribute("data-curstatus", "wait3");}
+        else if(curStatus == null){button.setAttribute("data-curstatus","wait")}
 
         document.querySelector(".cancel-wait-btn").addEventListener("click", function () {
             const ownerId = this.dataset.ownerid;

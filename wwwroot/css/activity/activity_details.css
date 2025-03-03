@@ -200,6 +200,11 @@ main {
         background-color: #2973B2;
         border: 1px solid #2973B2;
     }
+
+    .cancel-wait-btn {
+        background-color: #D32F2F;
+        border: 1px solid #D32F2F;
+    }
 }
 
 .owner {

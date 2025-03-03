@@ -123,6 +123,14 @@
                                                 <span>เเชท</span>
                                             </button>
                                         </a>
+                                        <button class="cancel-wait-btn" 
+                                            data-ownerid="@p.ActivityOwnerId" 
+                                            data-createdate="@p.ActivityCreatedAt" 
+                                            data-userid="@p.UserId"
+                                            data-curStatus="@p.Status">
+                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <span>ออกจากกิจกรรม @p.Status</span>
+                                        </button>
                                     }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
                                     Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3" )
@@ -131,15 +139,19 @@
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
                                             <span>รอการอนุมัติ</span>
                                         </button>
-                                        <button class="wait-btn" onclick="updateStatus()">
+                                        <button class="cancel-wait-btn" 
+                                            data-ownerid="@p.ActivityOwnerId" 
+                                            data-createdate="@p.ActivityCreatedAt" 
+                                            data-userid="@p.UserId"
+                                            data-curstatus="@p.Status">
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                            <span>ยกเลิกคำขอ</span>
+                                            <span>ยกเลิกคำขอ @p.Status</span>
                                         </button>
-                                    }
+                                        }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
-                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny" || p.Status == "Deny2"))
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny" || p.Status == "Deny2" || p.Status == "exit" || p.Status == "exit2" || p.Status == "exit3"))
                                     {
-                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId','@Model.Activity.OwnerId','@Model.Activity.CreatedAt','@User.Identity.Name','@p.Status')" id="join-btn">
                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                             <span>เข้าร่วม</span>
                                         </button>
@@ -147,7 +159,7 @@
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
                                     Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
                                     {
-                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                        <button class="join-btn" id="join-btn">
                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                             <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
                                         </button>
@@ -157,7 +169,7 @@
                             }
                             else
                             {
-                                <button class="join-btn" onclick="join_activity('@Model.ActivityId')">
+                                <button class="join-btn" onclick="join_activity('@Model.ActivityId','@Model.Activity.OwnerId','@Model.Activity.CreatedAt','@User.Identity.Name',null)">
                                     <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                     <span>เข้าร่วม</span>
                                 </button>
@@ -166,7 +178,7 @@
                     }
                     else
                     {
-                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                        <button class="join-btn" onclick="join_activity('@Model.ActivityId','@Model.Activity.OwnerId','@Model.Activity.CreatedAt','@User.Identity.Name',null)" id="join-btn">
                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                             <span>เข้าร่วม</span>
                         </button>
@@ -186,7 +198,7 @@
                 {
                     @if (p.Status == "Accept")
                     {
-                        <div class="participant">
+                        <div class="participant" id="participant-@p.UserId">
                             @if (p.User.UserImageUrl == null)
                             {
                                 <a asp-controller="Profile" asp-action="Person" asp-route-id="@p.UserId">
@@ -226,9 +238,9 @@
                                 }
                                 <h4>@p.User.UserName</h4>
                                 <button class="accept-button" id="accept-button"
-                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept', '@p.Status')">Accept</button>
                                 <button class="deny-button" id="deny-button"
-                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny', '@p.Status')">Deny</button>
                             </div>
                         }
                     }
@@ -258,13 +270,27 @@
 
     document.addEventListener("DOMContentLoaded", updateParticipantCount);
 
-    async function updateStatus(ownerId, createDate, joinUser, status) {
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".cancel-wait-btn").addEventListener("click", function () {
+            const ownerId = this.dataset.ownerid;
+            const createDate = this.dataset.createdate;
+            const joinUser = this.dataset.userid;
+            const curStatus = this.dataset.curstatus;
+            console.log("call1");
+            console.log(this.dataset.ownerid,this.dataset.createdate,this.dataset.userid,this.dataset.curstatus);
+            console.log(ownerId, createDate, joinUser,curStatus);
+            updateStatus(ownerId, createDate, joinUser, "exit", curStatus);
+            console.log("call2");
+        });
+    });
+
+    async function updateStatus(ownerId, createDate, joinUser, status, curStatus) {
+        console.log(ownerId, createDate, joinUser, status, curStatus)
         let formData = new FormData();
         formData.append("ownerId", ownerId);
         formData.append("createDate", createDate);
         formData.append("joinUser", joinUser);
         formData.append("status", status);
-
         try {
             let response = await fetch('/Activity/UpdateJoinStatus', {
                 method: 'POST',
@@ -272,17 +298,60 @@
             });
 
             let result = await response.json();
-
+            console.log(result)
             if (result.success) {
                 if (status == "Accept"){
-                    accept_button = document.getElementById("accept-button");
-                    deny_button = document.getElementById("deny-button");
-                    temp = document.getElementById(`participant-${joinUser}`);
-                    document.getElementById(`participant-${joinUser}`).remove();
-                    temp.removeChild(accept_button);
-                    temp.removeChild(deny_button);
-                    document.getElementById("accept-participant").appendChild(temp);
+                    if (curStatus == 'wait' || curStatus == 'wait2' || curStatus == 'wait3'){
+                        accept_button = document.getElementById("accept-button");
+                        deny_button = document.getElementById("deny-button");
+                        temp = document.getElementById(`participant-${joinUser}`);
+                        document.getElementById(`participant-${joinUser}`).remove();
+                        temp.removeChild(accept_button);
+                        temp.removeChild(deny_button);
+                        document.getElementById("accept-participant").appendChild(temp);
+                    }
         
+                }
+                else if (status == "exit"){
+                    if(curStatus == 'wait' || curStatus == 'wait2' || curStatus == 'wait3'){
+                        document.querySelector(".wait-btn").remove();
+                        document.querySelector(".cancel-wait-btn").remove();
+                        const buttonGroupForOwnerOrUserDiv = document.querySelector(".btn-group-for-owner-or-user");
+                        if(curStatus == 'wait'){
+                            buttonGroupForOwnerOrUserDiv.innerHTML = `
+                            <button class="join-btn" onclick="join_activity('@Model.ActivityId', '@Model.Activity.OwnerId', '@Model.Activity.CreatedAt', '@User.Identity.Name', 'exit')" id="join-btn">
+                                <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                <span>เข้าร่วม</span>
+                            </button>`;
+                        }
+                        else if(curStatus == 'wait2'){
+                            buttonGroupForOwnerOrUserDiv.innerHTML = `
+                        <button class="join-btn" onclick="join_activity('@Model.ActivityId', '@Model.Activity.OwnerId', '@Model.Activity.CreatedAt', '@User.Identity.Name', 'exit2')" id="join-btn">
+                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                            <span>เข้าร่วม</span>
+                        </button>`;
+                        }
+                        else if(curStatus == 'wait3'){
+                            buttonGroupForOwnerOrUserDiv.innerHTML = `
+                        <button class="join-btn" onclick="join_activity('@Model.ActivityId', '@Model.Activity.OwnerId', '@Model.Activity.CreatedAt', '@User.Identity.Name', 'exit3')" id="join-btn">
+                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                            <span>เข้าร่วม</span>
+                        </button>`;
+                        }
+                        
+                    }
+                    else if(curStatus == "Accept"){
+                        document.querySelector(".chat-btn").remove();
+                        document.querySelector(".cancel-wait-btn").remove();
+                        const buttonGroupForOwnerOrUserDiv = document.querySelector(".btn-group-for-owner-or-user");
+                        buttonGroupForOwnerOrUserDiv.innerHTML = `
+                                <button class="join-btn" onclick="join_activity('@Model.ActivityId','@Model.Activity.OwnerId','@Model.Activity.CreatedAt','@User.Identity.Name','exit')" id="join-btn">
+                                <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                <span>เข้าร่วม</span>
+                            </button>
+                        `;
+                        document.getElementById(`participant-${joinUser}`).remove();
+                    }
                 }
                 else{
                     document.getElementById(`participant-${joinUser}`).remove();

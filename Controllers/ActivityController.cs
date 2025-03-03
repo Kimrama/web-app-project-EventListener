@@ -136,8 +136,11 @@ public class ActivityController : Controller
                 u.ActivityOwnerId == userJoinActivity.ActivityOwnerId &&
                 u.ActivityCreatedAt == userJoinActivity.ActivityCreatedAt);
             if (existingJoinActivity != null)
-            {
-                if (existingJoinActivity.Status == "Deny") { existingJoinActivity.Status = "wait2"; }
+            {  
+                if (existingJoinActivity.Status == "exit") { existingJoinActivity.Status = "wait";}
+                else if (existingJoinActivity.Status == "exit2") { existingJoinActivity.Status = "wait2"; }
+                else if (existingJoinActivity.Status == "exit3") { existingJoinActivity.Status = "wait3"; }
+                else if (existingJoinActivity.Status == "Deny") { existingJoinActivity.Status = "wait2"; }
                 else if (existingJoinActivity.Status == "Deny2") { existingJoinActivity.Status = "wait3"; }
                 _context.UserJoinActivities.Update(existingJoinActivity);
             }
@@ -178,6 +181,13 @@ public class ActivityController : Controller
                     if (userActivity.Status == "wait") { userActivity.Status = "Deny"; }
                     else if (userActivity.Status == "wait2") { userActivity.Status = "Deny2"; }
                     if (userActivity.Status == "wait3") { userActivity.Status = "Deny3"; }
+                }
+                else if (status == "exit")
+                {
+                    if (userActivity.Status == "wait") { userActivity.Status = "exit"; }
+                    else if (userActivity.Status == "wait2") { userActivity.Status = "exit2"; }
+                    else if (userActivity.Status == "wait3") { userActivity.Status = "exit3"; }
+                    else if (userActivity.Status == "Accept") {userActivity.Status = "exit";}
                 }
                 _context.SaveChanges();
                 return Json(new { success = true });

@@ -71,6 +71,9 @@ nav {
         border-radius: 8px;
         max-width: 30%;
         line-height: 18px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
     }
 
     .my-chat {

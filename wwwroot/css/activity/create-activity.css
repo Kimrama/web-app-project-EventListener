@@ -72,17 +72,17 @@ form {
 
 .question label {
     font-weight: bold;
-    margin-bottom: 1vh;
+    padding-right: 1vw;
 }
 
-.question input {
+.question .input {
     padding: 1.5vh;
     border: 0.2vh solid #ccc;
     border-radius: 1vh;
     font-size: 1.8vh;
 }
 
-.question textarea{
+.question .input-textarea{
     padding: 1.5vh;
     border: 0.2vh solid #ccc;
     border-radius: 1vh;
@@ -119,4 +119,85 @@ form {
     margin-top: 2vh;
     align-self: center;
     object-fit: cover;
+}
+
+.input-error {
+    border: 0.2vh solid red;
+    padding: 1.5vh;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+}
+
+.error-message {
+
+    color: red;
+    font-size: 14px;
+}
+
+.label-div {
+    padding-bottom: 1vh;
+}
+
+@media screen and (max-width: 820px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav {
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+        width: 100%;
+        height: 10vh;
+    }
+
+    .title {
+        font-size: 3vh;
+    }
+
+    .confirm-button, .cancel-button {
+        font-size: 1.8vh;
+        padding: 1.5vh 4vw;
+        border-radius: 1.5vh;
+    }
+
+    form {
+        width: 80vw;
+        margin-top: 12vh;
+        padding: 2vh;
+        box-shadow: none;
+    }
+
+    .question {
+        margin-top: 3vh;
+    }
+
+    .question label {
+        font-size: 2vh;
+    }
+
+    .question .input,
+    .question .input-textarea,
+    .question select {
+        font-size: 1.6vh;
+        padding: 1.2vh;
+        border-radius: 0.8vh;
+    }
+
+    .imgquestion {
+        flex-direction: column;
+        gap: 1.5vh;
+    }
+
+    .imgreq {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .imgdiv {
+        width: 100%;
+        height: auto;
+    }
 }

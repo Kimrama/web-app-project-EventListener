@@ -5,10 +5,11 @@
 @model CreateActivityViewModel
 
 <link rel="stylesheet" href="~/css/activity/create-activity.css" asp-append-version="true">
+
 <div>
     <nav>
-        <button class="cancel-button">
-            <i class="fa-solid fa-x"></i>
+        <button class="cancel-button" onclick="location.href='@Url.Action("Index", "Home")'">
+            <i class="fa-solid fa-x"></i> 
             ยกเลิก
         </button>
         <h2 class="title">สร้างกิจกรรม</h2>
@@ -19,44 +20,78 @@
             </button>
         </div>
     </nav>
+    
     <form id="activity-create-form" asp-action="Create" method="post" enctype="multipart/form-data">
         <div class="question">
-            <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
-            <input type="text" id="name" asp-for="ActivityName">
+            <div class="label-div">
+                <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
+                <span class="error-message" asp-validation-for="ActivityName"></span>
+            </div>
+            <input type="text" id="name" asp-for="ActivityName" class="@(ViewData.ModelState["ActivityName"]?.Errors.Any() == true ? "input-error" : "input")">
         </div>
+
         <div class="question">
-            <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
-            <input type="text" id="location" asp-for="Location">
+            <div class="label-div">
+                <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
+                <span class="error-message" asp-validation-for="Location"></span>
+            </div>
+            <input type="text" id="location" asp-for="Location" class="@(ViewData.ModelState["Location"]?.Errors.Any() == true ? "input-error" : "input")">
         </div>
+
         <div class="question">
-            <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
-            <input type="datetime-local" id="date_time" asp-for="StartDateTime">
+            <div class="label-div">
+                <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
+                <span class="error-message" asp-validation-for="StartDateTime"></span>
+            </div>
+            <input type="datetime-local" id="date_time" asp-for="StartDateTime" class="@(ViewData.ModelState["StartDateTime"]?.Errors.Any() == true ? "input-error" : "input")">
         </div>
+
         <div class="question">
-            <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
-            <input type="number" id="maximum_participant" asp-for="ParticipantLimit">
+            <div class="label-div">
+                <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
+                <span class="error-message" asp-validation-for="ParticipantLimit"></span>
+            </div>
+            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" class="@(ViewData.ModelState["ParticipantLimit"]?.Errors.Any() == true ? "input-error" : "input")">
         </div>
+
         <div class="question">
-            <label asp-for="Detail"><i class="fa-regular fa-user"></i> รายละเอียด</label>
-            <textarea id="details" asp-for="Detail" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."></textarea>
+            <div class="label-div">
+                <label asp-for="Detail"><i class="fa-regular fa-user"></i> รายละเอียด</label>
+                <span class="error-message" asp-validation-for="Detail"></span>
+            </div>
+            <textarea id="details" asp-for="Detail" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."
+                class="@(ViewData.ModelState["Detail"]?.Errors.Any() == true ? "input-error" : "input-textarea")"></textarea>
         </div>
+
         <div class="question">
-            <label for="searchDropdown">เลือกแท็ก</label>
-            @* <input type="text" id="dropdownSearch" placeholder="ค้นหาแท็ก..."> *@
-            <select asp-for="ActivityTag" id="searchDropdown">
-                @foreach (var a in ViewBag.activityTags)
+            <div class="label-div">
+                <label for="searchDropdown">เลือกแท็ก</label>
+                <span class="error-message" asp-validation-for="ActivityTag"></span>
+            </div>
+            <select asp-for="ActivityTag" id="searchDropdown" class="@(ViewData.ModelState["ActivityTag"]?.Errors.Any() == true ? "input-error" : "")">
+                @if (ViewBag.activityTags != null)
                 {
-                    <option value="@a.ActivityName">@a.ActivityName</option>
+                    @foreach (var a in ViewBag.activityTags)
+                    {
+                        <option value="@a.ActivityName">@a.ActivityName</option>
+                    }
                 }
             </select>
-            <div class="imgquestion">
-                <div class="imgreq">
-                    <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="file" name="file" accept="image/*">
-                </div>
-                <div class="imgdiv">
-                    <img id="previewImage" style="display: none;">
-                </div>
+        </div>
+
+        <div class="imgquestion">
+            <div class="imgreq">
+                <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
+                <input type="file" id="file" name="file" accept="image/*" class="@(ViewData.ModelState["file"]?.Errors.Any() == true ? "input-error" : "")">
+                <span class="error-message">
+                    @if (ViewData.ModelState["file"]?.Errors.Any() == true)
+                    {
+                        @ViewData.ModelState["file"].Errors.First().ErrorMessage
+                    }
+                </span>
+            </div>
+            <div class="imgdiv">
+                <img id="previewImage" style="display: none;">
             </div>
         </div>
     </form>
@@ -73,20 +108,10 @@
                 img.style.display = "block";
                 img.style.width = "100%";
                 img.style.height = "100%";
-
             };
             reader.readAsDataURL(file);
         }
     });
-    @* document.getElementById("dropdownSearch").addEventListener("keyup", function () {
-        let filter = this.value.toLowerCase();
-        let dropdown = document.getElementById("searchDropdown");
-        let options = dropdown.getElementsByTagName("option");
-
-        for (let option of options) {
-            let text = option.textContent.toLowerCase();
-            option.style.display = text.includes(filter) ? "" : "none";
-        }
-    }); *@
-
 </script>
+
+

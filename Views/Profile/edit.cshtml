@@ -4,11 +4,13 @@
 
 <div class="main">
     <nav>
-         <button class="cancel-button">
+        <a asp-controller="Profile" asp-action="Index">
+            <button class="cancel-button">
                 <i class="fa-solid fa-x"></i>
                 ยกเลิก
             </button>
-        <h2 class="title">แก้ไขโปรไฟล์ (user: @Model.User.UserName)</h2>
+        </a>
+        <h2 class="title">แก้ไขโปรไฟล์</h2>
         <div class="buttongroup-and-user">
             <button class="confirm-button" id="submitBtn" form="edit_profile_form">
                 <i class="fa-solid fa-check"></i>
@@ -16,11 +18,11 @@
             </button>
         </div>
     </nav>
-    <form id="edit_profile_form"class="form_body" asp-action="EditProfile" method="post" enctype="multipart/form-data">
-         <div class="zone1">
+    <form id="edit_profile_form" class="form_body" asp-action="EditProfile" method="post" enctype="multipart/form-data">
+        <div class="zone1">
             <div class="imgquestion">
                 <div class="imgdiv">
-                    <img id="previewImage" src="@Model.User.UserImageUrl" alt=""> 
+                    <img id="previewImage" src="@Model.UserImageUrl" alt="">
                 </div>
                 <div class="imgreq">
                     <label for="imageUpload"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
@@ -30,16 +32,16 @@
             <div class="rowq">
                 <div class="question">
                     <label for="fname">Firstname:</label>
-                    <input type="text" id="fname" asp-for="User.Firstname" required value="@Model.User.Firstname">
+                    <input type="text" id="fname" asp-for="Firstname" required value="@Model.Firstname">
                 </div>
                 <div class="question">
                     <label for="lname">Lastname:</label>
-                    <input type="text" id="lname" asp-for="User.Lastname" required value="@Model.User.Lastname">
+                    <input type="text" id="lname" asp-for="Lastname" required value="@Model.Lastname">
                 </div>
             </div>
             <div class="question">
-                    <label for="nname">Nickname: </label>
-                    <input class=nickname type="text" id="nname" asp-for="User.Nickname" required value="@Model.User.Nickname">
+                <label for="nname">Nickname: </label>
+                <input class=nickname type="text" id="nname" asp-for="Nickname" value="@Model.Nickname" required>
             </div>
 
 
@@ -47,52 +49,54 @@
         <div class="zone2">
             <div class="rowq">
                 <div class="question">
-                        <label for="bdate">Birthdate: @Model.User.Birthday</label>
-                        <input type="date" id="bdate"  asp-for="User.Birthday" value="@Model.User.Birthday.ToString("yyyy-MM-dd")" required>
+                    <label for="bdate">Birthdate: @Model.Birthday.AddYears(-543).ToString("dd/MM/yyyy")</label>
+                    <input type="date" id="bdate" asp-for="Birthday"
+                        value="@Model.Birthday.AddYears(-543).ToString("yyyy-MM-dd")" required>
                 </div>
                 <div class="question">
-                        <label for="sex">sex</label>
-                        <select id="sex" asp-for="User.Sex" class="form-control">
+                    <label for="sex">sex</label>
+                    <select id="sex" asp-for="Sex" class="form-control" required>
                         <option value="">-- กรุณาเลือก --</option>
-                        <option value="Male" selected="@(Model.User.Sex == "Male" ? "selected" : null)">ชาย</option>
-                        <option value="Female" selected="@(Model.User.Sex == "Female" ? "selected" : null)">หญิง</option>
+                        <option value="Male" selected="@(Model.Sex == "Male" ? "selected" : null)">ชาย</option>
+                        <option value="Female" selected="@(Model.Sex == "Female" ? "selected" : null)">หญิง</option>
                     </select>
                 </div>
             </div>
             <div class="question">
-                <label for="name"><i class="fa-regular fa-user"></i>About me</label>
-                <textarea id="details" rows="4" cols="50" asp-for="User.About" placeholder="กรอกรายละเอียดที่นี่...">@Model.User.About</textarea>
+                <label for="name"><i class="fa-regular fa-user"></i> About me</label>
+                <textarea id="details" rows="4" cols="50" asp-for="About"
+                    placeholder="กรอกรายละเอียดที่นี่...">@Model.About</textarea>
             </div>
             <div class="drag-drop">
                 <label for="name"><i class="fa-solid fa-pen-nib"></i>ติดแท็ก:</label>
-                
+
                 <div class="source">
-                        @foreach (var tag in Model.TagList)
-                        {   @if(!Model.UserInterestActivityTag.Any(t => t.ActivityTagId == tag.ActivityName)){
-                                <div class="tag">@tag.ActivityName</div>
-                            }
-                        }
-                    
+                    @foreach (var tag in Model.TagList)
+                    { @if(!Model.UserInterestActivityTag.Any(t => t.ActivityTagId == tag.ActivityName)){
+                        <div class="tag">@tag.ActivityName</div>
+                    }
+                                        }
+
                 </div>
                 <div class="destination">
-                @foreach (var tag in Model.UserInterestActivityTag)
-                {
-                    <div class="tag">@tag.ActivityTagId</div>
-                }
+                    @foreach (var tag in Model.UserInterestActivityTag)
+                    {
+                        <div class="tag">@tag.ActivityTagId</div>
+                    }
                 </div>
             </div>
         </div>
 
-        
+
     </form>
 </div>
 
 <script>
-    document.getElementById("file").addEventListener("change", function(event) {
+    document.getElementById("file").addEventListener("change", function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const img = document.getElementById("previewImage");
                 img.src = e.target.result;
                 img.style.display = "block";
@@ -136,14 +140,14 @@
             let newTag = document.createElement("div");
             newTag.textContent = data;
             newTag.classList.add("tag");
-            newTag.setAttribute("draggable", true); 
+            newTag.setAttribute("draggable", true);
             newTag.addEventListener("dragstart", dragStart);
-            newTag.style.userSelect = "none"; 
+            newTag.style.userSelect = "none";
             destination.appendChild(newTag);
         });
 
         source.addEventListener("dragover", function (event) {
-        event.preventDefault();
+            event.preventDefault();
         });
 
         source.addEventListener("drop", function (event) {
@@ -164,7 +168,7 @@
             let newTag = document.createElement("div");
             newTag.textContent = data;
             newTag.classList.add("tag");
-            newTag.setAttribute("draggable", true); 
+            newTag.setAttribute("draggable", true);
             newTag.addEventListener("dragstart", dragStart);
             source.appendChild(newTag);
         });
@@ -174,13 +178,13 @@
     document.getElementById("submitBtn").addEventListener("click", function () {
         form = document.getElementById("edit_profile_form");
         if (!form.checkValidity()) {
-        form.reportValidity(); // 🔹 แสดงข้อความแจ้งเตือน required
-        return;
-    }
+            form.reportValidity(); // 🔹 แสดงข้อความแจ้งเตือน required
+            return;
+        }
         let oldInput = document.getElementById("tempInterestTags");
         if (oldInput) oldInput.remove();
         let tags = Array.from(document.querySelector(".destination").children)
-                        .map(tag => tag.textContent.trim());
+            .map(tag => tag.textContent.trim());
         let input = document.createElement("input");
         input.type = "hidden";
         input.name = "InterestTags";
@@ -188,5 +192,5 @@
         input.id = "tempInterestTags";
         form.appendChild(input);
         form.submit();
-        });
+    });
 </script>

@@ -52,51 +52,28 @@ public class ProfileController : Controller
             Lastname = user.Lastname,
             Nickname = user.Nickname,
             SexColor = "",
-            About = "",
             InterestTags = userInterestTag,
-            UserImageUrl = user.UserImageUrl
+            UserImageUrl = user.UserImageUrl,
+            About = user.About
+
         };
         
         var intmonth = user.Birthday.Month;
         string strmonth = null;
         switch (intmonth) 
         {
-            case 1:
-                strmonth = "January";
-                break;
-            case 2:
-                strmonth = "Feburary";
-                break;
-            case 3:
-                strmonth = "March";
-                break;
-            case 4:
-                strmonth = "April";
-                break;
-            case 5:
-                strmonth = "May";
-                break;
-            case 6:
-                strmonth = "June";
-                break;
-            case 7:
-                strmonth = "July";
-                break;
-            case 8:
-                strmonth = "August";
-                break;
-            case 9:
-                strmonth = "September";
-                break;
-            case 10:
-                strmonth = "October";
-                break;
-            case 11:
-                strmonth = "November";
-                break;
-            case 12:
-                strmonth = "December";
-                break;
+            case 1: strmonth = "January";break;
+            case 2: strmonth = "Feburary";break;
+            case 3: strmonth = "March";break;
+            case 4: strmonth = "April";break;
+            case 5: strmonth = "May";break;
+            case 6: strmonth = "June";break;
+            case 7: strmonth = "July";break;
+            case 8: strmonth = "August";break;
+            case 9: strmonth = "September";break;
+            case 10: strmonth = "October";break;
+            case 11: strmonth = "November";break;
+            case 12: strmonth = "December";break;
         }
 
         model.Birthday = user.Birthday.Day.ToString() + " " + strmonth + " " + user.Birthday.Year.ToString();
@@ -109,19 +86,6 @@ public class ProfileController : Controller
         }
         else{
             model.SexColor = "#CBC3E3";
-        }
-
-        if(user.About == null && user.Sex == "Male"){
-            model.About = "<this user have not told us about himself yet>";
-        }
-        else if(user.About == null && user.Sex == "Female"){
-            model.About = "<this user have not told us about herself yet>";
-        }
-        else if(user.About == null && (user.Sex != "Male" && user.Sex != "Female")){
-            model.About = "<this user have not told us about themself yet>";
-        }
-        else{
-            model.About = user.About;
         }
         
         int intpage = 1;
@@ -293,51 +257,27 @@ public class ProfileController : Controller
             Lastname = user.Lastname,
             Nickname = user.Nickname,
             SexColor = "",
-            About = "",
             InterestTags = userInterestTag,
-            UserImageUrl = user.UserImageUrl
+            UserImageUrl = user.UserImageUrl,
+            About = user.About
         };
 
         var intmonth = user.Birthday.Month;
         string strmonth = null;
         switch (intmonth) 
         {
-            case 1:
-                strmonth = "January";
-                break;
-            case 2:
-                strmonth = "Feburary";
-                break;
-            case 3:
-                strmonth = "March";
-                break;
-            case 4:
-                strmonth = "April";
-                break;
-            case 5:
-                strmonth = "May";
-                break;
-            case 6:
-                strmonth = "June";
-                break;
-            case 7:
-                strmonth = "July";
-                break;
-            case 8:
-                strmonth = "August";
-                break;
-            case 9:
-                strmonth = "September";
-                break;
-            case 10:
-                strmonth = "October";
-                break;
-            case 11:
-                strmonth = "November";
-                break;
-            case 12:
-                strmonth = "December";
-                break;
+            case 1: strmonth = "January";break;
+            case 2: strmonth = "Feburary";break;
+            case 3: strmonth = "March";break;
+            case 4: strmonth = "April";break;
+            case 5: strmonth = "May";break;
+            case 6: strmonth = "June";break;
+            case 7: strmonth = "July";break;
+            case 8: strmonth = "August";break;
+            case 9: strmonth = "September";break;
+            case 10: strmonth = "October";break;
+            case 11: strmonth = "November";break;
+            case 12: strmonth = "December";break;
         }
 
         model.Birthday = user.Birthday.Day.ToString() + " " + strmonth + " " + user.Birthday.Year.ToString();
@@ -352,19 +292,6 @@ public class ProfileController : Controller
         }
         else{
             model.SexColor = "#CBC3E3";
-        }
-
-        if(user.About == null && user.Sex == "Male"){
-            model.About = "<this user have not told us about himself yet>";
-        }
-        else if(user.About == null && user.Sex == "Female"){
-            model.About = "<this user have not told us about herself yet>";
-        }
-        else if(user.About == null && (user.Sex != "Male" && user.Sex != "Female")){
-            model.About = "<this user have not told us about themself yet>";
-        }
-        else{
-            model.About = user.About;
         }
 
         int intpage = 1;

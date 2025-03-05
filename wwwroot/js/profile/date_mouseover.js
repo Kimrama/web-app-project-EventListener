@@ -18,9 +18,11 @@ function handleOver(datestr,id){
     }
     else if(dayleft > 1){
         datetd.innerHTML = dayleft.toString() + " days left"
+        datetd.style.color = "black"
     }
     else{
         datetd.innerHTML = "Started"
+        datetd.style.color = "red"
     }
 }
 
@@ -28,4 +30,5 @@ function handleOut(datestr,id){
     datetd = document.getElementById(id)
     datetd.style.cursor = "context-menu"
     datetd.innerHTML = oldtext
+    datetd.style.color = "black"
 }

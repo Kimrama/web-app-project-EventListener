@@ -179,16 +179,12 @@ nav {
     font-family: Inter;
     p:nth-child(1){
         font-weight:bolder;
+        padding: 0px 0px 10px 0px;
         /* 1.15 vw = 15.96 px (width=1388px,height=838px) */
         font-size: clamp(30px,2.44vw,34px);
     }
-    
-    p:nth-child(2){
-        padding: 12px 0px 8px 0px;
-        font-size: clamp(16px,1.15vw);
-    }
 
-    p:nth-child(4){
+    p:nth-child(3){
         font-family: Noto Sans Thai;
         font-weight: bold;
         letter-spacing: 1px;
@@ -196,7 +192,7 @@ nav {
         font-size: clamp(16px,1.15vw);
     }
 
-    p:nth-child(5){
+    p:nth-child(4){
         letter-spacing: 0.018vw;
         line-height: 1.1;/*1.3vw */
         width:42.8vw;

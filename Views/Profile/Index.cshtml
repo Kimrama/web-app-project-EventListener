@@ -90,7 +90,7 @@
                 </div>
                 <div class="profile-detail-div">
                     <p>@Model.Firstname @Model.Lastname</p>
-                    <p>Your Profile</p>
+                    @* <p>Your Profile</p> *@
                     <div class="id_birthday-div">
                         <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
@@ -99,9 +99,18 @@
                         <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
-                    <p>
-                        @Model.About
-                    </p>
+                        @if(Model.About == null)
+                        {
+                            <p style="color:lightslategrey;font-style: italic;">
+                                คุณยังไม่ได้ใส่ข้อมูลเกี่ยวกับฉัน
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                @Model.About
+                            </p>
+                        }
                 </div>
                 <div class="profile-interest-div">
                     <p>ความสนใจ</p>

@@ -56,6 +56,7 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.AddScoped<CloudinaryService>();
 
 
+
 var app = builder.Build();
 
 app.UseCors("AllowAll");

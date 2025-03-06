@@ -21,9 +21,9 @@ nav {
 }
 
 .title {
-    font-size: 4vh;
+    font-size: 28px;
     font-weight: bold;
-    color: #333;
+    color: black;
     text-align: center;
     pointer-events: none;
     user-select: none;

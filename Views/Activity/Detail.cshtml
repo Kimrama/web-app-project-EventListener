@@ -201,11 +201,15 @@
                         <div class="participant" id="participant-@p.UserId">
                             @if (p.User.UserImageUrl == null)
                             {
-                                <img src="~/user.png" alt="">
+                                <a asp-controller="Profile" asp-action="Person" asp-route-id="@p.UserId">
+                                    <img src="~/user.png" alt="">
+                                </a>
                             }
                             else
                             {
-                                <img src="@p.User.UserImageUrl" alt="">
+                                <a asp-controller="Profile" asp-action="Person" asp-route-id="@p.UserId">
+                                    <img src="@p.User.UserImageUrl" alt="">
+                                </a>
                             }
                             <h4>@p.User.UserName</h4>
                         </div>

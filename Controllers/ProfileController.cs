@@ -460,10 +460,16 @@ public class ProfileController : Controller
             .Include(u => u.ActivityTag)
             .ToListAsync();
 
-
         var model = new EditProfileViewModel
         {
-            User = user,
+            UserName = username,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname,
+            Nickname = user.Nickname,
+            Birthday = user.Birthday,
+            Sex = user.Sex,
+            About = user.About,
+            UserImageUrl = user.UserImageUrl,
             UserInterestActivityTag = userInterestTag,
             TagList = tagList
         };
@@ -473,37 +479,45 @@ public class ProfileController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> EditProfile(EditProfileViewModel model,string InterestTags, IFormFile file)
+    public async Task<IActionResult> EditProfile(EditProfileViewModel model, string InterestTags, IFormFile file)
     {
+        Console.WriteLine("test");
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username))
+        {
+            return BadRequest("Username is required");
+        }
 
-        // if (!ModelState.IsValid)
-        // {
-        //     foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-        //     {
-        //         Console.WriteLine($"Validation Error: {error.ErrorMessage}");
-        //     }
-        //     return View(model);
-        // }
-        string username = HttpContext.User.Identity?.Name;
-        var user = await _context.Users.FindAsync(username);
-        if (user == null) return NotFound();
-        var uploadResult = await _cloudinaryService.UploadImageAsync(file);
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (file != null && file.Length != 0)
+        {
+            Console.WriteLine("test upload image to cloudinary");
+
+            var uploadResult = await _cloudinaryService.UploadImageAsync(file);
             if (uploadResult == null)
             {
-                ModelState.AddModelError("", "อัปโหลดไม่สำเร็จ");
-                return View();
+                Console.WriteLine("อัปโหลดรูปภาพไปยัง Cloudinary ไม่สำเร็จ");
+                ModelState.AddModelError("", "อัปโหลดรูปภาพไปยัง Cloudinary ไม่สำเร็จ");
+
+                return View(model);
             }
 
-        user.Firstname = model.User.Firstname;
-        user.Lastname = model.User.Lastname;
-        user.Nickname = model.User.Nickname;
-        user.Birthday = model.User.Birthday;
-        user.Sex = model.User.Sex;
-        user.About = model.User.About;
-        user.UserImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+            Console.WriteLine("อัพโหลดรูปภาพไปยัง Cloudinary สำเร็จ");
+
+            user.UserImageUrl = uploadResult.SecureUrl.AbsoluteUri;
+        }
+
+        user.Firstname = model.Firstname;
+        user.Lastname = model.Lastname;
+        user.Nickname = model.Nickname;
+        user.Birthday = model.Birthday;
+        user.Sex = model.Sex;
+        user.About = model.About;
+
         var existingTags = await _context.UserInterestActivityTags
-                            .Where(t => t.UserId == username)
-                            .ToListAsync();
+        .Where(t => t.UserId == username)
+        .ToListAsync();
         _context.UserInterestActivityTags.RemoveRange(existingTags);
 
         if (!string.IsNullOrEmpty(InterestTags))
@@ -513,8 +527,8 @@ public class ProfileController : Controller
             {
                 UserId = username,
                 ActivityTagId = tag
-            }).ToList();
-
+            })
+            .ToList();
 
             _context.UserInterestActivityTags.AddRange(newTags);
         }

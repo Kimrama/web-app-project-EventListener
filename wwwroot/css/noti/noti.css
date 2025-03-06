@@ -1,10 +1,10 @@
 nav {
     background-color: white;
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 0.25px solid black; 
-    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
+    padding: 13px;
     position: fixed;
     top: 0;
     left: 0;
@@ -12,47 +12,78 @@ nav {
 }
 
 .logo {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 16px;
     span {
         font-size: 24px;
         font-weight: bold;
     }
+    margin-left: 12px;
 }
 
 .buttongroup-and-user {
-    display: flex; 
-    align-items: center; 
-    gap: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-    button:nth-child(1) {
-        padding: 8px 18px; 
+    button {
+        padding: 8px 18px;
         font-size: 16px;
         border-radius: 12px;
-        border: 1px solid #E232BC;
-        background-color: #E232BC;
-        color: white;
         cursor: pointer;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        opacity: 0.8;
+    }
+
+    .create-activity-btn {
+        border: 1px solid #e232bc;
+        background-color: #e232bc;
+        color: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
 
         i {
             margin-right: 5px;
         }
     }
 
-    button:nth-child(2) {
-        padding: 8px 18px; 
-        font-size: 16px;
-        border-radius: 12px;
-        border: 1px solid #FF713E;
-        background-color: #FF713E;
+    .noti-btn {
+        border: 1px solid #ff713e;
+        background-color: #ff713e;
         color: white;
-        cursor: pointer;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
 
         i {
             margin-right: 5px;
         }
+    }
+
+    .user-avatar-btn {
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+    }
+
+    .login-btn {
+        border: 1px solid #4f46e5;
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+        width: 120px;
+    }
+
+    .register-btn {
+        background-color: white;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        transition: transform 0.3s, opacity 0.3s ease-in-out;
+        width: 120px;
     }
 
     img {
@@ -61,9 +92,50 @@ nav {
         border-radius: 100%;
     }
 }
+
+.user-avatar-btn {
+    border: none;
+    background-color: white;
+    border-radius: 100%;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #ffffff;
+    background-color: #f2f2f2;
     margin: 0;
     padding: 0;
     display: flex;
@@ -71,7 +143,9 @@ body {
     min-height: 100vh;
 }
 
-
+a{
+    text-decoration: none;
+}
 .container {
     width: 100%;
     max-width: 3000px;
@@ -215,3 +289,4 @@ body {
         font-size: 16px;
     }
 }
+

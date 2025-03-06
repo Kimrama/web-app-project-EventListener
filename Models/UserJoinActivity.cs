@@ -1,16 +1,15 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-
 namespace EventListener.Models;
 
 public class UserJoinActivity
 {
-    public string UserId { get; set; } //fk => pk of User
-    public string ActivityOwnerId { get; set; } //fk => pk of Activity
-    public DateTime ActivityCreatedAt { get; set; } //fk => pk of Activity
-    public DateTime JoinDate { get; set; } 
+    //pk = UserId + ActivityOwnerId + ActivityCreatedAt
+    public string UserId { get; set; } //fk => pk of User that join activity
+    public string ActivityOwnerId { get; set; } //fk => key of Activity
+    public DateTime ActivityCreatedAt { get; set; } //fk => key of Activity
+    public DateTime? RequestJoinDate { get; set; } = DateTime.UtcNow;
+    public DateTime? JoinDate { get; set; }
+    public string? Status { get; set; }
 
-    // Navigation Property
     public User User { get; set; }
     public Activity Activity { get; set; }
 }

@@ -1,3 +1,5 @@
+@model ActivityDetailViewModel
+
 @{
     ViewData["Title"] = "Activity Details";
 }
@@ -6,99 +8,288 @@
 
 <div>
     <nav>
-        <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+            <i class="fa-solid fa-ear-listen fa-4x"></i>
             <span>EventListener</span>
         </div>
+        </a>
         <div class="buttongroup-and-user">
-            <button>
-                <i class="fa-solid fa-plus"></i>
-                สร้างกิจกรรม
-            </button>
-            <button>
-                <i class="fa-regular fa-bell"></i>
-                การเเจ้งเตือน
-            </button>
-            <img src="https://imgcdn.stablediffusionweb.com/2024/2/24/31aad3d9-a853-4296-88d7-58b3104a0527.jpg" alt="">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="activity" asp-action="create">
+                    <button class="create-activity-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        สร้างกิจกรรม
+                    </button>
+                </a>
+                <a asp-controller="notification" asp-action="notification">
+                    <button class="noti-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        การเเจ้งเตือน
+                    </button>
+                </a>
+                <div class="user-dropdown">
+                    <button class="user-avatar-btn" onclick="drop()">
+                        @if (Model.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="" class="avatar-img">
+                        }
+                        else
+                        {
+                            <img src="@Model.UserImageUrl" alt="" class="avatar-img">
+                        }
+                    </button>
+                    <div id="dropdown-content" class="dropdown-content">
+                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
+                        <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="account" asp-action="login">
+                    <button class="login-btn">
+                        Login
+                    </button>
+                </a>
+                <a asp-controller="account" asp-action="register">
+                    <button class="register-btn">
+                        Register
+                    </button>
+                </a>
+            }
         </div>
     </nav>
 
     <main>
         <div class="activity-img">
-            <img src="https://globaluniversity.edu/wp-content/uploads/2020/03/multiethnic-group-young-people-studying-together.jpg"
-                alt="">
+            <img src="@Model.Activity.ActivityImageUrl" alt="">
         </div>
         <div class="content">
             <div class="activity-details">
                 <div class="group-tag-topic">
-                    <span class="tag-topic">Tag Topic</span>
-                    <span class="tag-topic">Tag Topic</span>
+                    <span class="tag-topic">@Model.Activity.ActivityTagId</span>
                 </div>
                 <h4 class="start-datetime">
-                    เสาร์, 1 กุมภาพันธ์ 2025, 17:00 น.
+                    @Model.Activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartTime.ToString(@"hh\:mm") น.
                 </h4>
                 <br>
                 <h3 class="topic">
-                    ติวสอบ Final วิชา Web Application Development
+                    @Model.Activity.ActivityName
                 </h3>
                 <br>
                 <h4 class="location">
                     <i class="fa-solid fa-location-dot fa-lg" style="color: #ff0000;"></i>
-                    King Mongkut’s Institute of Technology
+                    @Model.Activity.Location
                 </h4>
                 <br>
                 <p class="detail">
-                    รายละเอียด : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam imperdiet
-                    lorem vel lectus egestas, a eleifend risus bibendum
+                    รายละเอียด : @Model.Activity.Detail
                 </p>
                 <br>
-                <button>
-                    <i class="fa-solid fa-right-to-bracket fa-lg"></i>
-                    <span>เข้าร่วม</span>
-                </button>
+                <div class="btn-group-for-owner-or-user">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.Identity.Name == Model.Activity.User.UserName)
+                        {
+                            <a asp-controller="Chatroom" asp-action="Room" asp-route-id="@Model.ActivityId">
+                                <button class="chat-btn">
+                                    <i class="fa-regular fa-comment fa-lg"></i>
+                                    <span>เเชท</span>
+                                </button>
+                            </a>
+                            <a asp-controller="Activity" asp-action="Edit" asp-route-id="@Model.ActivityId">
+                                <button class="edit-activity-btn">
+                                    <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                                    <span>เเก้ไข</span>
+                                </button>
+                            </a>
+                        }
+                        else
+                        {
+                            @if (Model.isUserJoin)
+                            {
+                                @foreach (var p in Model.UserJoinActivity)
+                                {
+                                    @if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                                        Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "Accept")
+                                    {
+                                        <a asp-controller="Chatroom" asp-action="Room" asp-route-id="@Model.ActivityId">
+                                            <button class="chat-btn">
+                                                <i class="fa-regular fa-comment fa-lg"></i>
+                                                <span>เเชท</span>
+                                            </button>
+                                        </a>
+                                    }
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3" )
+                                    {
+                                        <button class="wait-btn">
+                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <span>รอการอนุมัติ</span>
+                                        </button>
+                                        <button class="wait-btn" onclick="updateStatus()">
+                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <span>ยกเลิกคำขอ</span>
+                                        </button>
+                                    }
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny" || p.Status == "Deny2"))
+                                    {
+                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                            <span>เข้าร่วม</span>
+                                        </button>
+                                    }
+                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
+                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
+                                    {
+                                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                            <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
+                                        </button>
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                <button class="join-btn" onclick="join_activity('@Model.ActivityId')">
+                                    <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                    <span>เข้าร่วม</span>
+                                </button>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <button class="join-btn" onclick="join_activity('@Model.ActivityId')" id="join-btn">
+                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                            <span>เข้าร่วม</span>
+                        </button>
+                    }
+                </div>
             </div>
             <div class="owner">
                 <h3>เจ้าของ</h3>
-                <img src="https://i.pinimg.com/564x/69/2b/76/692b76e52092469fd10487cd0f4c62e6.jpg" alt="">
-                <h4>Jack</h4>
+                <img src="@Model.Activity.User.UserImageUrl" alt="">
+                <h4>@Model.Activity.User.UserName</h4>
             </div>
         </div>
         <div class="participant-container">
-            <h2>8 ผู้เข้าร่วม</h2>
-            <div class="all-participant">
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
-                <div class="participant">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlw3sKpafl78LFg_NjOxVX7ui2VVUbSDkaCQ&s" alt="">
-                    <h4>Jack</h4>
-                </div>
+            <h2 id="userJoinActivityCount-accept">Hello there</h2>
+            <div class="all-participant" id="accept-participant">
+                @foreach (var p in Model.UserJoinActivity)
+                {
+                    @if (p.Status == "Accept")
+                    {
+                        <div class="participant">
+                            @if (p.User.UserImageUrl == null)
+                            {
+                                <img src="~/user.png" alt="">
+                            }
+                            else
+                            {
+                                <img src="@p.User.UserImageUrl" alt="">
+                            }
+                            <h4>@p.User.UserName</h4>
+                        </div>
+                    }
+                }
             </div>
         </div>
+        @if (User.Identity.Name == Model.Activity.User.UserName)
+        {
+            <div class="participant-container">
+                <h2 id="userJoinActivityCount-wait"></h2>
+                <div class="all-participant" id="req-participant">
+                    @foreach (var p in Model.UserJoinActivity)
+                    {
+                        @if (p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3")
+                        {
+                            <div class="participant" id="participant-@p.UserId">
+
+                                @if (p.User.UserImageUrl == null)
+                                {
+                                    <img src="~/user.png" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@p.User.UserImageUrl" alt="">
+                                }
+                                <h4>@p.User.UserName</h4>
+                                <button class="accept-button" id="accept-button"
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Accept')">Accept</button>
+                                <button class="deny-button" id="deny-button"
+                                    onclick="updateStatus('@p.ActivityOwnerId', '@p.ActivityCreatedAt', '@p.UserId', 'Deny')">Deny</button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
     </main>
 </div>
+
+<script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script src="~/js/activity/join_activity.js" asp-append-version="true"></script>
+
+<script>
+
+    function updateParticipantCount() {
+        let accept_paticipants = document.getElementById("accept-participant");
+        let wait_paicipant = document.getElementById("req-participant");
+        if (accept_paticipants) {
+            let accept_count = accept_paticipants.querySelectorAll(".participant").length;
+            document.getElementById("userJoinActivityCount-accept").textContent = `${accept_count} ผู้เข้าร่วม`;
+        }
+        if (wait_paicipant) {
+            let wait_count = wait_paicipant.querySelectorAll(".participant").length;
+            document.getElementById("userJoinActivityCount-wait").textContent = `${wait_count} คำขอเข้าร่วม`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", updateParticipantCount);
+
+    async function updateStatus(ownerId, createDate, joinUser, status) {
+        let formData = new FormData();
+        formData.append("ownerId", ownerId);
+        formData.append("createDate", createDate);
+        formData.append("joinUser", joinUser);
+        formData.append("status", status);
+
+        try {
+            let response = await fetch('/Activity/UpdateJoinStatus', {
+                method: 'POST',
+                body: formData
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                if (status == "Accept"){
+                    accept_button = document.getElementById("accept-button");
+                    deny_button = document.getElementById("deny-button");
+                    temp = document.getElementById(`participant-${joinUser}`);
+                    document.getElementById(`participant-${joinUser}`).remove();
+                    temp.removeChild(accept_button);
+                    temp.removeChild(deny_button);
+                    document.getElementById("accept-participant").appendChild(temp);
+        
+                }
+                else{
+                    document.getElementById(`participant-${joinUser}`).remove();
+                }
+            } else {
+                alert("ไม่สามารถอัปเดตสถานะได้ โปรดลองอีกครั้ง");
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+        }
+        updateParticipantCount();
+    }
+</script>

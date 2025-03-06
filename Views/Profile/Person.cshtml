@@ -1,5 +1,17 @@
+@model ProfileViewModel
 @{
-    ViewData["Title"] = "John Doe's Profile";
+    ViewData["Title"] = @Model.Nickname + "'s Profile";
+    int id = 0;
+    var pageparam = Context.Request.Query["page"];
+    if(pageparam.Count() == 0){//if pageparam is null
+        pageparam = "1";
+    }
+    var currentpage = Int32.Parse(pageparam);
+    string ActivityIdEncode = null;
+    int makePath(string ownerId,DateTime createdAt){
+        ActivityIdEncode = EventListener.Services.Base64Helper.EncodeBase64(ownerId + " " + createdAt.ToString("yyyy-MM-dd HH:mm:ss", new System.Globalization.CultureInfo("en-US")));
+        return 0;
+    }
 }
 
 <link rel="stylesheet" href="~/css/profile/person.css" asp-asp-append-version="true">
@@ -9,71 +21,136 @@
 <div>
     <nav>
         <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+            <i class="fa-solid fa-ear-listen fa-3x"></i>
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
-            <button>
-                <i class="fa-solid fa-plus"></i> 
-                <span>สร้างกิจกรรม</span>
-            </button>
-            <button>
-                <i class="fa-regular fa-bell"></i>
-                <span>การเเจ้งเตือน</span>
-            </button>
-            <i class="fa-solid fa-circle-user fa-3x"></i>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="activity" asp-action="create">
+                    <button class="create-activity-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        สร้างกิจกรรม
+                    </button>
+                </a>
+                <button class="noti-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    การเเจ้งเตือน
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
+                            class="avatar-img"></button>
+                    <div id="dropdown-content" class="dropdown-content">
+                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
+                        <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="account" asp-action="login">
+                    <button class="login-btn">
+                        Login
+                    </button>
+                </a>
+                <a asp-controller="account" asp-action="register">
+                    <button class="register-btn">
+                        Register
+                    </button>
+                </a>
+            }
         </div>
     </nav>
+
     <body>
         <div class="profile-main-div">
             <div class="profile-div">
                 <div class="profile-img_rect-div">
                     <div class="profile-img-div">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="me_profile_picture" >
+                        @if(Model.UserImageUrl == null){
+                            <img src="https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg" alt="me_profile_picture" >
+                        }
+                        else{
+                            <img src="@Model.UserImageUrl" alt="me_profile_picture" >
+                        }
                     </div>
-                    <div class="sex-rect"></div>
+                    <div class="sex-rect" style="background-color:@Model.SexColor"></div>
                 </div>
                 <div class="profile-detail-div">
                     <div class="name_status-div">
-                        <p>John Doe, 24</p>
-                        <div class="status-circle"></div>
+                        <p>@Model.Firstname @Model.Lastname, @Model.Age</p>
+                        <div class="status-circle" style="background-color:@Model.SexColor"></div>
                     </div>
                     <div class="id_birthday-div">
-                        <p>@@JohnInwZa007</p>
+                        <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
-                        <p>19 September 1996</p>
+                        <p>@Model.Birthday</p>
+                        <i class="fa-solid fa-user"></i>
+                        <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident.
+                        @Model.About
 
                     </p>
                 </div>
                 <div class="profile-interest-div">
                     <p>ความสนใจ</p>
                     <ul class="interest-ul">
-                        <li>😆 hello</li>
-                        <li>helloefeofeijfiejif</li>
-                        <li>😍 hello</li>
-                        <li>🌙 hello</li>
-                        <li>🎵 hello</li>
-                        <li>🐱 hello</li>
-                        <li>hello</li>
-                        <li>hello</li>
-                        <li>👍 hello</li>
-                        <li>hello</li>
-                        <li>hello</li>
+                        @foreach(var tag in Model.InterestTags){
+                            <li>@tag.ActivityTagId</li>
+                        }
                     </ul>
+                </div>
+            </div>
+            <div class="activity-div">
+                <p>กิจกรรมที่เข้าร่วม</p>
+                <table>
+                    <tr>
+                        <th>ประเภท</th>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>Tag</th>
+                        <th>สถานที่</th>
+                        <th>วันที่เริ่มกิจกรรม</th>
+                    </tr>
+                        @foreach (var act in Model.JoinActivities)
+                        {   
+                            var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                            makePath(act.OwnerId,act.CreatedAt);
+                            <tr>
+                                <td><div class="activity-category-circle" style="background-color: @Model.ActivityCategoryColor[id]"></div> @Model.ActivityCategory[id]</td>
+                                <td><a asp-controller="activity" asp-action="detail" asp-route-activityIdHash=@ActivityIdEncode><i class="fa-solid fa-up-right-from-square"></i>  @act.ActivityName</a></td>
+                                <td><div class="activity-tag-div">@act.ActivityTagId</div></td>
+                                <td>@act.Location</td>
+                                <td id=@id onmouseover="handleOver('@strdate',@id)" onmouseout="handleOut('@strdate',@id)"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
+                            </tr>
+                            id = id + 1;
+                        }
+                </table>
+
+                <div class="page-list-div">
+                    @if(Model.Numpage > 1){
+                        @for(int i=0;i<Model.Numpage;i++)
+                        {
+                            @if(currentpage == i+1)
+                            {
+                                <div style="background-color:grey"><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"> </a></div>
+                            }
+                            else
+                            {
+                                <div><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"></a></div>
+                            }
+                        }
+                    }
+
                 </div>
             </div>
         </div>
     </body>
 </div>
+
+<script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script src="~/js/profile/date_mouseover.js" asp-append-version="true"></script>
 
 
 

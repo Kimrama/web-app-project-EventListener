@@ -1,133 +1,122 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 nav {
     background-color: white;
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    border-bottom: 0.25px solid black; 
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.25px solid black;
     padding: 16px;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    width: 100%;
 }
-
 
 .title {
     font-size: 4vh;
     font-weight: bold;
     color: #333;
     text-align: center;
+    pointer-events: none;
+    user-select: none;
 }
 
 .confirm-button{
-    padding: 8px 18px; 
-    font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid green;
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid green;
     background-color: green;
     color: white;
     cursor: pointer;
 }
+
 .cancel-button{
-    padding: 8px 18px; 
-    font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid red;
+    padding: 1vh 2vw; 
+    font-size: 2vh;
+    border-radius: 2vh;
+    border: 0.2vh solid red;
     background-color: red;
     color: white;
     cursor: pointer;
 }
-.form{
+
+form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-.drag-drop {
-    width: 80vw;
-    height: 50vh;
-    border:5px;
-    display: flex;
-    flex-direction: column;
-    margin-top : 5vh;
     justify-content: center;
-    align-items: flex-start;
-}
-.drag-drop label{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.source{
-    width: 100%;
-    height: 30%;
+    align-self: center;
+    margin-top: 20vh;
+    margin-bottom: 10vh;
+    width: 50vw;
+    box-sizing: border-box;
     background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top:2vh;
-    border-bottom: 2px solid #e3e3e3;
-
+    max-width: 80vw;
+    padding: 3vh;
+    border-radius: 1vh;
+    box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.1);
 }
 
-.destination{
-    width: 100%;
-    height: 70%;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-}
-
-.question{
-    width: 80vw;
-    height: 8vh;
-    border:5px;
-    display: flex;
-    flex-direction: row;
-    margin-top : 5vh;
-}
-.img-question {
-    width: 80vw;
-    height: 50vh;
-    border:5px;
+.question {
     display: flex;
     flex-direction: column;
     margin-top : 5vh;
-    justify-content: start;
 }
-.add-image-area{
-    width: 100%;
-    height: 30%;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2vh;
-    border-bottom: 2px solid #e3e3e3;
 
+.question label {
+    font-weight: bold;
+    margin-bottom: 1vh;
 }
-.question i {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 5%;
-}
+
 .question input {
-    width: 70%;
-    border: none;
-    border-bottom: 2px solid black;
-    outline: none;
-    padding: 5px;
-    font-size: 16px;
-    background-color: #e5e5e5;
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
 }
 
-.form label{
-    width: 20%;
+.question textarea{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
+.question select{
+    padding: 1.5vh;
+    border: 0.2vh solid #ccc;
+    border-radius: 1vh;
+    font-size: 1.8vh;
+    resize: none;
+}
+
+.imgquestion {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
+    gap: 2vh;
+}
+
+.imgreq {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    font-size: x-large;
-    padding: 0 3%;
+    gap: 2vh;
+}
+
+.imgdiv{
+    width: 30vw;
+    height: 30vh;
+    border-radius: 1vh;
+    display: block;
+    margin-top: 2vh;
+    align-self: center;
+    object-fit: cover;
 }

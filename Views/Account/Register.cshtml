@@ -1,0 +1,149 @@
+@{
+    ViewData["Title"] = "Register";
+}
+
+@model RegisterViewModel
+
+<link rel="stylesheet" href="~/css/account/register.css" asp-append-version="true">
+
+<div class="screen-container">
+    <div class="box">
+        <span class="span-box"></span>
+        <div class="register-container">
+            <h1>Create Account</h1>
+            <form method="post" asp-action="Register">
+                <div class="user-input-container">
+                    <div class="info-container">
+                        <label asp-for="UserName">Username (Display Name)</label><br>
+                        <input type="text" asp-for="UserName" placeholder="Enter Username" required >
+                        
+                        <label asp-for="Firstname">Firstname</label><br>
+                        <input type="text" asp-for="Firstname" placeholder="Enter Firstname" required >
+
+                        <label asp-for="Lastname">Lastname</label><br>
+                        <input type="text" asp-for="Lastname" placeholder="Enter Lastname" required >
+
+                        <label asp-for="Nickname">Nickname</label><br>
+                        <input type="text" asp-for="Nickname" placeholder="Enter Nickname" required >
+                        
+                        <label asp-for="Birthday">Birthdate</label><span class="error-message" id="bdate-error-message"> -x- Please enter a valid birthdate.</span><br>
+                        <input type="date" asp-for="Birthday" >
+                        <br>
+                        
+                        <label asp-for="Sex">Gender</label><br>
+                        <select asp-for="Sex" id="gender" onchange="changeColor()" >
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+
+                        <label asp-for="Password">Password</label><br>
+                        <input id="passwd" type="password" placeholder="Enter a password" asp-for="Password" >
+                        
+                        <label asp-for="ConfirmPassword">Confirm Password</label><br>
+                        <input id="conf-passwd" type="password" placeholder="Confirm your password" asp-for="ConfirmPassword" >
+                        <span class="error-message" id="confpasswd-error-message"> -x- Confirm password not match</span>
+                    </div>
+                    <div class="select-container">
+                        <h2><i class="fa-solid fa-tag"></i> Select Your Interests</h2>
+                        <section class="sport-and-fitness">
+                            <h3>Exercise & Sports</h3>
+                            <div class="select-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Football" />
+                                    <span>Football</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Basketball" />
+                                    <span>Basketball</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Badminton" />
+                                    <span>Badminton</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Table tennis" />
+                                    <span>Table tennis</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Running" />
+                                    <span>Running</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Swimming" />
+                                    <span>Swimming</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Cardio" />
+                                    <span>Cardio</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Weight training" />
+                                    <span>Weight training</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section class="sport-and-fitness">
+                            <h3>Arts & Culture</h3>
+                            <div class="select-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Sing" />
+                                    <span>Sing</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Dance" />
+                                    <span>Dance</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Painting" />
+                                    <span>Painting</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section class="sport-and-fitness">
+                            <h3>Social</h3>
+                            <div class="select-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Food & Dining" />
+                                    <span>Gaming</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Board Games" />
+                                    <span>Board Games</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Gaming" />
+                                    <span>Food & Dining</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Travel" />
+                                    <span>Travel</span>
+                                </label>
+                            </div>
+                        </section>
+                        <section class="sport-and-fitness">
+                            <h3>Education</h3>
+                            <div class="select-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Tutoring" />
+                                    <span>Tutoring</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Lab" />
+                                    <span>Lab</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="Interests" value="Hackathon" />
+                                    <span>Hackathon</span>
+                                </label>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <button type="submit">Create Account</button>
+                <p>Already have an account ? <a asp-action="Login" asp-controller="Account">Sign in</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/account/register.js" asp-append-version="true"></script>

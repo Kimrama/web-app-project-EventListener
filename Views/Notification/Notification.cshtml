@@ -1,53 +1,76 @@
+@model List<NotificationViewModel>
 <link rel="stylesheet" href="~/css/noti/noti.css" asp-append-version="true">
 
 
      <div class="container">
-        <nav>
+       <nav>
         <div class="logo">
-            <i class="fa-brands fa-facebook fa-4x"></i>
+            <i class="fa-solid fa-ear-listen fa-3x"></i>
             <span>EventListener</span>
         </div>
         <div class="buttongroup-and-user">
-            <button>
-                <i class="fa-solid fa-plus"></i> 
-                <span>สร้างกิจกรรม</span>
-            </button>
-            <button>
-                <i class="fa-regular fa-bell"></i>
-                <span>การเเจ้งเตือน</span>
-            </button>
-            <i class="fa-solid fa-circle-user fa-3x"></i>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="activity" asp-action="create">
+                    <button class="create-activity-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        สร้างกิจกรรม
+                    </button>
+                </a>
+                <button class="noti-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    การเเจ้งเตือน
+                </button>
+                <div class="user-dropdown">
+                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
+                            class="avatar-img"></button>
+                    <div id="dropdown-content" class="dropdown-content">
+                        <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
+                        <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a asp-controller="account" asp-action="login">
+                    <button class="login-btn">
+                        Login
+                    </button>
+                </a>
+                <a asp-controller="account" asp-action="register">
+                    <button class="register-btn">
+                        Register
+                    </button>
+                </a>
+            }
         </div>
     </nav>
-        <h2>การแจ้งเตือนทั้งหมด</h2>
+        <h2>การแจ้งเตือนของคุณ</h2>
 
-        <div class="notification">
-            <span class="icon">🔔</span>
-            <div class="content">
-                <strong>หาเพื่อนเข้ายิมที่สจลครับ</strong>
-                <p>กิจกรรมจะเริ่มในวันพุธที่ 16 ม.ค. 2025, 17:00 น.</p>
+    @if (Model != null) 
+    {
+        @foreach (var notification in Model)
+        {
+            <a href="/activity/detail/@notification.ActivityIdEncode" class="notification">
+                <span class="icon">🔔</span>
+                <div class="content">
+                    <strong>@notification.ActivityName</strong>
+                    <p>กิจกรรมจะเริ่มในวันที่ @notification.StartDateTime.ToString("ddddที่ dd MMM yyyy, HH:mm น.")</p>
+                </div>
+                <button class="delete">🗑️</button>
+            </a>
+        }
+    }
+    else
+    {
+        <div class="notification-container">
+            <div class="bell-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/1827/1827349.png" alt="Notification Bell">
             </div>
-            <span class="time">ผ่านมาแล้ว 1 นาที</span>
-            <button class="delete">🗑️</button>
+            <p class="no-notifications">ไม่มีการแจ้งเตือน</p>
+            <p class="notification-text">การแจ้งเตือนใหม่จะปรากฏที่นี่</p>
         </div>
+    }
+</div>
 
-        <div class="notification">
-            <span class="icon">🔔</span>
-            <div class="content">
-                <strong>ติวสอบ Final วิชา Web Application Development</strong>
-                <p>กิจกรรมจะเริ่มในวันพุธที่ 16 ม.ค. 2025, 17:00 น.</p>
-            </div>
-            <span class="time">ผ่านมาแล้ว 15 นาที</span>
-            <button class="delete">🗑️</button>
-        </div>
-
-        <div class="notification">
-            <span class="icon">🔔</span>
-            <div class="content">
-                <strong>หาเพื่อนไปหอศิลป์ครับ</strong>
-                <p>กิจกรรมจะเริ่มในวันพุธที่ 16 ม.ค. 2025, 17:00 น.</p>
-            </div>
-            <span class="time">ผ่านมาแล้ว 30 นาที</span>
-            <button class="delete">🗑️</button>
-        </div>
-    </div>
+<script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>

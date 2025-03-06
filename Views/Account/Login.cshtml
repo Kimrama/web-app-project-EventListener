@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+@model LoginViewModel
+
+<link rel="stylesheet" href="~/css/account/login.css" asp-append-version="true">
+<div class="screen-container">
+    <div class="box">
+        <span></span>
+    <div class="login-container">
+        <h1>Welcome</h1>
+        <form method="post" asp-action="Login">
+            <div class="input-container">
+                <label asp-for="UserName">Username</label><br>
+                <input type="text" asp-for="UserName" placeholder="Enter Username" required>
+            </div>
+            <div class="input-container">
+                <label asp-for="Password">Password</label><br>
+                <input type="password" asp-for="Password" placeholder="Enter Password" required>
+            </div>
+            <div class="option">
+                <div class="checkbox-wrapper-32">
+                    <input type="checkbox" name="checkbox-32" id="checkbox-32" />
+                    <label for="checkbox-32"> Remember&nbsp;me </label>
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 10 10 L 90 90" stroke="#000" stroke-dasharray="113" stroke-dashoffset="113"></path>
+                        <path d="M 90 10 L 10 90" stroke="#000" stroke-dasharray="113" stroke-dashoffset="113"></path>
+                    </svg>
+                </div>
+                <a href="">Forgot password?</a>
+            </div>
+            <button type="submit">Login</button>
+            <p>Don’t have an account ? <a asp-action="Register" asp-controller="Account">Register now</a></p>
+        </form>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+@model List<ChatroomListFromActivity>
+
+   
+<link rel="stylesheet" href="~/css/ChatRoom/Detail.css" asp-append-version="true">
+<h1>Debug ChatRoom</h1>
+<div class="wrapper">
+
+  <div class="table">
+    
+    <div class="row header green">
+      <div class="cell">
+        ActivityName
+      </div>
+      <div class="cell">
+        ActivityOwnerId
+      </div>
+      <div class="cell">
+        ActivityCreateAt
+      </div>
+      <div class="cell">
+       RoomIdHash
+      </div>
+    </div>
+     @foreach(var chatroom in Model) {
+        <div class="row">
+            <div class="cell" data-title="Product">
+                @chatroom.ActivityName
+            </div>
+            <div class="cell" data-title="Unit Price">
+                @chatroom.ActivityOwnerId
+            </div>
+            <div class="cell" data-title="Quantity">
+                @chatroom.ActivityCreateAt
+            </div>
+            <div class="cell" data-title="Date Sold">
+                <a asp-controller="Chatroom" asp-action="room" asp-route-roomId="@chatroom.RoomIdHash">@chatroom.RoomIdHash</a>
+            </div>
+        </div>
+    }
+
+</div>

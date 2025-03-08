@@ -6,6 +6,7 @@ using EventListener.Models;
 using EventListener.Services;
 using System.Security.Claims;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace EventListener.Controllers;
 
@@ -37,35 +38,68 @@ public class NotificationController : Controller
             return NotFound();
         }
         
-        var usersJoinActivity = await _context.UserJoinActivities
-        .Include(u => u.Activity)
-        .Where(
-            u => u.UserId == username &&
-            u.Status == "Accept"
-        )
-        .OrderByDescending(u => u.Activity.StartDate)
-        .ThenByDescending(u => u.Activity.StartTime)
-        .ToListAsync();
+        var notifications = await _context.Notifications
+            .Where(
+                u => u.UserId == username &&
+                u.ReceiveDate <= DateTime.Now
+            )
+            .OrderByDescending(u => u.ReceiveDate)
+            .ToListAsync();
+        // var usersJoinActivity = await _context.UserJoinActivities
+        // .Include(u => u.Activity)
+        // .Where(
+        //     u => u.UserId == username &&
+        //     u.Status == "Accept"
+        // )
+        // .OrderByDescending(u => u.Activity.StartDate)
+        // .ThenByDescending(u => u.Activity.StartTime)
+        // .ToListAsync();
 
         List<NotificationViewModel> models = [];
-        foreach (var uja in usersJoinActivity)
+        foreach (var noti in notifications)
         {
-            if(uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(uja.Activity.StartTime)) <= DateTime.Now.AddHours(1))
+            string[] msg = noti.Message.Split(' ', 2);
+            models.Add(new NotificationViewModel
             {
-                var activityName = uja.Activity.ActivityName;
-                var startTime = uja.Activity.StartTime;
-                var startDateTime = uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
-                models.Add(new NotificationViewModel
-                {
-                    ActivityName = activityName, 
-                    StartDateTime = startDateTime, 
-                    ActivityIdEncode = Base64Helper.EncodeBase64(uja.ActivityOwnerId + " " + uja.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
-                });
-            }
+                ReceiveDate = noti.ReceiveDate,
+                ActivityIdEncode = msg[0],
+                Message = msg[1],
+                Id = noti.NotificationId
+            });
         }
+        // foreach (var uja in usersJoinActivity)
+        // {
+        //     if(uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(uja.Activity.StartTime)) <= DateTime.Now.AddHours(1))
+        //     {
+        //         var activityName = uja.Activity.ActivityName;
+        //         var startTime = uja.Activity.StartTime;
+        //         var startDateTime = uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
+        //         var message = "กิจกรรมกำลังจะเริ่มวัน "+startDateTime.ToString(" dddd ที่ dd MMM yyyy, HH:mm น.");
+        //         models.Add(new NotificationViewModel
+        //         {
+        //             ActivityName = activityName, 
+        //             StartDateTime = startDateTime, 
+        //             ActivityIdEncode = Base64Helper.EncodeBase64(uja.ActivityOwnerId + " " + uja.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
+        //             Message = message
+        //         });
+        //         var noti = new Notification{
+        //             UserId = uja.UserId,
+        //             Message = message
+        //         };
+        //         _context.Notifications.Add(noti);
+        //     } 
+        // }
+        // await _context.SaveChangesAsync();
 
         return View(models);
+    }  
+
+    [HttpDelete]
+    public async Task<JsonResult> DeleteNotification(int notificationId)
+    {
+        var counter = await _context.Notifications.Where(n => n.NotificationId == notificationId).ExecuteDeleteAsync();
+        return Json(new { success = true, count = counter });
     }
-   
+    
 }
 

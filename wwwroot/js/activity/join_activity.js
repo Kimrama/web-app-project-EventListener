@@ -1,4 +1,5 @@
-async function join_activity(activityIdHash) {
+async function join_activity(activityIdHash,ownerId,createDate,userId,curStatus) {
+    console.log(activityIdHash, ownerId, createDate, userId)
     try {
         const response = await fetch("/Activity/JoinActivity", {
             method: 'POST',
@@ -32,7 +33,29 @@ async function join_activity(activityIdHash) {
                 <i class="fa-solid fa-hourglass-start fa-lg"></i>
                 <span>รอการอนุมัติ</span>
             </button>
+             <button class="cancel-wait-btn" >
+                <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                <span>ยกเลิกคำขอ</span>
+            </button>
         `;
+        button = document.querySelector(".cancel-wait-btn")
+        button.setAttribute("data-ownerid", ownerId);
+        button.setAttribute("data-createdate", createDate);
+        button.setAttribute("data-userid", userId);
+        if(curStatus == "exit"){button.setAttribute("data-curstatus", "wait");}
+        else if(curStatus == "exit2"){button.setAttribute("data-curstatus", "wait2");}
+        else if(curStatus == "exit3"){button.setAttribute("data-curstatus", "wait3");}
+        else if(curStatus == null){button.setAttribute("data-curstatus","wait")}
+
+        document.querySelector(".cancel-wait-btn").addEventListener("click", function () {
+            const ownerId = this.dataset.ownerid;
+            const createDate = this.dataset.createdate;
+            const joinUser = this.dataset.userid;
+            const curStatus = this.dataset.curstatus;
+            console.log("call1")
+            updateStatus(ownerId, createDate, joinUser, "exit", curStatus);
+            console.log("call2")
+        });
 
         // document.getElementById("userJoinActivityCount-wait").textContent = `${data.userJoinActivityCount} ผู้เข้าร่วม`
 

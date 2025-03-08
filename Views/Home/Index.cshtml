@@ -6,13 +6,7 @@
         <div class="left-container">
             <div class="search-bar">
                 <label for="search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                <input type="text" name="search" id="">
-            </div>
-            <div class="filter-container">
-                <div class="date-input">
-                    <i class="fa-regular fa-calendar"></i><button onclick="openPopup()" id="date-filter">all</button>
-                </div>
-                <div class="filter"><i class="fa-solid fa-sliders"></i><button> all</button></div>
+                <input type="text" name="search" id="search-word">
             </div>
         </div>
         <div class="buttongroup-and-user">
@@ -47,11 +41,16 @@
             }
         </div>
     </nav>
-    
+    <div class="filter-container">
+        <div class="date-input">
+            <i class="fa-regular fa-calendar"></i><button onclick="openPopupDate()" id="date-filter">all</button>
+        </div>
+        <div class="filter"><i class="fa-solid fa-sliders"></i><button id="tag-filter" onclick="openPopupTag()"> all</button><div id="tag-filter-list"></div></div>
+    </div>
     <div class="activity-card-container"></div>
 </div>
 
-<div class="popup-overlay" id="popupOverlay" onclick="openPopup(event)">
+<div class="popup-overlay" id="popupOverlayDate" onclick="openPopupDate(event)">
     <div class="popup" onclick="event.stopPropagation()">
         <h3>เลือกช่วงเวลาของกิจกรรมที่จะค้นหา</h3>
         <div class="date-input-container">
@@ -59,116 +58,112 @@
             <div>-></div>
             <div><h4>สิ้นสุด</h4><input type="date" id="end-date"></div>
         </div>
-        <button class="close-btn" onclick="closePopup()">เลือก</button>
+        <button class="close-btn" onclick="closePopupDate()">เลือก</button>
+    </div>
+</div>
+
+<div class="popup-overlay" id="popupOverlayTag" onclick="openPopupTag(event)">
+    <div class="popup" onclick="event.stopPropagation()">
+        <h3>เลือกหมวดหมู่ที่จะกรอง</h3>
+            <div class="select-container">
+                <section class="sport-and-fitness" data-category="Exercise & Sports">
+                    <h4>Exercise & Sports</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Football" class="filter-checkbox" id="Football" />
+                            <span>Football</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Basketball" class="filter-checkbox" id="Basketball" />
+                            <span>Basketball</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Badminton" class="filter-checkbox" id="Badminton" />
+                            <span>Badminton</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Table tennis" class="filter-checkbox" id="Table-tennis" />
+                            <span>Table tennis</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Running" class="filter-checkbox" id="Running" />
+                            <span>Running</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Swimming" class="filter-checkbox" id="Swimming" />
+                            <span>Swimming</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Cardio" class="filter-checkbox" id="Cardio" />
+                            <span>Cardio</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Weight training" class="filter-checkbox" id="Weight-training" />
+                            <span>Weight training</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness" data-category="Arts & Culture">
+                    <h4>Arts & Culture</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Sing" class="filter-checkbox" id="Sing" />
+                            <span>Sing</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Dance" class="filter-checkbox" id="Dance" />
+                            <span>Dance</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Painting" class="filter-checkbox" id="Painting" />
+                            <span>Painting</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness" data-category="Social">
+                    <h4>Social</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Gaming" class="filter-checkbox" id="Gaming" />
+                            <span>Gaming</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Board Games" class="filter-checkbox" id="Board-Games" />
+                            <span>Board Games</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Food & Dining" class="filter-checkbox" id="Food-Dining" />
+                            <span>Food & Dining</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Travel" class="filter-checkbox" id="Travel" />
+                            <span>Travel</span>
+                        </label>
+                    </div>
+                </section>
+                <section class="sport-and-fitness" data-category="Education">
+                    <h4>Education</h4>
+                    <div class="select-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Tutoring" class="filter-checkbox" id="Tutoring" />
+                            <span>Tutoring</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Lab" class="filter-checkbox" id="Lab" />
+                            <span>Lab</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="Hackathon" class="filter-checkbox" id="Hackathon" />
+                            <span>Hackathon</span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+        <button class="close-btn" onclick="closePopupTag()">ตกลง</button>
     </div>
 </div>
 
 
-<script>
 
-    function getDaysToBeginWord(date) {
-        const now = new Date()
-
-        if (date.getUTCDate() == now.getUTCDate()) {
-            return "กิจกรรมจะเกิดขึ้นวันนี้"
-        } else {
-            const timeDiff = date.getTime() - now.getTime();
-            const dateDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-            if (timeDiff < 0) {
-                return "กิจกรรมเริ่มไปแล้ว"
-            } else if (timeDiff == 1) {
-                return "กิจกรรมจะเริ่มวันพรุ่งนี้"
-            } else {
-                return `กิจกรรมจะเริ่มในอีก ${dateDiff} วัน`
-            }
-        }
-    }
-    function createUserIcon(userJoinActivity, userJoinActivityCount) {
-        let iconList = userJoinActivity.map(uja => {
-            if (uja.user.userImageUrl == null) {
-                return `<img src="/user.png" alt="participant-img" class="participant-img">`
-            } else {
-                return `<img src="${uja.user.userImageUrl}" alt="participant-img" class="participant-img">`
-            }
-        })
-
-        iconList = iconList.slice(0, 5)
-
-        if (userJoinActivityCount > 5) {
-            iconList.push(`<span style="background-color: gray; padding: 14px; border-radius: 20px; font-size: 17px;"
-            ><i class="fa-regular fa-user" style="margin-right: 8px;"></i>${userJoinActivityCount - 5} +</span
-        >`)
-        }
-        return iconList.join("")
-
-    }
-
-    async function fetchActivityData() {
-        try {
-            const response = await fetch("@Url.Action("fetchActivityData", "Home")");
-            if (!response.ok) throw new Error("Failed to fetch data");
-            
-            const data = await response.json();
-            console.log(data);
-
-            const container = document.querySelector(".activity-card-container");
-            container.innerHTML = "<p>กำลังโหลดกิจกรรม...</p>"; 
-
-            setTimeout(() => { 
-                container.innerHTML = "";
-
-                data.forEach(activity => {
-                    const card = document.createElement("a");
-                    card.classList.add("activity-card");
-                    card.href = `activity/detail/${activity.activityIdEncode}`;
-
-                    let categoryClass = "";
-                    switch (activity.activityTagCategory) {
-                        case "Education": categoryClass = "education"; break;
-                        case "Exercise & Sports": categoryClass = "exercise-sports"; break;
-                        case "Arts & Culture": categoryClass = "arts-culture"; break;
-                        case "Social": categoryClass = "social"; break;
-                        default: categoryClass = "";
-                    }
-                    const startDate = new Date(Date.parse(activity.startDate))
-                    let formattedDate = startDate.toLocaleDateString("th-TH", {
-                        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-                    });
-
-                    let formattedTime = activity.startTime.substring(0, 5) + " น.";
-
-                    card.innerHTML = `
-                        <div class="header-tag-card ${categoryClass}">${activity.activityTagCategory}</div>
-                        <div class="body-card">
-                            <div class="tag-line">
-                                <span class="tag">${activity.activityTagId}</span>
-                            </div>
-                            <div class="time-info">
-                                <span>${formattedDate}, ${formattedTime}</span>
-                                <span>${getDaysToBeginWord(startDate)}</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="info">
-                                    <article class="activity-name">${activity.activityName}</article>
-                                    <span class="location">${activity.location}</span>
-                                    <div class="user-avatar">
-                                    ${createUserIcon(activity.userJoinActivity, activity.userJoinActivityCount)}
-                                    </div>
-                                    <span class="participant-info">${activity.userJoinActivityCount}/${activity.participantLimit} คนจะไป</span>
-                                </div>
-                                <img src="${activity.activityImageUrl}" alt="activity picture" class="activity-img">
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }, 500);
-        } catch (error) {
-            console.error("Error fetching activities:", error);
-        }
-    }
-
-    fetchActivityData();
-</script>
 <script src="~/js/home/dropdown.js" asp-append-version="true"></script>
-<script src="~/js/home/filter.js" asp-append-version="true"></script>
+<script src="~/js/home/home.js" asp-append-version="true"></script>

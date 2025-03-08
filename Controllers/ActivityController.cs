@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using EventListener.Data;
 using EventListener.Models;
 using EventListener.Services;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualBasic;
 
 namespace EventListener.Controllers;
 
@@ -136,8 +138,11 @@ public class ActivityController : Controller
                 u.ActivityOwnerId == userJoinActivity.ActivityOwnerId &&
                 u.ActivityCreatedAt == userJoinActivity.ActivityCreatedAt);
             if (existingJoinActivity != null)
-            {
-                if (existingJoinActivity.Status == "Deny") { existingJoinActivity.Status = "wait2"; }
+            {  
+                if (existingJoinActivity.Status == "exit") { existingJoinActivity.Status = "wait";}
+                else if (existingJoinActivity.Status == "exit2") { existingJoinActivity.Status = "wait2"; }
+                else if (existingJoinActivity.Status == "exit3") { existingJoinActivity.Status = "wait3"; }
+                else if (existingJoinActivity.Status == "Deny") { existingJoinActivity.Status = "wait2"; }
                 else if (existingJoinActivity.Status == "Deny2") { existingJoinActivity.Status = "wait3"; }
                 _context.UserJoinActivities.Update(existingJoinActivity);
             }
@@ -158,7 +163,7 @@ public class ActivityController : Controller
     }
 
     [HttpPost]
-    public JsonResult UpdateJoinStatus(string ownerId, DateTime createDate, string joinUser, string status)
+    public async Task<JsonResult> UpdateJoinStatus(string ownerId, DateTime createDate, string joinUser, string status)
     {
         try
         {
@@ -171,7 +176,7 @@ public class ActivityController : Controller
             {
                 if (status == "Accept")
                 {
-                    if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3") { userActivity.Status = "Accept"; }
+                    if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3") { userActivity.Status = "Accept";}
                 }
                 else if (status == "Deny")
                 {
@@ -179,7 +184,13 @@ public class ActivityController : Controller
                     else if (userActivity.Status == "wait2") { userActivity.Status = "Deny2"; }
                     if (userActivity.Status == "wait3") { userActivity.Status = "Deny3"; }
                 }
-                _context.SaveChanges();
+                else if (status == "exit")
+                {
+                    if (userActivity.Status == "wait") { userActivity.Status = "exit"; }
+                    else if (userActivity.Status == "wait2") { userActivity.Status = "exit2"; }
+                    else if (userActivity.Status == "wait3") { userActivity.Status = "exit3"; }
+                    else if (userActivity.Status == "Accept") {userActivity.Status = "exit";}
+                }
                 return Json(new { success = true });
             }
             return Json(new { success = false, message = "User not found" });
@@ -206,33 +217,65 @@ public class ActivityController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateActivityViewModel model, IFormFile file)
     {
+        // ตรวจสอบว่า model มีค่าไหม
+        if (model == null)
+        {
+            ModelState.AddModelError("", "ข้อมูลที่ส่งมาไม่ถูกต้อง");
+            ViewBag.activityTags = await _context.ActivityTags.ToListAsync(); 
+            return View();
+        }
 
-        if (!ModelState.IsValid) return View(model);
+        // ตรวจสอบว่า ModelState ถูกต้องหรือไม่
+        if (!ModelState.IsValid)
+        {
+            ViewBag.activityTags = await _context.ActivityTags.ToListAsync(); 
+            return View(model);
+        }
 
+        // ตรวจสอบค่าต่าง ๆ ว่ามีการส่งมาหรือไม่
+        if (string.IsNullOrEmpty(model.ActivityName))
+            ModelState.AddModelError("ActivityName", "กรุณากรอกชื่อกิจกรรม");
+
+        if (string.IsNullOrEmpty(model.Location))
+            ModelState.AddModelError("Location", "กรุณากรอกสถานที่");
+
+        if (model.StartDateTime == default)
+            ModelState.AddModelError("StartDateTime", "กรุณาเลือกวันและเวลาเริ่มต้น");
+
+        if (string.IsNullOrEmpty(model.Detail))
+            ModelState.AddModelError("Detail", "กรุณากรอกรายละเอียดกิจกรรม");
+
+        if (model.ParticipantLimit == null || model.ParticipantLimit <= 0)
+            ModelState.AddModelError("ParticipantLimit", "กรุณาระบุจำนวนผู้เข้าร่วมที่ถูกต้อง");
+
+        if (model.ActivityTag == null)
+            ModelState.AddModelError("ActivityTag", "กรุณาเลือกหมวดหมู่กิจกรรม");
+
+        // ตรวจสอบว่าอัปโหลดไฟล์มาหรือไม่
         if (file == null || file.Length == 0)
         {
-            ModelState.AddModelError("", "กรุณาเลือกไฟล์รูปภาพ");
+            ModelState.AddModelError("file", "กรุณาเลือกไฟล์รูปภาพ");
             Console.WriteLine("ยังไม่ได้อัพโหลดรูปภาพ");
-            return View();
         }
         else
         {
             Console.WriteLine("อัพโหลดรูปภาพเเล้ว");
         }
 
-        var username = User.FindFirstValue(ClaimTypes.Name);
-
-        if (string.IsNullOrEmpty(username))
+        // ถ้ามีข้อผิดพลาด ให้คืนค่า View พร้อมข้อมูล
+        if (!ModelState.IsValid)
         {
-            return Forbid();
+            ViewBag.activityTags = await _context.ActivityTags.ToListAsync(); 
+            return View(model);
         }
+
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username))
+            return Forbid();
 
         var user = await _userManager.FindByNameAsync(username);
-
         if (user == null)
-        {
             return NotFound();
-        }
 
         DateOnly startDate = DateOnly.FromDateTime(model.StartDateTime);
         TimeSpan startTime = model.StartDateTime.TimeOfDay;
@@ -240,8 +283,9 @@ public class ActivityController : Controller
         var uploadResult = await _cloudinaryService.UploadImageAsync(file);
         if (uploadResult == null)
         {
-            ModelState.AddModelError("", "อัปโหลดไม่สำเร็จ");
-            return View();
+            ModelState.AddModelError("file", "อัปโหลดไฟล์ไม่สำเร็จ กรุณาลองอีกครั้ง");
+            ViewBag.activityTags = await _context.ActivityTags.ToListAsync(); 
+            return View(model);
         }
 
         var activity = new Activity

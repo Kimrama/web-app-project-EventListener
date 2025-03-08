@@ -89,14 +89,12 @@
                     <div class="sex-rect" style="background-color: @Model.SexColor;"></div>
                 </div>
                 <div class="profile-detail-div">
-                    <p>@Model.Firstname @Model.Lastname</p>
+                    <p>@Model.Firstname @Model.Lastname (@Model.Nickname)</p>
                     @* <p>Your Profile</p> *@
                     <div class="id_birthday-div">
                         <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
-                        <i class="fa-solid fa-user"></i>
-                        <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
                         @if(Model.About == null)

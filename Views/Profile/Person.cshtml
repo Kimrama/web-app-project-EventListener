@@ -78,15 +78,12 @@
                 </div>
                 <div class="profile-detail-div">
                     <div class="name_status-div">
-                        <p>@Model.Firstname @Model.Lastname, @Model.Nickname</p>
-                        <div class="status-circle" style="background-color:@Model.SexColor"></div>
+                        <p>@Model.Firstname @Model.Lastname (@Model.Nickname)</p>
                     </div>
                     <div class="id_birthday-div">
                         <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
-                        <i class="fa-solid fa-user"></i>
-                        <p>@Model.Age</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
                         @if(Model.About == null)

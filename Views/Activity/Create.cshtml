@@ -9,7 +9,7 @@
 <div>
     <nav>
         <button class="cancel-button" onclick="location.href='@Url.Action("Index", "Home")'">
-            <i class="fa-solid fa-x"></i> 
+            <i class="fa-solid fa-x"></i>
             ยกเลิก
         </button>
         <h2 class="title">สร้างกิจกรรม</h2>
@@ -20,14 +20,15 @@
             </button>
         </div>
     </nav>
-    
+
     <form id="activity-create-form" asp-action="Create" method="post" enctype="multipart/form-data">
         <div class="question">
             <div class="label-div">
                 <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
                 <span class="error-message" asp-validation-for="ActivityName"></span>
             </div>
-            <input type="text" id="name" asp-for="ActivityName" class="@(ViewData.ModelState["ActivityName"]?.Errors.Any() == true ? "input-error" : "input")" required>
+            <input type="text" id="name" asp-for="ActivityName"
+                class="@(ViewData.ModelState["ActivityName"]?.Errors.Any() == true ? "input-error" : "input")" required>
         </div>
 
         <div class="question">
@@ -35,7 +36,8 @@
                 <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
                 <span class="error-message" asp-validation-for="Location"></span>
             </div>
-            <input type="text" id="location" asp-for="Location" class="@(ViewData.ModelState["Location"]?.Errors.Any() == true ? "input-error" : "input")">
+            <input type="text" id="location" asp-for="Location"
+                class="@(ViewData.ModelState["Location"]?.Errors.Any() == true ? "input-error" : "input")" required>
         </div>
 
         <div class="question">
@@ -43,7 +45,9 @@
                 <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
                 <span class="error-message" asp-validation-for="StartDateTime"></span>
             </div>
-            <input type="datetime-local" id="date_time" asp-for="StartDateTime" class="@(ViewData.ModelState["StartDateTime"]?.Errors.Any() == true ? "input-error" : "input")">
+            <input type="datetime-local" id="date_time" asp-for="StartDateTime"
+                class="@(ViewData.ModelState["StartDateTime"]?.Errors.Any() == true ? "input-error" : "input")"
+                required>
         </div>
 
         <div class="question">
@@ -51,7 +55,9 @@
                 <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
                 <span class="error-message" asp-validation-for="ParticipantLimit"></span>
             </div>
-            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" class="@(ViewData.ModelState["ParticipantLimit"]?.Errors.Any() == true ? "input-error" : "input")">
+            <input type="number" id="maximum_participant" asp-for="ParticipantLimit"
+                class="@(ViewData.ModelState["ParticipantLimit"]?.Errors.Any() == true ? "input-error" : "input")"
+                required>
         </div>
 
         <div class="question">
@@ -60,7 +66,8 @@
                 <span class="error-message" asp-validation-for="Detail"></span>
             </div>
             <textarea id="details" asp-for="Detail" rows="4" cols="50" placeholder="กรอกรายละเอียดที่นี่..."
-                class="@(ViewData.ModelState["Detail"]?.Errors.Any() == true ? "input-error" : "input-textarea")"></textarea>
+                class="@(ViewData.ModelState["Detail"]?.Errors.Any() == true ? "input-error" : "input-textarea")"
+                required></textarea>
         </div>
 
         <div class="question">
@@ -68,7 +75,8 @@
                 <label for="searchDropdown">เลือกแท็ก</label>
                 <span class="error-message" asp-validation-for="ActivityTag"></span>
             </div>
-            <select asp-for="ActivityTag" id="searchDropdown" class="@(ViewData.ModelState["ActivityTag"]?.Errors.Any() == true ? "input-error" : "")">
+            <select asp-for="ActivityTag" id="searchDropdown"
+                class="@(ViewData.ModelState["ActivityTag"]?.Errors.Any() == true ? "input-error" : "" )" required>
                 @if (ViewBag.activityTags != null)
                 {
                     @foreach (var a in ViewBag.activityTags)
@@ -82,7 +90,8 @@
         <div class="imgquestion">
             <div class="imgreq">
                 <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                <input type="file" id="file" name="file" accept="image/*" class="@(ViewData.ModelState["file"]?.Errors.Any() == true ? "input-error" : "")">
+                <input type="file" id="file" name="file" accept="image/*"
+                    class="@(ViewData.ModelState["file"]?.Errors.Any() == true ? "input-error" : "")" required>
                 <span class="error-message">
                     @if (ViewData.ModelState["file"]?.Errors.Any() == true)
                     {
@@ -113,5 +122,3 @@
         }
     });
 </script>
-
-

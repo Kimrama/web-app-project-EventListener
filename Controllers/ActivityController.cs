@@ -362,14 +362,8 @@ public class ActivityController : Controller
 
         var oldDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
         var newDateTime = model.StartDateTime;
-        var differentDateTime1 = oldDateTime - DateTime.UtcNow;
-        var differentDateTime2 = newDateTime - DateTime.UtcNow;
-
-        Console.WriteLine(DateTime.UtcNow);
-        Console.WriteLine(oldDateTime);
-        Console.WriteLine(newDateTime);
-        Console.WriteLine(differentDateTime1.TotalHours);
-        Console.WriteLine(differentDateTime2.TotalHours);
+        var differentDateTime1 = oldDateTime - DateTime.UtcNow.AddHours(7);
+        var differentDateTime2 = newDateTime - DateTime.UtcNow.AddHours(7);
 
         var oldParticipantLimit = activity.ParticipantLimit;
         var newParticipantLimit = model.ParticipantLimit;
@@ -384,7 +378,7 @@ public class ActivityController : Controller
 
             return View(model);
         }
-
+        
         if(differentDateTime2.TotalHours < 3){
             ModelState.AddModelError("StartDateTime", "ตั้งเวลาเริ่มกิจกรรมไม่น้อยกว่า 3 ชั่วโมงก่อนกิจกรรมเริ่ม");
 
@@ -401,6 +395,7 @@ public class ActivityController : Controller
 
             var activityTags = await _context.ActivityTags.ToListAsync();
 
+            ViewBag.ActivityIdHash = activityIdHash;
             ViewBag.activityTags = activityTags;
             ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
 

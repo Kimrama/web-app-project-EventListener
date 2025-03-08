@@ -44,7 +44,7 @@
         <div class="question">
             <label asp-for="Detail"><i class="fa-regular fa-user"></i> รายละเอียด</label>
             <textarea id="details" asp-for="Detail" rows="4" cols="50"
-                placeholder="กรอกรายละเอียดที่นี่...">@Model.Detail</textarea>
+                placeholder="กรอกรายละเอียดที่นี่..." required>@Model.Detail</textarea>
         </div>
         <div class="question">
             <label for="searchDropdown">เลือกแท็ก</label>
@@ -57,13 +57,14 @@
             <div class="imgquestion">
                 <div class="imgreq">
                     <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="file" name="file" accept="image/*" required>
+                    <input type="file" id="file" name="file" accept="image/*">
                 </div>
                 <div class="imgdiv">
                     <img src="@ViewBag.ActivityImageUrl" style="width: 100%; height: 100%; object-fit: cover;"
                         id="previewImage">
                 </div>
             </div>
+            <input type="hidden" asp-for="ActivityId" value="@Model.ActivityId">
         </div>
     </form>
 </div>

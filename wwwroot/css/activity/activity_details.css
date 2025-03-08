@@ -226,9 +226,8 @@ main {
         height: 60px;
         border-radius: 100%;
         object-fit: cover;
+        cursor: pointer;
     }
-    
-    cursor: pointer;
 }
 
 .participant-container {

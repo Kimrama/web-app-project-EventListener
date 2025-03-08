@@ -175,6 +175,7 @@ nav {
         width:97.5%;
         border-collapse: separate;
         border-spacing: 0px 12px;
+        padding: 0px 0px 30px 0px;
         justify-self: center;
         align-self: center;
 
@@ -413,6 +414,7 @@ nav {
         }
 
         p:nth-child(4){
+            text-align: center;
             width:410px;
         }
 

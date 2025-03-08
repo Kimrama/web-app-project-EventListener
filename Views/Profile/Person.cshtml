@@ -78,7 +78,7 @@
                 </div>
                 <div class="profile-detail-div">
                     <div class="name_status-div">
-                        <p>@Model.Firstname @Model.Lastname, @Model.Age</p>
+                        <p>@Model.Firstname @Model.Lastname, @Model.Nickname</p>
                         <div class="status-circle" style="background-color:@Model.SexColor"></div>
                     </div>
                     <div class="id_birthday-div">
@@ -86,13 +86,21 @@
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
                         <i class="fa-solid fa-user"></i>
-                        <p>@Model.Nickname</p>
+                        <p>@Model.Age</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
-                    <p>
-                        @Model.About
-
-                    </p>
+                        @if(Model.About == null)
+                        {
+                            <p style="color:lightslategrey;font-style: italic;">
+                                ผู้ใช้คนนี้ยังไม่ได้ใส่ข้อมูลเกี่ยวกับฉัน
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                @Model.About
+                            </p>
+                        }
                 </div>
                 <div class="profile-interest-div">
                     <p>ความสนใจ</p>

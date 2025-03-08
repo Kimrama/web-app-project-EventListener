@@ -129,7 +129,7 @@
                                             data-userid="@p.UserId"
                                             data-curStatus="@p.Status">
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                            <span>ออกจากกิจกรรม @p.Status</span>
+                                            <span>ออกจากกิจกรรม</span>
                                         </button>
                                     }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
@@ -145,7 +145,7 @@
                                             data-userid="@p.UserId"
                                             data-curstatus="@p.Status">
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                            <span>ยกเลิกคำขอ @p.Status</span>
+                                            <span>ยกเลิกคำขอ</span>
                                         </button>
                                         }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
@@ -159,7 +159,7 @@
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
                                     Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
                                     {
-                                        <button class="join-btn" id="join-btn">
+                                        <button class="join-btnca" id="join-btn">
                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                             <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
                                         </button>

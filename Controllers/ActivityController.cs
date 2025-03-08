@@ -362,12 +362,30 @@ public class ActivityController : Controller
 
         var oldDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
         var newDateTime = model.StartDateTime;
-        var differentDateTime = newDateTime - oldDateTime;
+        var differentDateTime1 = oldDateTime - DateTime.UtcNow;
+        var differentDateTime2 = newDateTime - DateTime.UtcNow;
+
+        Console.WriteLine(DateTime.UtcNow);
+        Console.WriteLine(oldDateTime);
+        Console.WriteLine(newDateTime);
+        Console.WriteLine(differentDateTime1.TotalHours);
+        Console.WriteLine(differentDateTime2.TotalHours);
 
         var oldParticipantLimit = activity.ParticipantLimit;
         var newParticipantLimit = model.ParticipantLimit;
 
-        if(differentDateTime.TotalHours < 3){
+        if(differentDateTime1.TotalHours < 3){
+            ModelState.AddModelError("StartDateTime", "กิจกรรมนี้ได้เเจ้งเตือนไปยังผู้เข้าร่วมทุกคนเเล้วจึงไม่สามารถเเก้ไขเวลาได้");
+
+            var activityTags = await _context.ActivityTags.ToListAsync();
+
+            ViewBag.activityTags = activityTags;
+            ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
+
+            return View(model);
+        }
+
+        if(differentDateTime2.TotalHours < 3){
             ModelState.AddModelError("StartDateTime", "ตั้งเวลาเริ่มกิจกรรมไม่น้อยกว่า 3 ชั่วโมงก่อนกิจกรรมเริ่ม");
 
             var activityTags = await _context.ActivityTags.ToListAsync();

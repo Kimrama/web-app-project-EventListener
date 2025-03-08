@@ -19,11 +19,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Thai">
 
 <div>
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-ear-listen fa-3x"></i>
+     <nav>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+            <i class="fa-solid fa-ear-listen fa-4x"></i>
             <span>EventListener</span>
         </div>
+        </a>
         <div class="buttongroup-and-user">
             @if (User.Identity.IsAuthenticated)
             {
@@ -33,7 +35,7 @@
                         สร้างกิจกรรม
                     </button>
                 </a>
-                <a asp-controller="Notification" asp-action="Notification">
+                <a asp-controller="notification" asp-action="notification">
                     <button class="noti-btn">
                         <i class="fa-regular fa-bell"></i>
                         การเเจ้งเตือน
@@ -72,6 +74,7 @@
         </div>
     </nav>
 
+
     <body>
         <div class="profile-main-div">
             <div class="profile-div">
@@ -89,14 +92,12 @@
                     <div class="sex-rect" style="background-color: @Model.SexColor;"></div>
                 </div>
                 <div class="profile-detail-div">
-                    <p>@Model.Firstname @Model.Lastname</p>
+                    <p>@Model.Firstname @Model.Lastname (@Model.Nickname)</p>
                     @* <p>Your Profile</p> *@
                     <div class="id_birthday-div">
                         <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
-                        <i class="fa-solid fa-user"></i>
-                        <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
                         @if(Model.About == null)

@@ -3,22 +3,26 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 0.25px solid black;
-    padding: 13px;
-    /* position: fixed; */
+    padding: 16px;
+    height: 100px;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 6px, rgba(0, 0, 0, 0.2) 0px 3px 6px;
+    z-index: 100;
+
 }
 
 .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
     span {
         font-size: 24px;
         font-weight: bold;
+        margin-top: 7px;
     }
     margin-left: 12px;
 }
@@ -26,7 +30,7 @@ nav {
 .buttongroup-and-user {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 
     button {
         padding: 8px 18px;
@@ -90,8 +94,10 @@ nav {
         width: 50px;
         height: 50px;
         border-radius: 100%;
+        object-fit: cover;
     }
 }
+
 
 .user-avatar-btn {
     border: none;
@@ -164,6 +170,7 @@ nav {
 .profile-img-div{
     display:flex;
     padding: 0;
+    margin:100px 0px 0px 0px;
 
     img{
         border-radius: 25px;
@@ -177,6 +184,7 @@ nav {
 
 .profile-detail-div{
     font-family: Inter;
+    padding: 100px 0px 0px 0px;
     p:nth-child(1){
         font-weight:bolder;
         padding: 0px 0px 10px 0px;
@@ -214,7 +222,7 @@ nav {
     }
 
     table{
-        width:97.5%;
+        width:98.5%;
         border-collapse: separate;
         border-spacing: 0px 12px;
         justify-self: center;
@@ -418,12 +426,17 @@ nav {
     }
 
     .profile-detail-div{
+        padding: 0px;
         display: flex;
         flex-direction: column;
         align-self: center;
 
         p:nth-child(n){
             align-self: center;
+        }
+
+        p:nth-child(4){
+            text-align: center;
         }
 
         p:nth-child(5){
@@ -435,6 +448,27 @@ nav {
         align-self: center;
         p:nth-child(n){
             width:fit-content;
+        }
+    }
+
+    .activity-div{
+        table{
+            th:nth-child(1){
+                display: none;
+            }
+            th:nth-child(3){
+                display: none;
+            }
+            td:nth-child(1){
+                display: none;
+            }
+            td:nth-child(3){
+                display: none;
+            }
+        }
+
+        p:nth-child(1){
+            padding:25px 0px 15px 10px;
         }
     }
 

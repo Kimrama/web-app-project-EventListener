@@ -19,11 +19,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Thai">
 
 <div>
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-ear-listen fa-3x"></i>
+     <nav>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+            <i class="fa-solid fa-ear-listen fa-4x"></i>
             <span>EventListener</span>
         </div>
+        </a>
         <div class="buttongroup-and-user">
             @if (User.Identity.IsAuthenticated)
             {
@@ -33,7 +35,7 @@
                         สร้างกิจกรรม
                     </button>
                 </a>
-                <a asp-controller="Notification" asp-action="Notification">
+                <a asp-controller="notification" asp-action="notification">
                     <button class="noti-btn">
                         <i class="fa-regular fa-bell"></i>
                         การเเจ้งเตือน
@@ -71,6 +73,7 @@
             }
         </div>
     </nav>
+
 
     <body>
         <div class="profile-main-div">

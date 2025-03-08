@@ -24,11 +24,11 @@
     <form id="activity-create-form" asp-action="Edit" method="post" enctype="multipart/form-data">
         <div class="question">
             <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
-            <input type="text" id="name" asp-for="ActivityName" value="@Model.ActivityName">
+            <input type="text" id="name" asp-for="ActivityName" value="@Model.ActivityName" required>
         </div>
         <div class="question">
             <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
-            <input type="text" id="location" asp-for="Location" value="@Model.Location">
+            <input type="text" id="location" asp-for="Location" value="@Model.Location" required>
         </div>
         <div class="question">
             <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
@@ -38,7 +38,7 @@
         </div>
         <div class="question">
             <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
-            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" value="@Model.ParticipantLimit">
+            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" value="@Model.ParticipantLimit" required>
             @Html.ValidationMessageFor(m => m.ParticipantLimit, "", new { @class = "validation-error" })
         </div>
         <div class="question">
@@ -48,7 +48,7 @@
         </div>
         <div class="question">
             <label for="searchDropdown">เลือกแท็ก</label>
-            <select asp-for="ActivityTag" id="searchDropdown">
+            <select asp-for="ActivityTag" id="searchDropdown" required>
                 @foreach (var a in ViewBag.activityTags)
                 {
                     <option value="@a.ActivityName">@a.ActivityName</option>
@@ -57,7 +57,7 @@
             <div class="imgquestion">
                 <div class="imgreq">
                     <label for="file"><i class="fa-solid fa-link"></i> รูปภาพ:</label>
-                    <input type="file" id="file" name="file" accept="image/*">
+                    <input type="file" id="file" name="file" accept="image/*" required>
                 </div>
                 <div class="imgdiv">
                     <img src="@ViewBag.ActivityImageUrl" style="width: 100%; height: 100%; object-fit: cover;"

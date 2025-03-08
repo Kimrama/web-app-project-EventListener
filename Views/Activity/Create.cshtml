@@ -27,7 +27,7 @@
                 <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
                 <span class="error-message" asp-validation-for="ActivityName"></span>
             </div>
-            <input type="text" id="name" asp-for="ActivityName" class="@(ViewData.ModelState["ActivityName"]?.Errors.Any() == true ? "input-error" : "input")">
+            <input type="text" id="name" asp-for="ActivityName" class="@(ViewData.ModelState["ActivityName"]?.Errors.Any() == true ? "input-error" : "input")" required>
         </div>
 
         <div class="question">

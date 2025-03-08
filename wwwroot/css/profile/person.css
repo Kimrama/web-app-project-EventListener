@@ -440,6 +440,27 @@ nav {
         margin: 4px 0px;
     }
 
+    .activity-div{
+        table{
+            th:nth-child(1){
+                display: none;
+            }
+            th:nth-child(3){
+                display: none;
+            }
+            td:nth-child(1){
+                display: none;
+            }
+            td:nth-child(3){
+                display: none;
+            }
+        }
+
+        p:nth-child(1){
+            padding:25px 0px 15px 10px;
+        }
+    }
+
     .id_birthday-div{
         align-self: center;
     }

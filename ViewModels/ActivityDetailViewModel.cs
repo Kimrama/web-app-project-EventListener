@@ -8,4 +8,6 @@ public class ActivityDetailViewModel
     public bool isUserJoin { get; set; }
     public string ActivityId { get; set; }
     public string? UserImageUrl { get; set; }
+
+    
 }

@@ -34,7 +34,7 @@ async function join_activity(activityIdHash,ownerId,createDate,userId,curStatus)
                 <span>รอการอนุมัติ</span>
             </button>
              <button class="cancel-wait-btn" >
-                <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                <i class="fa-solid fa-xmark fa-lg"></i>
                 <span>ยกเลิกคำขอ</span>
             </button>
         `;

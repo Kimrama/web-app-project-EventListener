@@ -122,9 +122,9 @@ nav {
     align-items: center;
     box-sizing: border-box;
     gap: 30px;
+    margin-bottom: 40px;
 
     .activity-card {
-        /* height: 290px; */
         width: 75%;
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         cursor: pointer;

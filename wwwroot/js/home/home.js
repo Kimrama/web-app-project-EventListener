@@ -134,16 +134,16 @@ function getDaysToBeginWord(date) {
     const now = new Date();
 
     if (date.getUTCDate() == now.getUTCDate()) {
-        return "กิจกรรมจะเกิดขึ้นวันนี้";
+        return "<span>กิจกรรมจะเกิดขึ้นวันนี้ </span>";
     } else {
         const timeDiff = date.getTime() - now.getTime();
         const dateDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
         if (timeDiff < 0) {
-            return "กิจกรรมเริ่มไปแล้ว";
+            return "<span style='color: red;'>กิจกรรมเริ่มไปแล้ว</span>";
         } else if (timeDiff == 1) {
-            return "กิจกรรมจะเริ่มวันพรุ่งนี้";
+            return "<span>กิจกรรมจะเริ่มวันพรุ่งนี้</span>";
         } else {
-            return `กิจกรรมจะเริ่มในอีก ${dateDiff} วัน`;
+            return `<span>กิจกรรมจะเริ่มในอีก ${dateDiff} วัน</span>`;
         }
     }
 }
@@ -252,8 +252,8 @@ function updateActivityCards(data) {
                         <span class="tag">${activity.activityTagId}</span>
                     </div>
                     <div class="time-info">
-                        <span>${formattedDate}, ${formattedTime}</span>
-                        <span>${getDaysToBeginWord(startDate)}</span>
+                        <span>เริ่ม ${formattedDate}, ${formattedTime}</span>
+                        ${getDaysToBeginWord(startDate)}
                     </div>
                     <div class="card-info">
                         <div class="info">
@@ -267,9 +267,13 @@ function updateActivityCards(data) {
                                     activity.userJoinActivityCount
                                 )}
                             </div>
-                            <span class="participant-info">${
-                                activity.userJoinActivityCount
-                            }/${activity.participantLimit} คนจะไป</span>
+                            ${
+                                activity.userJoinActivityCount ===
+                                activity.participantLimit
+                                    ? `<span style="color: red; font-style: bold;">${activity.userJoinActivityCount}/${activity.participantLimit} เต็มแล้ว - ไม่สามารถเข้าร่วมได้</span>`
+                                    : `<span>${activity.userJoinActivityCount}/${activity.participantLimit} คนจะไป</span>`
+                            }
+                            
                         </div>
                         <img src="${
                             activity.activityImageUrl

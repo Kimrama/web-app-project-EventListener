@@ -164,20 +164,23 @@ a{
     margin-top: 125px; 
 }
 
-
-
-.notification {
+.noti-container {
     display: flex;
-    align-items: flex-start;
-    padding: 16px;
+    flex-direction: row;
+    padding: 16px ; 
     margin-bottom: 10px;
     border-radius: 10px;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     transition: background-color 0.2s;
 }
+.notification {
+    display: flex;
+    align-items: flex-start;
+}
 
-.notification:hover {
+
+.noti-container:hover {
     background-color: #d1d1d1;
 }
 
@@ -213,14 +216,13 @@ a{
     white-space: nowrap;
 }
 
-.notification .delete {
+.delete {
     background: none;
     border: none;
-    padding: 4px;
     color: #9ca3af;
     cursor: pointer;
     transition: color 0.2s;
-    margin-left: 8px;
+    margin-left: auto;
 }
 
 .notification .delete:hover {

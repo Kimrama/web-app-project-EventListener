@@ -1,5 +1,6 @@
 @model List<NotificationViewModel>
 <link rel="stylesheet" href="~/css/noti/noti.css" asp-append-version="true">
+<link rel="stylesheet" href="~/css/noti/not.css" asp-append-version="true">
 
 
      <div class="container">
@@ -45,20 +46,23 @@
             }
         </div>
     </nav>
-        <h2>การแจ้งเตือนของคุณ</h2>
+        <h2>การแจ้งเตือนทั้งหมด</h2>
 
-    @if (Model != null) 
+    @if (Model.Count != 0) 
     {
         @foreach (var notification in Model)
-        {
-            <a href="/activity/detail/@notification.ActivityIdEncode" class="notification">
+        {   
+            <div class="noti-container">
+                  <a href="/activity/detail/@notification.ActivityIdEncode" class="notification">
                 <span class="icon">🔔</span>
                 <div class="content">
-                    <strong>@notification.Message</strong>
+                    <strong>@notification.ActivityName</strong>
                     <p>@notification.Message</p>
                 </div>
-                <button class="delete">🗑️</button>
-            </a>
+                 </a>
+            <button onclick="deleteNoti(@notification.Id, this)" class="delete">🗑️</button> 
+            </div>
+            
         }
     }
     else
@@ -68,9 +72,29 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/1827/1827349.png" alt="Notification Bell">
             </div>
             <p class="no-notifications">ไม่มีการแจ้งเตือน</p>
-            <p class="notification-text">การแจ้งเตือนใหม่จะปรากฏที่นี่</p>
+            @* <p class="notification-text">การแจ้งเตือนใหม่จะปรากฏที่นี่</p> *@
         </div>
     }
 </div>
 
 <script src="~/js/activity/user_dropdown.js" asp-append-version="true"></script>
+<script>
+    async function deleteNoti(notiId, element) {
+        try {
+            let response = await fetch(`/Notification/DeleteNotification?notificationId=${notiId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                element.closest(".noti-container").remove(); // ลบการแจ้งเตือนออกจากหน้า
+                window.location.reload();
+            } else {
+                alert("ไม่สามารถลบการแจ้งเตือนได้");
+            }
+        } catch (error) {
+            console.error("Error deleting notification:", error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+        }
+    }
+
+</script>

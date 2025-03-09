@@ -15,7 +15,6 @@ public class NotificationController : Controller
     private readonly ApplicationDbContext _context; // เอาไว้ดึงฐานข้อมูลที่ต้องการ 
     private readonly UserManager<User> _userManager; //ใช้ดึงข้อมูลชื่อคนใช้งาน
     private readonly CloudinaryService _cloudinaryService;
- 
 
     public NotificationController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
@@ -41,7 +40,7 @@ public class NotificationController : Controller
         var notifications = await _context.Notifications
             .Where(
                 u => u.UserId == username &&
-                u.ReceiveDate <= DateTime.Now
+                u.ReceiveDate <= DateTime.Now.AddHours(7)
             )
             .OrderByDescending(u => u.ReceiveDate)
             .ToListAsync();
@@ -54,17 +53,19 @@ public class NotificationController : Controller
         // .OrderByDescending(u => u.Activity.StartDate)
         // .ThenByDescending(u => u.Activity.StartTime)
         // .ToListAsync();
-
+        
         List<NotificationViewModel> models = [];
         foreach (var noti in notifications)
         {
-            string[] msg = noti.Message.Split(' ', 2);
+            string[] msg = noti.Message.Split(' ', 3);
             models.Add(new NotificationViewModel
-            {
+            {   
                 ReceiveDate = noti.ReceiveDate,
                 ActivityIdEncode = msg[0],
-                Message = msg[1],
+                ActivityName = msg[1],
+                Message = msg[2],
                 Id = noti.NotificationId
+
             });
         }
         // foreach (var uja in usersJoinActivity)
@@ -94,12 +95,28 @@ public class NotificationController : Controller
         return View(models);
     }  
 
+    // [HttpDelete]
+    // public async Task<JsonResult> DeleteNotification(int notificationId)
+    // {
+    //     var counter = await _context.Notifications.Where(n => n.NotificationId == notificationId).ExecuteDeleteAsync();
+    //     return Json(new { success = true, count = counter });
+    // }
     [HttpDelete]
     public async Task<JsonResult> DeleteNotification(int notificationId)
     {
-        var counter = await _context.Notifications.Where(n => n.NotificationId == notificationId).ExecuteDeleteAsync();
-        return Json(new { success = true, count = counter });
+        var counter = await _context.Notifications
+            .Where(n => n.NotificationId == notificationId)
+            .ExecuteDeleteAsync();
+
+        if (counter > 0)
+        {
+            return Json(new { success = true, count = counter });
+        }
+        else
+        {
+            return Json(new { success = false, message = "ไม่พบการแจ้งเตือนนี้" });
+        }
     }
-    
+
 }
 

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using EventListener.Data;
 using EventListener.Models;
 using EventListener.Services;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualBasic;
 
 namespace EventListener.Controllers;
 
@@ -173,12 +175,13 @@ public class ActivityController : Controller
     }
 
     [HttpPost]
-    public JsonResult UpdateJoinStatus(string ownerId, DateTime createDate, string joinUser, string status)
+    public async Task<JsonResult> UpdateJoinStatus(string ownerId, DateTime createDate, string joinUser, string status)
     {
         try
         {
-            var userActivity = _context.UserJoinActivities
-                .FirstOrDefault(a => a.ActivityOwnerId == ownerId &&
+            var userActivity = await _context.UserJoinActivities
+                .Include(u => u.Activity)
+                .FirstOrDefaultAsync(a => a.ActivityOwnerId == ownerId &&
                                     a.ActivityCreatedAt == createDate &&
                                     a.UserId == joinUser);
 
@@ -186,7 +189,22 @@ public class ActivityController : Controller
             {
                 if (status == "Accept")
                 {
-                    if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3") { userActivity.Status = "Accept"; }
+                    if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3")
+                    {
+                        userActivity.Status = "Accept";
+                        var activityName = userActivity.Activity.ActivityName;
+                        var startTime = userActivity.Activity.StartTime;
+                        var startDateTime = userActivity.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
+                        var ActivityIdEncode = Base64Helper.EncodeBase64(userActivity.ActivityOwnerId + " " + userActivity.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US")));
+                        var noti = new Notification{
+                            UserId = userActivity.UserId,
+                            Message = ActivityIdEncode+" "+activityName+" กิจกรรมกำลังจะเริ่มวัน "+startDateTime.ToString(" dddd ที่ dd MMM yyyy, HH:mm น."),
+                            ReceiveDate = startDateTime.AddHours(-1)
+                        };
+                        // System.Console.WriteLine("Ativityname",activityName,"starttime",startTime,"startdate",startDateTime,"ActivityIdEncode",ActivityIdEncode,"noti",noti);
+                        _context.Notifications.Add(noti);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 else if (status == "Deny")
                 {

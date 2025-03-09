@@ -3,26 +3,23 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
-    height: 100px;
+    border-bottom: 0.25px solid black;
+    padding: 13px;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 6px, rgba(0, 0, 0, 0.2) 0px 3px 6px;
-    z-index: 100;
-
+    z-index:100;
 }
 
 .logo {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     span {
         font-size: 24px;
         font-weight: bold;
-        margin-top: 7px;
     }
     margin-left: 12px;
 }
@@ -30,7 +27,7 @@ nav {
 .buttongroup-and-user {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 
     button {
         padding: 8px 18px;
@@ -98,7 +95,6 @@ nav {
     }
 }
 
-
 .user-avatar-btn {
     border: none;
     background-color: white;
@@ -150,7 +146,7 @@ nav {
     display:grid;
     grid-template-columns: max-content max-content;
     gap:4.32vw;
-    padding-bottom:50px;
+    padding:100px 0px 50px 0px;
 }
 
 .profile-img_rect-div{
@@ -170,7 +166,6 @@ nav {
 .profile-img-div{
     display:flex;
     padding: 0;
-    margin:100px 0px 0px 0px;
 
     img{
         border-radius: 25px;
@@ -184,7 +179,6 @@ nav {
 
 .profile-detail-div{
     font-family: Inter;
-    padding: 100px 0px 0px 0px;
     p:nth-child(1){
         font-weight:bolder;
         padding: 0px 0px 10px 0px;
@@ -214,7 +208,7 @@ nav {
     font-family: Noto Sans Thai;
     flex-direction: column;
     padding: 0px 0px 50px 0px;
-    p:nth-child(1){
+    p{
         font-weight: bold;
         letter-spacing: 1px;
         padding: 25px 0px 15px 0px;/*top right bottom left*/ 
@@ -222,7 +216,7 @@ nav {
     }
 
     table{
-        width:98.5%;
+        width:97.5%;
         border-collapse: separate;
         border-spacing: 0px 12px;
         justify-self: center;
@@ -246,8 +240,6 @@ nav {
         }
         td:nth-child(2):hover{
             cursor: pointer;
-            font-size: 1.05rem;
-            transition: 0.25s;
         }
         tr{
             background-color: white;
@@ -378,7 +370,8 @@ nav {
     align-items: center;
     justify-content: center;
     width:100%;
-    transition: all 0.5s;
+    transition: transform 0.5s ease;
+    will-change: transform;
     height:40px;
     background-color: #4F46E5;
     border:none;
@@ -426,17 +419,13 @@ nav {
     }
 
     .profile-detail-div{
-        padding: 0px;
         display: flex;
         flex-direction: column;
         align-self: center;
 
         p:nth-child(n){
+            width: fit-content;
             align-self: center;
-        }
-
-        p:nth-child(4){
-            text-align: center;
         }
 
         p:nth-child(5){
@@ -467,7 +456,7 @@ nav {
             }
         }
 
-        p:nth-child(1){
+        p{
             padding:25px 0px 15px 10px;
         }
     }

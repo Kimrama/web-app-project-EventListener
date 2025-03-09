@@ -24,7 +24,7 @@ public class ProfileController : Controller
     }
 
     [Authorize]
-    public async Task<IActionResult> Index(string page)
+    public async Task<IActionResult> Index(string joinpage,string hostpage)
     {
         var username = User.FindFirstValue(ClaimTypes.Name); //inspect login user
 
@@ -54,6 +54,7 @@ public class ProfileController : Controller
             SexColor = "",
             InterestTags = userInterestTag,
             UserImageUrl = user.UserImageUrl,
+            PersonImageUrl = null,
             About = user.About
 
         };
@@ -88,13 +89,40 @@ public class ProfileController : Controller
             model.SexColor = "#CBC3E3";
         }
         
-        int intpage = 1;
-        if(page == null || Int32.Parse(page) <= 0){
-            intpage = 1;
+        int joinintpage = 1;
+        int hostintpage = 1;
+
+        if(joinpage == null || Int32.Parse(joinpage) <= 0){
+            joinintpage = 1;
         }
         else{
-            intpage = Int32.Parse(page);
+            joinintpage = Int32.Parse(joinpage);
         }
+
+        if(hostpage == null || Int32.Parse(hostpage) <= 0){
+            hostintpage = 1;
+        }
+        else{
+            hostintpage = Int32.Parse(hostpage);
+        }
+
+        
+        var activity = await _context.Activities
+            .Where(u => u.OwnerId == username)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+        
+        model.HostNumpage = Math.Ceiling((Double)(activity.Count())/(Double)4);
+
+        activity = await _context.Activities
+            .Where(u => u.OwnerId == username)
+            .Skip(4*(hostintpage-1))
+            .Take(4) //LIMIT (skip,take)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+        
+        model.HostActivities = activity;
+
         var userjoinactivity = await _context.UserJoinActivities
             //Left SQL Join
             .Join(
@@ -137,14 +165,14 @@ public class ProfileController : Controller
                         }
                     )
             )
-            .Where(u => u.UserId == username || u.OwnerId == username)
+            .Where(u => u.UserId == username)
             .Where(u => u.Status == "Accept")
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();
 
         userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
 
-        model.Numpage = Math.Ceiling((Double)userjoinactivity.Count()/(Double)4);
+        model.JoinNumpage = Math.Ceiling((Double)(userjoinactivity.Count())/(Double)4);
 
         userjoinactivity = await _context.UserJoinActivities
             //Left SQL Join
@@ -188,9 +216,9 @@ public class ProfileController : Controller
                         }
                     )
             )
-            .Where(u => u.UserId == username || u.OwnerId == username)
+            .Where(u => u.UserId == username)
             .Where(u => u.Status == "Accept")
-            .Skip(4*(intpage-1))
+            .Skip(4*(joinintpage-1))
             .Take(4) //LIMIT (skip,take)
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();
@@ -202,24 +230,51 @@ public class ProfileController : Controller
             switch(act.ActivityTagId)
             {
                 case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
-                    model.ActivityCategory.Add("Exercise & Sports");
-                    model.ActivityCategoryColor.Add("#ff9d00");
+                    model.JoinActivityCategory.Add("Exercise & Sports");
+                    model.JoinActivityCategoryColor.Add("#ff9d00");
                     break;
                 case "Sing" : case "Dance" : case "Painting":
-                    model.ActivityCategory.Add("Arts & Culture");
-                    model.ActivityCategoryColor.Add("#04bb7b");
+                    model.JoinActivityCategory.Add("Arts & Culture");
+                    model.JoinActivityCategoryColor.Add("#04bb7b");
                     break;
                 case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
-                    model.ActivityCategory.Add("Social");
-                    model.ActivityCategoryColor.Add("#b750d9");
+                    model.JoinActivityCategory.Add("Social");
+                    model.JoinActivityCategoryColor.Add("#b750d9");
                     break;
                 case "Tutoring" : case "Lab" : case "Hackathon":
-                    model.ActivityCategory.Add("Education");
-                    model.ActivityCategoryColor.Add("#008cff");
+                    model.JoinActivityCategory.Add("Education");
+                    model.JoinActivityCategoryColor.Add("#008cff");
                     break;
                 default:
-                    model.ActivityCategory.Add("Default");
-                    model.ActivityCategoryColor.Add("red");
+                    model.JoinActivityCategory.Add("Default");
+                    model.JoinActivityCategoryColor.Add("red");
+                    break;
+            }
+        }
+
+        foreach(var act in activity)
+        {
+            switch(act.ActivityTagId)
+            {
+                case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
+                    model.HostActivityCategory.Add("Exercise & Sports");
+                    model.HostActivityCategoryColor.Add("#ff9d00");
+                    break;
+                case "Sing" : case "Dance" : case "Painting":
+                    model.HostActivityCategory.Add("Arts & Culture");
+                    model.HostActivityCategoryColor.Add("#04bb7b");
+                    break;
+                case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
+                    model.HostActivityCategory.Add("Social");
+                    model.HostActivityCategoryColor.Add("#b750d9");
+                    break;
+                case "Tutoring" : case "Lab" : case "Hackathon":
+                    model.HostActivityCategory.Add("Education");
+                    model.HostActivityCategoryColor.Add("#008cff");
+                    break;
+                default:
+                    model.HostActivityCategory.Add("Default");
+                    model.HostActivityCategoryColor.Add("red");
                     break;
             }
         }
@@ -229,11 +284,12 @@ public class ProfileController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    [Route("Profile/Person/{usernameparam}")]
-    public async Task<IActionResult> Person(string usernameparam,string page)
+    [Route("profile/person/{usernameparam}")]
+    public async Task<IActionResult> Person(string usernameparam,string joinpage,string hostpage)
     {
         var username = User.FindFirstValue(ClaimTypes.Name);//inspect login user
         var user = await _userManager.FindByNameAsync(usernameparam);//fetch db ready to use
+        var indexuser = await _userManager.FindByNameAsync(username);
 
         if (user == null)
         {
@@ -258,7 +314,8 @@ public class ProfileController : Controller
             Nickname = user.Nickname,
             SexColor = "",
             InterestTags = userInterestTag,
-            UserImageUrl = user.UserImageUrl,
+            PersonImageUrl = user.UserImageUrl,
+            UserImageUrl = indexuser.UserImageUrl,
             About = user.About
         };
 
@@ -294,15 +351,40 @@ public class ProfileController : Controller
             model.SexColor = "#CBC3E3";
         }
 
-        int intpage = 1;
-        if(page == null || Int32.Parse(page) <= 0){
-            intpage = 1;
+        int joinintpage = 1;
+        int hostintpage = 1;
+
+        if(joinpage == null || Int32.Parse(joinpage) <= 0){
+            joinintpage = 1;
         }
         else{
-            intpage = Int32.Parse(page);
+            joinintpage = Int32.Parse(joinpage);
         }
 
-       var userjoinactivity = await _context.UserJoinActivities
+        if(hostpage == null || Int32.Parse(hostpage) <= 0){
+            hostintpage = 1;
+        }
+        else{
+            hostintpage = Int32.Parse(hostpage);
+        }
+
+        var activity = await _context.Activities
+            .Where(u => u.OwnerId == usernameparam)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+        
+        model.HostNumpage = Math.Ceiling((Double)(activity.Count())/(Double)4);
+
+        activity = await _context.Activities
+            .Where(u => u.OwnerId == usernameparam)
+            .Skip(4*(hostintpage-1))
+            .Take(4) //LIMIT (skip,take)
+            .OrderByDescending(u => u.CreatedAt)
+            .ToListAsync();
+        
+        model.HostActivities = activity;
+
+        var userjoinactivity = await _context.UserJoinActivities
             //Left SQL Join
             .Join(
                 _context.Activities, 
@@ -344,14 +426,14 @@ public class ProfileController : Controller
                         }
                     )
             )
-            .Where(u => u.UserId == usernameparam || u.OwnerId == usernameparam)
+            .Where(u => u.UserId == usernameparam)
             .Where(u => u.Status == "Accept")
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();
 
         userjoinactivity = userjoinactivity.DistinctBy(u => u.ActivityName).ToList();
 
-        model.Numpage = Math.Ceiling((Double)userjoinactivity.Count()/(Double)4);
+        model.JoinNumpage = Math.Ceiling((Double)userjoinactivity.Count()/(Double)4);
 
         userjoinactivity = await _context.UserJoinActivities
             //Left SQL Join
@@ -395,9 +477,9 @@ public class ProfileController : Controller
                         }
                     )
             )
-            .Where(u => u.UserId == usernameparam || u.OwnerId == usernameparam)
+            .Where(u => u.UserId == usernameparam)
             .Where(u => u.Status == "Accept")
-            .Skip(4*(intpage-1))
+            .Skip(4*(joinintpage-1))
             .Take(4) //LIMIT (skip,take)
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();
@@ -411,27 +493,55 @@ public class ProfileController : Controller
             switch(act.ActivityTagId)
             {
                 case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
-                    model.ActivityCategory.Add("Exercise & Sports");
-                    model.ActivityCategoryColor.Add("#ff9d00");
+                    model.JoinActivityCategory.Add("Exercise & Sports");
+                    model.JoinActivityCategoryColor.Add("#ff9d00");
                     break;
                 case "Sing" : case "Dance" : case "Painting":
-                    model.ActivityCategory.Add("Arts & Culture");
-                    model.ActivityCategoryColor.Add("#04bb7b");
+                    model.JoinActivityCategory.Add("Arts & Culture");
+                    model.JoinActivityCategoryColor.Add("#04bb7b");
                     break;
                 case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
-                    model.ActivityCategory.Add("Social");
-                    model.ActivityCategoryColor.Add("#b750d9");
+                    model.JoinActivityCategory.Add("Social");
+                    model.JoinActivityCategoryColor.Add("#b750d9");
                     break;
                 case "Tutoring" : case "Lab" : case "Hackathon":
-                    model.ActivityCategory.Add("Education");
-                    model.ActivityCategoryColor.Add("#008cff");
+                    model.JoinActivityCategory.Add("Education");
+                    model.JoinActivityCategoryColor.Add("#008cff");
                     break;
                 default:
-                    model.ActivityCategory.Add("Default");
-                    model.ActivityCategoryColor.Add("red");
+                    model.JoinActivityCategory.Add("Default");
+                    model.JoinActivityCategoryColor.Add("red");
                     break;
             }
         }
+
+        foreach(var act in activity)
+        {
+            switch(act.ActivityTagId)
+            {
+                case "Football" : case "Basketball" : case "Badminton" : case "Table tennis" : case "Running" : case "Swimming" : case "Cardio" : case "Weight training" :
+                    model.HostActivityCategory.Add("Exercise & Sports");
+                    model.HostActivityCategoryColor.Add("#ff9d00");
+                    break;
+                case "Sing" : case "Dance" : case "Painting":
+                    model.HostActivityCategory.Add("Arts & Culture");
+                    model.HostActivityCategoryColor.Add("#04bb7b");
+                    break;
+                case "Gaming" : case "Board Games" : case "Food & Dining" : case "Travel":
+                    model.HostActivityCategory.Add("Social");
+                    model.HostActivityCategoryColor.Add("#b750d9");
+                    break;
+                case "Tutoring" : case "Lab" : case "Hackathon":
+                    model.HostActivityCategory.Add("Education");
+                    model.HostActivityCategoryColor.Add("#008cff");
+                    break;
+                default:
+                    model.HostActivityCategory.Add("Default");
+                    model.HostActivityCategoryColor.Add("red");
+                    break;
+            }
+        }
+
         return View(model);
     }
 

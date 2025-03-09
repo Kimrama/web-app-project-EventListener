@@ -73,7 +73,7 @@
                 </div>
                 <h4 class="start-datetime">
                     @Model.Activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th")),
-                    @Model.Activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartDate.AddYears(-543).ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
                     @Model.Activity.StartTime.ToString(@"hh\:mm") น.
                 </h4>
                 <br>
@@ -128,8 +128,8 @@
                                             data-createdate="@p.ActivityCreatedAt" 
                                             data-userid="@p.UserId"
                                             data-curStatus="@p.Status">
-                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                            <span>ออกจากกิจกรรม @p.Status</span>
+                                            <i class="fa-solid fa-right-from-bracket fa-lg"></i>
+                                            <span>ออกจากกิจกรรม</span>
                                         </button>
                                     }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
@@ -144,8 +144,8 @@
                                             data-createdate="@p.ActivityCreatedAt" 
                                             data-userid="@p.UserId"
                                             data-curstatus="@p.Status">
-                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
-                                            <span>ยกเลิกคำขอ @p.Status</span>
+                                            <i class="fa-solid fa-xmark fa-lg"></i>
+                                            <span>ยกเลิกคำขอ</span>
                                         </button>
                                         }
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
@@ -159,7 +159,7 @@
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
                                     Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
                                     {
-                                        <button class="join-btn" id="join-btn">
+                                        <button class="join-btnca" id="join-btn">
                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                             <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
                                         </button>
@@ -187,7 +187,16 @@
             </div>
             <div class="owner">
                 <h3>เจ้าของ</h3>
-                <img src="@Model.Activity.User.UserImageUrl" alt="">
+                @if(Model.Activity.User.UserImageUrl == null){
+                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@Model.Activity.User.UserName">
+                        <img src="~/user.png" alt="">
+                    </a>
+                }
+                else{
+                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@Model.Activity.User.UserName">
+                        <img src="@Model.Activity.User.UserImageUrl" alt="">
+                    </a>
+                }
                 <h4>@Model.Activity.User.UserName</h4>
             </div>
         </div>
@@ -230,11 +239,15 @@
 
                                 @if (p.User.UserImageUrl == null)
                                 {
-                                    <img src="~/user.png" alt="">
+                                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@p.UserId">
+                                        <img src="~/user.png" alt="">
+                                    </a>
                                 }
                                 else
                                 {
-                                    <img src="@p.User.UserImageUrl" alt="">
+                                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@p.UserId">
+                                        <img src="@p.User.UserImageUrl" alt="">
+                                    </a>
                                 }
                                 <h4>@p.User.UserName</h4>
                                 <button class="accept-button" id="accept-button"

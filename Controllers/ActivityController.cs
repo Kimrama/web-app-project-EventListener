@@ -153,6 +153,18 @@ public class ActivityController : Controller
 
             await _context.SaveChangesAsync();
 
+            DateTime now = DateTime.Now;
+
+            var notification = new Notification
+            {
+                UserId = activity.OwnerId,
+                Message = $"ผู้ใช้ {username} ได้ส่งคำขอเข้าร่วมกิจกรรม {activity.ActivityName}",
+                ReceiveDate = now
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
             return Ok();
         }
         catch (Exception ex)
@@ -207,7 +219,20 @@ public class ActivityController : Controller
                     else if (userActivity.Status == "wait3") { userActivity.Status = "exit3"; }
                     else if (userActivity.Status == "Accept") {userActivity.Status = "exit";}
                 }
+                _context.SaveChanges();
+
+                var notifications = _context.Notifications
+                    .Where(n => n.UserId == ownerId && n.Message.Contains(joinUser))
+                    .ToList();
+
+                if (notifications.Any())
+                {
+                    _context.Notifications.RemoveRange(notifications);
+                }
+                _context.SaveChanges();
                 return Json(new { success = true });
+
+                
             }
             return Json(new { success = false, message = "User not found" });
         }
@@ -266,6 +291,12 @@ public class ActivityController : Controller
 
         if (model.ActivityTag == null)
             ModelState.AddModelError("ActivityTag", "กรุณาเลือกหมวดหมู่กิจกรรม");
+
+        DateTime now = DateTime.Now;
+        if (model.StartDateTime < now.AddHours(3))
+        {
+            ModelState.AddModelError("StartDateTime", "กรุณาเลือกเวลาเริ่มต้นอย่างน้อย 3 ชั่วโมงจากเวลาปัจจุบัน");
+        }
 
         // ตรวจสอบว่าอัปโหลดไฟล์มาหรือไม่
         if (file == null || file.Length == 0)
@@ -379,12 +410,24 @@ public class ActivityController : Controller
 
         var oldDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
         var newDateTime = model.StartDateTime;
-        var differentDateTime = newDateTime - oldDateTime;
+        var differentDateTime1 = oldDateTime - DateTime.UtcNow.AddHours(7);
+        var differentDateTime2 = newDateTime - DateTime.UtcNow.AddHours(7);
 
         var oldParticipantLimit = activity.ParticipantLimit;
         var newParticipantLimit = model.ParticipantLimit;
 
-        if(differentDateTime.TotalHours < 3){
+        if(differentDateTime1.TotalHours < 3){
+            ModelState.AddModelError("StartDateTime", "กิจกรรมนี้ได้เเจ้งเตือนไปยังผู้เข้าร่วมทุกคนเเล้วจึงไม่สามารถเเก้ไขเวลาได้");
+
+            var activityTags = await _context.ActivityTags.ToListAsync();
+
+            ViewBag.activityTags = activityTags;
+            ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
+
+            return View(model);
+        }
+        
+        if(differentDateTime2.TotalHours < 3){
             ModelState.AddModelError("StartDateTime", "ตั้งเวลาเริ่มกิจกรรมไม่น้อยกว่า 3 ชั่วโมงก่อนกิจกรรมเริ่ม");
 
             var activityTags = await _context.ActivityTags.ToListAsync();
@@ -400,6 +443,7 @@ public class ActivityController : Controller
 
             var activityTags = await _context.ActivityTags.ToListAsync();
 
+            ViewBag.ActivityIdHash = activityIdHash;
             ViewBag.activityTags = activityTags;
             ViewBag.ActivityImageUrl = activity.ActivityImageUrl;
 

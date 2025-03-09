@@ -19,11 +19,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Thai">
 
 <div>
-    <nav>
-        <div class="logo">
-            <i class="fa-solid fa-ear-listen fa-3x"></i>
+     <nav>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+            <i class="fa-solid fa-ear-listen fa-4x"></i>
             <span>EventListener</span>
         </div>
+        </a>
         <div class="buttongroup-and-user">
             @if (User.Identity.IsAuthenticated)
             {
@@ -33,13 +35,23 @@
                         สร้างกิจกรรม
                     </button>
                 </a>
-                <button class="noti-btn">
-                    <i class="fa-regular fa-bell"></i>
-                    การเเจ้งเตือน
-                </button>
+                <a asp-controller="notification" asp-action="notification">
+                    <button class="noti-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        การเเจ้งเตือน
+                    </button>
+                </a>
                 <div class="user-dropdown">
-                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
-                            class="avatar-img"></button>
+                    <button class="user-avatar-btn" onclick="drop()">
+                        @if (Model.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="" class="avatar-img">
+                        }
+                        else
+                        {
+                            <img src="@Model.UserImageUrl" alt="" class="avatar-img">
+                        }
+                    </button>
                     <div id="dropdown-content" class="dropdown-content">
                         <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>
@@ -78,21 +90,26 @@
                 </div>
                 <div class="profile-detail-div">
                     <div class="name_status-div">
-                        <p>@Model.Firstname @Model.Lastname, @Model.Age</p>
-                        <div class="status-circle" style="background-color:@Model.SexColor"></div>
+                        <p>@Model.Firstname @Model.Lastname (@Model.Nickname)</p>
                     </div>
                     <div class="id_birthday-div">
                         <p>@@@Model.Username</p>
                         <i class="far fa-calendar-minus"></i>
                         <p>@Model.Birthday</p>
-                        <i class="fa-solid fa-user"></i>
-                        <p>@Model.Nickname</p>
                     </div>
                     <p>เกี่ยวกับฉัน</p>
-                    <p>
-                        @Model.About
-
-                    </p>
+                        @if(Model.About == null)
+                        {
+                            <p style="color:lightslategrey;font-style: italic;">
+                                ผู้ใช้คนนี้ยังไม่ได้ใส่ข้อมูลเกี่ยวกับฉัน
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                @Model.About
+                            </p>
+                        }
                 </div>
                 <div class="profile-interest-div">
                     <p>ความสนใจ</p>

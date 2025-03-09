@@ -24,11 +24,11 @@
     <form id="activity-create-form" asp-action="Edit" method="post" enctype="multipart/form-data">
         <div class="question">
             <label asp-for="ActivityName"><i class="fa-solid fa-pen-nib"></i> ชื่อกิจกรรม</label>
-            <input type="text" id="name" asp-for="ActivityName" value="@Model.ActivityName">
+            <input type="text" id="name" asp-for="ActivityName" value="@Model.ActivityName" required>
         </div>
         <div class="question">
             <label asp-for="Location"><i class="fa-solid fa-location-dot"></i> สถานที่</label>
-            <input type="text" id="location" asp-for="Location" value="@Model.Location">
+            <input type="text" id="location" asp-for="Location" value="@Model.Location" required>
         </div>
         <div class="question">
             <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
@@ -38,17 +38,17 @@
         </div>
         <div class="question">
             <label asp-for="ParticipantLimit"><i class="fa-regular fa-user"></i> จำนวนสมาชิกสูงสุด</label>
-            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" value="@Model.ParticipantLimit">
+            <input type="number" id="maximum_participant" asp-for="ParticipantLimit" value="@Model.ParticipantLimit" required>
             @Html.ValidationMessageFor(m => m.ParticipantLimit, "", new { @class = "validation-error" })
         </div>
         <div class="question">
             <label asp-for="Detail"><i class="fa-regular fa-user"></i> รายละเอียด</label>
             <textarea id="details" asp-for="Detail" rows="4" cols="50"
-                placeholder="กรอกรายละเอียดที่นี่...">@Model.Detail</textarea>
+                placeholder="กรอกรายละเอียดที่นี่..." required>@Model.Detail</textarea>
         </div>
         <div class="question">
             <label for="searchDropdown">เลือกแท็ก</label>
-            <select asp-for="ActivityTag" id="searchDropdown">
+            <select asp-for="ActivityTag" id="searchDropdown" required>
                 @foreach (var a in ViewBag.activityTags)
                 {
                     <option value="@a.ActivityName">@a.ActivityName</option>
@@ -64,6 +64,7 @@
                         id="previewImage">
                 </div>
             </div>
+            <input type="hidden" asp-for="ActivityId" value="@Model.ActivityId">
         </div>
     </form>
 </div>

@@ -226,9 +226,8 @@ main {
         height: 60px;
         border-radius: 100%;
         object-fit: cover;
+        cursor: pointer;
     }
-    
-    cursor: pointer;
 }
 
 .participant-container {
@@ -305,10 +304,11 @@ main {
 }
 
 .accept-button{
-    background-color: #DAF7A6 ;
-    border: 1px solid  #DAF7A6 ;
+    background-color: #28b463;
+    border: 1px solid #28b463;
     font-size: 16px;
-    padding: 10px 20px;
+    padding: 8px 16px;
+    width: 100px;
     color: white;
     border-radius: 16px;
     cursor: pointer;
@@ -322,7 +322,8 @@ main {
     background-color: red;
     border: 1px solid red;
     font-size: 16px;
-    padding: 10px 20px;
+    padding: 8px 16px;
+    width: 100px;
     color: white;
     border-radius: 16px;
     cursor: pointer;

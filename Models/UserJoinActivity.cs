@@ -9,7 +9,6 @@ public class UserJoinActivity
     public DateTime? RequestJoinDate { get; set; } = DateTime.UtcNow;
     public DateTime? JoinDate { get; set; }
     public string? Status { get; set; }
-    public bool IsNoti { get; set; } = false;
 
     public User User { get; set; }
     public Activity Activity { get; set; }

@@ -252,7 +252,7 @@ function updateActivityCards(data) {
                         <span class="tag">${activity.activityTagId}</span>
                     </div>
                     <div class="time-info">
-                        <span>${formattedDate}, ${formattedTime}</span>
+                        <span>เริ่ม ${formattedDate}, ${formattedTime}</span>
                         <span>${getDaysToBeginWord(startDate)}</span>
                     </div>
                     <div class="card-info">
@@ -267,9 +267,13 @@ function updateActivityCards(data) {
                                     activity.userJoinActivityCount
                                 )}
                             </div>
-                            <span class="participant-info">${
-                                activity.userJoinActivityCount
-                            }/${activity.participantLimit} คนจะไป</span>
+                            ${
+                                activity.userJoinActivityCount ===
+                                activity.participantLimit
+                                    ? `<span style="color: red; font-style: bold;">เต็มแล้ว - ไม่สามารถเข้าร่วมได้</span>`
+                                    : `<span>${activity.userJoinActivityCount}/${activity.participantLimit} คนจะไป</span>`
+                            }
+                            
                         </div>
                         <img src="${
                             activity.activityImageUrl

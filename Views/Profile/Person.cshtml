@@ -1,12 +1,18 @@
 @model ProfileViewModel
 @{
     ViewData["Title"] = @Model.Nickname + "'s Profile";
-    int id = 0;
-    var pageparam = Context.Request.Query["page"];
-    if(pageparam.Count() == 0){//if pageparam is null
-        pageparam = "1";
+    int joinid = 0;
+    int hostid = 0;
+    var joinpageparam = Context.Request.Query["joinpage"];
+    if(joinpageparam.Count() == 0){//if pageparam is null
+        joinpageparam = "1";
     }
-    var currentpage = Int32.Parse(pageparam);
+    var hostpageparam = Context.Request.Query["hostpage"];
+    if(hostpageparam.Count() == 0){//if pageparam is null
+        hostpageparam = "1";
+    }
+    var joincurrentpage = Int32.Parse(joinpageparam);
+    var hostcurrentpage = Int32.Parse(hostpageparam);
     string ActivityIdEncode = null;
     int makePath(string ownerId,DateTime createdAt){
         ActivityIdEncode = EventListener.Services.Base64Helper.EncodeBase64(ownerId + " " + createdAt.ToString("yyyy-MM-dd HH:mm:ss", new System.Globalization.CultureInfo("en-US")));
@@ -79,11 +85,11 @@
             <div class="profile-div">
                 <div class="profile-img_rect-div">
                     <div class="profile-img-div">
-                        @if(Model.UserImageUrl == null){
+                        @if(Model.PersonImageUrl == null){
                             <img src="https://i.pinimg.com/736x/ac/67/4d/ac674d2be5f98abf1c189c75de834155.jpg" alt="me_profile_picture" >
                         }
                         else{
-                            <img src="@Model.UserImageUrl" alt="me_profile_picture" >
+                            <img src="@Model.PersonImageUrl" alt="me_profile_picture" >
                         }
                     </div>
                     <div class="sex-rect" style="background-color:@Model.SexColor"></div>
@@ -121,7 +127,7 @@
                 </div>
             </div>
             <div class="activity-div">
-                <p>กิจกรรมที่เข้าร่วม</p>
+                <p>กิจกรรมที่เป็นเจ้าของ</p>
                 <table>
                     <tr>
                         <th>ประเภท</th>
@@ -130,26 +136,27 @@
                         <th>สถานที่</th>
                         <th>วันที่เริ่มกิจกรรม</th>
                     </tr>
-                        @foreach (var act in Model.JoinActivities)
-                        {   
-                            var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                        @foreach (var act in Model.HostActivities)
+                        {
                             makePath(act.OwnerId,act.CreatedAt);
-                            <tr>
-                                <td><div class="activity-category-circle" style="background-color: @Model.ActivityCategoryColor[id]"></div> @Model.ActivityCategory[id]</td>
-                                <td><a asp-controller="activity" asp-action="detail" asp-route-activityIdHash=@ActivityIdEncode><i class="fa-solid fa-up-right-from-square"></i>  @act.ActivityName</a></td>
+                            var query = "host" + hostid;
+                            var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                            <tr> 
+                                <td><div class="activity-category-circle" style="background-color: @Model.HostActivityCategoryColor[hostid]"></div> @Model.HostActivityCategory[hostid]</td>
+                                <td><a asp-controller="activity" asp-action="detail" asp-route-activityIdHash="@ActivityIdEncode"><i class="fa-solid fa-up-right-from-square"></i> @act.ActivityName</a></td>
                                 <td><div class="activity-tag-div">@act.ActivityTagId</div></td>
                                 <td>@act.Location</td>
-                                <td id=@id onmouseover="handleOver('@strdate',@id)" onmouseout="handleOut('@strdate',@id)"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
+                                <td id="@query" onmouseover="handleOver('@strdate','@query')" onmouseout="handleOut('@strdate','@query')"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
                             </tr>
-                            id = id + 1;
+                            hostid = hostid + 1;
                         }
                 </table>
 
                 <div class="page-list-div">
-                    @if(Model.Numpage > 1){
-                        @for(int i=0;i<Model.Numpage;i++)
+                    @if(Model.HostNumpage > 1){
+                        @for(int i=0;i<Model.HostNumpage;i++)
                         {
-                            @if(currentpage == i+1)
+                            @if(hostcurrentpage == i+1)
                             {
                                 <div style="background-color:grey"><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"> </a></div>
                             }
@@ -161,6 +168,49 @@
                     }
 
                 </div>
+
+                <p>กิจกรรมที่เข้าร่วม</p>
+                <table>
+                    <tr>
+                        <th>ประเภท</th>
+                        <th>ชื่อกิจกรรม</th>
+                        <th>Tag</th>
+                        <th>สถานที่</th>
+                        <th>วันที่เริ่มกิจกรรม</th>
+                    </tr>
+                    @foreach (var act in Model.JoinActivities)
+                    {
+                        makePath(act.OwnerId,act.CreatedAt);
+                        var query = "join" + joinid;
+                        var strdate = act.StartDate.Year.ToString() + '-' + act.StartDate.Month.ToString() + '-' + act.StartDate.Day.ToString();
+                        <tr> 
+                            <td><div class="activity-category-circle" style="background-color: @Model.JoinActivityCategoryColor[joinid]"></div> @Model.JoinActivityCategory[joinid]</td>
+                            <td><a asp-controller="Activity" asp-action="Detail" asp-route-activityIdHash="@ActivityIdEncode"><i class="fa-solid fa-up-right-from-square"></i> @act.ActivityName</a></td>
+                            <td><div class="activity-tag-div">@act.ActivityTagId</div></td>
+                            <td>@act.Location</td>
+                            <td id="@query" onmouseover="handleOver('@strdate','@query')" onmouseout="handleOut('@strdate','@query')"><i class="far fa-calendar-minus"></i> @act.StartDate</td>
+                        </tr>
+                        joinid = joinid + 1;
+                    }
+                </table>
+
+                <div class="page-list-div">
+                    @if(Model.JoinNumpage > 1){
+                        @for(int i=0;i<Model.JoinNumpage;i++)
+                        {
+                            @if(joincurrentpage == i+1)
+                            {
+                                <div style="background-color:grey"><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"> </a></div>
+                            }
+                            else
+                            {
+                                <div><a asp-controller="Profile" asp-action="Person" asp-route-page="@(i+1)"></a></div>
+                            }
+                        }
+                    }
+
+                </div>
+
             </div>
         </div>
     </body>

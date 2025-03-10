@@ -62,7 +62,7 @@
                         <p>@notification.Message</p>
                     </div>
                 </a>
-                <button onclick="deleteNoti(@notification.Id, this)" class="delete">🗑️</button>
+                <button onclick="deleteNoti(@notification.Id, this)" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #ff0000;"></i></button>
             </div>
 
         }
@@ -73,8 +73,8 @@
             <div class="bell-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/1827/1827349.png" alt="Notification Bell">
             </div>
-            <p class="no-notifications">ไม่มีการแจ้งเตือน</p>
-            @* <p class="notification-text">การแจ้งเตือนใหม่จะปรากฏที่นี่</p> *@
+            <p class="no-notifications" style="margin-top: 16px;">ไม่มีการแจ้งเตือน</p>
+            <p class="notification-text" style="margin-top: 12px;">การแจ้งเตือนใหม่จะปรากฏที่นี่</p>
         </div>
     }
 </div>

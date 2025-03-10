@@ -134,19 +134,19 @@ nav {
     display: block;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
+/* body {
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     min-height: 100vh;
-}
+} */
 
 a{
     text-decoration: none;
 }
+
 .container {
     width: 100%;
     max-width: 3000px;
@@ -156,22 +156,21 @@ a{
 }
 
 .container h2 {
-    font-size: 24px;
-    color: #000000;
+    font-size: 28px;
     margin-bottom: 30px;
     text-align: center;
-    font-weight: 500;
+    font-weight: bold;
     margin-top: 125px; 
 }
 
 .noti-container {
     display: flex;
     flex-direction: row;
-    padding: 16px ; 
-    margin-bottom: 10px;
-    border-radius: 10px;
+    padding: 24px; 
+    margin-bottom: 24px;
+    border-radius: 12px;
     background-color: #ffffff;
-    border: 1px solid #e5e7eb;
+    border: 1px solid black;
     transition: background-color 0.2s;
 }
 .notification {
@@ -181,14 +180,14 @@ a{
 
 
 .noti-container:hover {
-    background-color: #d1d1d1;
+    background-color: rgb(225, 225, 225);
 }
 
 .notification .icon {
-    font-size: 20px;
+    font-size: 28px;
     color: #f59e0b;
-    margin-right: 12px;
-    margin-top: 2px;
+    margin-right: 18px;
+    margin-top: 8px;
 }
 
 .notification .content {
@@ -196,16 +195,16 @@ a{
 }
 
 .notification .content strong {
-    font-size: 14px;
-    color: #111827;
+    font-size: 20px;
+    color: black;
     display: block;
-    margin-bottom: 4px;
-    font-weight: 500;
+    margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .notification .content p {
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 16px;
+    color: gray;
     margin: 0;
 }
 
@@ -228,6 +227,15 @@ a{
 .notification .delete:hover {
     color: #ef4444;
 }
+
+.no-notifications {
+    margin-top: 10px;
+}
+
+.notification-text {
+    margin-top: 12px;
+}
+
 @media (max-width: 900px) {
     nav {
         padding: 12px;

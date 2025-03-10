@@ -24,9 +24,17 @@
                     <i class="fa-regular fa-bell"></i>
                     การเเจ้งเตือน
                 </button>
-                <div class="user-dropdown">
-                    <button class="user-avatar-btn" onclick="drop()"><img src="~/user.png" alt=""
-                            class="avatar-img"></button>
+<div class="user-dropdown">
+                    <button class="user-avatar-btn" onclick="drop()">
+                        @if (ViewBag.UserImageUrl == null)
+                        {
+                            <img src="~/user.png" alt="" class="avatar-img">
+                        }
+                        else
+                        {
+                            <img src="@ViewBag.UserImageUrl" alt="" class="avatar-img">
+                        }
+                    </button>
                     <div id="dropdown-content" class="dropdown-content">
                         <a asp-controller="profile" asp-action="index">โปรไฟล์</a>
                         <a asp-controller="account" asp-action="logout">ออกจากระบบ</a>

@@ -49,9 +49,9 @@
         <div class="zone2">
             <div class="rowq">
                 <div class="question">
-                    <label for="bdate">Birthdate: @Model.Birthday.AddYears(-543).ToString("dd/MM/yyyy")</label>
+                    <label for="bdate">Birthdate: @Model.Birthday.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"))</label>
                     <input type="date" id="bdate" asp-for="Birthday"
-                        value="@Model.Birthday.AddYears(-543).ToString("yyyy-MM-dd")" required>
+                        value="@Model.Birthday.ToString("yyyy-MM-dd", new System.Globalization.CultureInfo("en-US"))" required>
                 </div>
                 <div class="question">
                     <label for="sex">sex</label>

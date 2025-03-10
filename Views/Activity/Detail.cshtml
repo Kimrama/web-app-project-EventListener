@@ -73,7 +73,7 @@
                 </div>
                 <h4 class="start-datetime">
                     @Model.Activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th")),
-                    @Model.Activity.StartDate.AddYears(-543).ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("en-US")),
                     @Model.Activity.StartTime.ToString(@"hh\:mm") น.
                 </h4>
                 <br>

@@ -98,6 +98,8 @@ public class NotificationController : Controller
             });
         }
 
+        ViewBag.UserImageUrl = _user.UserImageUrl;
+
         return View(models);
     }
 

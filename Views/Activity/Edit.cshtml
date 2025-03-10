@@ -33,7 +33,7 @@
         <div class="question">
             <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
             <input type="datetime-local" id="date_time" asp-for="StartDateTime"
-                value="@Model.StartDateTime.AddYears(-543).ToString("yyyy-MM-ddTHH:mm")">
+                value="@Model.StartDateTime.ToString("yyyy-MM-ddTHH:mm", new System.Globalization.CultureInfo("en-US"))">
             @Html.ValidationMessageFor(m => m.StartDateTime, "", new { @class = "validation-error" })
         </div>
         <div class="question">

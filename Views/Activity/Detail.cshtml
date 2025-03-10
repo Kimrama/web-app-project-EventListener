@@ -314,15 +314,26 @@
             console.log(result)
             if (result.success) {
                 if (status == "Accept"){
-                    if (curStatus == 'wait' || curStatus == 'wait2' || curStatus == 'wait3'){
-                        accept_button = document.getElementById("accept-button");
-                        deny_button = document.getElementById("deny-button");
+                    if (curStatus == 'wait' || curStatus == 'wait2' || curStatus == 'wait3') {
                         temp = document.getElementById(`participant-${joinUser}`);
-                        document.getElementById(`participant-${joinUser}`).remove();
-                        temp.removeChild(accept_button);
-                        temp.removeChild(deny_button);
-                        document.getElementById("accept-participant").appendChild(temp);
+                        console.log(temp);
+                        console.log(temp.children);
+                        if (temp) {
+                            var accept_button = temp.querySelector("#accept-button");
+                            var deny_button = temp.querySelector("#deny-button");
+                            if (accept_button) {
+                                temp.removeChild(accept_button);
+                            }
+
+                            if (deny_button) {
+                                temp.removeChild(deny_button);
+                            }
+                            document.getElementById("accept-participant").appendChild(temp);
+                        } else {
+                            console.error("Element not found:", `participant-${joinUser}`);
+                        }
                     }
+
         
                 }
                 else if (status == "exit"){

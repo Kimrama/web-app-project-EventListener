@@ -153,17 +153,17 @@ public class ActivityController : Controller
 
             await _context.SaveChangesAsync();
 
-            DateTime now = DateTime.Now;
+            // DateTime now = DateTime.Now;
 
-            var notification = new Notification
-            {
-                UserId = activity.OwnerId,
-                Message = $"ผู้ใช้ {username} ได้ส่งคำขอเข้าร่วมกิจกรรม {activity.ActivityName}",
-                ReceiveDate = now
-            };
+            // var notification = new Notification
+            // {
+            //     UserId = activity.OwnerId,
+            //     Message = $"ผู้ใช้ {username} ได้ส่งคำขอเข้าร่วมกิจกรรม {activity.ActivityName}",
+            //     ReceiveDate = now
+            // };
 
-            _context.Notifications.Add(notification);
-            await _context.SaveChangesAsync();
+            // _context.Notifications.Add(notification);
+            // await _context.SaveChangesAsync();
 
             return Ok();
         }
@@ -192,18 +192,18 @@ public class ActivityController : Controller
                     if (userActivity.Status == "wait" || userActivity.Status == "wait2" || userActivity.Status == "wait3")
                     {
                         userActivity.Status = "Accept";
-                        var activityName = userActivity.Activity.ActivityName;
-                        var startTime = userActivity.Activity.StartTime;
-                        var startDateTime = userActivity.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
-                        var ActivityIdEncode = Base64Helper.EncodeBase64(userActivity.ActivityOwnerId + " " + userActivity.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US")));
-                        var noti = new Notification{
-                            UserId = userActivity.UserId,
-                            Message = ActivityIdEncode+" "+activityName+" กิจกรรมกำลังจะเริ่มวัน "+startDateTime.ToString(" dddd ที่ dd MMM yyyy, HH:mm น."),
-                            ReceiveDate = startDateTime.AddHours(-1)
-                        };
-                        // System.Console.WriteLine("Ativityname",activityName,"starttime",startTime,"startdate",startDateTime,"ActivityIdEncode",ActivityIdEncode,"noti",noti);
-                        _context.Notifications.Add(noti);
-                        await _context.SaveChangesAsync();
+                        // var activityName = userActivity.Activity.ActivityName;
+                        // var startTime = userActivity.Activity.StartTime;
+                        // var startDateTime = userActivity.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
+                        // var ActivityIdEncode = Base64Helper.EncodeBase64(userActivity.ActivityOwnerId + " " + userActivity.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US")));
+                        // var noti = new Notification{
+                        //     UserId = userActivity.UserId,
+                        //     Message = ActivityIdEncode+" "+activityName+" กิจกรรมกำลังจะเริ่มวัน "+startDateTime.ToString(" dddd ที่ dd MMM yyyy, HH:mm น."),
+                        //     ReceiveDate = startDateTime.AddHours(-3)
+                        // };
+                        // // System.Console.WriteLine("Ativityname",activityName,"starttime",startTime,"startdate",startDateTime,"ActivityIdEncode",ActivityIdEncode,"noti",noti);
+                        // _context.Notifications.Add(noti);
+                        // await _context.SaveChangesAsync();
                     }
                 }
                 else if (status == "Deny")
@@ -295,7 +295,7 @@ public class ActivityController : Controller
         DateTime now = DateTime.Now;
         if (model.StartDateTime < now.AddHours(3))
         {
-            ModelState.AddModelError("StartDateTime", "กรุณาเลือกเวลาเริ่มต้นอย่างน้อย 3 ชั่วโมงจากเวลาปัจจุบัน");
+            ModelState.AddModelError("StartDateTime", "ตั้งเวลาเริ่มกิจกรรมไม่น้อยกว่า 3 ชั่วโมงก่อนกิจกรรมเริ่ม");
         }
 
         // ตรวจสอบว่าอัปโหลดไฟล์มาหรือไม่

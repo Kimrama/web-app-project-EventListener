@@ -1,11 +1,9 @@
 using EventListener.Models;
 public class NotificationViewModel
 {
-    public required string ActivityName {get; set;}
-    // public required DateTime StartDateTime {get; set;}
-    public required DateTime ReceiveDate {get; set;}
-    public required string ActivityIdEncode {get; set;}
-    public required string Message {get; set;}
-    public required int Id {get; set;}
-
+    public int Id { get; set; }
+    public string ActivityIdEncode { get; set; }
+    public string ActivityName { get; set; }
+    public string Message { get; set; }
+    public DateTime ReceiveDate { get; set; }
 }

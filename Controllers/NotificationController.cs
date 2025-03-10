@@ -49,6 +49,7 @@ public class NotificationController : Controller
             Console.WriteLine($"now: {DateTime.UtcNow.AddHours(7)}");
             Console.WriteLine($"start: {startDateTime}");
             Console.WriteLine($"diff: {differentDateTime.TotalHours}");
+            Console.WriteLine($"กิจกรรมจะเริ่มขึ้นตอน {activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-TH"))}, {activity.StartDate.AddYears(-543).ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-TH"))}, {activity.StartTime.ToString(@"hh\:mm")} น.");
 
             if (differentDateTime.TotalHours < 3 && !aj.IsNoti)
             {
@@ -57,7 +58,7 @@ public class NotificationController : Controller
                 {
                     UserId = username,
                     ActivityIdString = activityIdHash,
-                    Message = "กิจกรรมจะเริ่มขึ้นในอีก 3 ชั่วโมง",
+                    Message = $"กิจกรรมจะเริ่มขึ้นตอน {activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-TH"))}, {activity.StartDate.AddYears(-543).ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-TH"))}, {activity.StartTime.ToString(@"hh\:mm")} น.",
                     ReceiveDate = startDateTime.AddHours(-3)
                 };
 

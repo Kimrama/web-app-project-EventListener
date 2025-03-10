@@ -105,6 +105,15 @@ public class ActivityController : Controller
             )
             .FirstOrDefaultAsync();
 
+            var startDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
+
+            if((startDateTime - DateTime.UtcNow.AddHours(7)).TotalHours < 0){
+                return BadRequest(new
+                {
+                    message = "ไม่สามารถเข้าร่วมกิจกรรมได้ เนื่องจากกิจกรรมได้เริ่มขึ้นไปเเล้ว"
+                });
+            }
+
             var usersJoinActivity = await _context.UserJoinActivities
             .Include(u => u.User)
             .Where(

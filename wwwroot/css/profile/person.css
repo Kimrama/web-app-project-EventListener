@@ -170,7 +170,7 @@ nav {
     font-family: Noto Sans Thai;
     flex-direction: column;
     padding: 0px 0px 50px 0px;
-    p:nth-child(1){
+    p{
         font-weight: bold;
         letter-spacing: 1px;
         padding: 25px 0px 15px 0px;/*top right bottom left*/ 
@@ -203,8 +203,6 @@ nav {
         }
         td:nth-child(2):hover{
             cursor: pointer;
-            font-size: 1.05rem;
-            transition: 0.25s;
         }
         tr{
             background-color: white;
@@ -456,7 +454,7 @@ nav {
             }
         }
 
-        p:nth-child(1){
+        p{
             padding:25px 0px 15px 10px;
         }
     }

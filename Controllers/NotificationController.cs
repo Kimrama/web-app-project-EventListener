@@ -15,6 +15,7 @@ public class NotificationController : Controller
     private readonly ApplicationDbContext _context; // เอาไว้ดึงฐานข้อมูลที่ต้องการ 
     private readonly UserManager<User> _userManager; //ใช้ดึงข้อมูลชื่อคนใช้งาน
     private readonly CloudinaryService _cloudinaryService;
+    private User? _user;
 
     public NotificationController(ApplicationDbContext context, UserManager<User> userManager, CloudinaryService cloudinaryService)
     {
@@ -22,85 +23,83 @@ public class NotificationController : Controller
         _userManager = userManager;
         _cloudinaryService = cloudinaryService;
     }
-     public async Task<IActionResult> Notification()
-    {   var username = User.FindFirstValue(ClaimTypes.Name); //inspect login user
+    public async Task<IActionResult> Notification()
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
 
-        if (string.IsNullOrEmpty(username))
+        if (username != null)
         {
-            return Forbid();
+            _user = await _userManager.FindByNameAsync(username);
         }
 
-        var user = await _userManager.FindByNameAsync(username);//fetch db ready to use
+        var activityJoins = await _context.UserJoinActivities
+        .Where(a => a.UserId == username && a.Status == "Accept")
+        .ToListAsync();
 
-        if (user == null)
+
+        foreach (var aj in activityJoins)
         {
-            return NotFound();
+            var activity = await _context.Activities
+            .Where(a => a.OwnerId == aj.ActivityOwnerId && a.CreatedAt == aj.ActivityCreatedAt)
+            .FirstOrDefaultAsync();
+
+            var startDateTime = activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(activity.StartTime));
+            var differentDateTime = startDateTime - DateTime.UtcNow.AddHours(7);
+
+            Console.WriteLine($"now: {DateTime.UtcNow.AddHours(7)}");
+            Console.WriteLine($"start: {startDateTime}");
+            Console.WriteLine($"diff: {differentDateTime.TotalHours}");
+
+            if (differentDateTime.TotalHours < 3 && !aj.IsNoti)
+            {
+                var activityIdHash = Base64Helper.EncodeBase64(activity.OwnerId + " " + activity.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US")));
+                var notification = new Notification
+                {
+                    UserId = username,
+                    ActivityIdString = activityIdHash,
+                    Message = "กิจกรรมจะเริ่มขึ้นในอีก 3 ชั่วโมง",
+                    ReceiveDate = startDateTime.AddHours(-3)
+                };
+
+                aj.IsNoti = true;
+
+                _context.UserJoinActivities.Update(aj);
+                await _context.SaveChangesAsync();
+
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+            }
         }
-        
+
         var notifications = await _context.Notifications
-            .Where(
-                u => u.UserId == username &&
-                u.ReceiveDate <= DateTime.Now.AddHours(7)
-            )
-            .OrderByDescending(u => u.ReceiveDate)
-            .ToListAsync();
-        // var usersJoinActivity = await _context.UserJoinActivities
-        // .Include(u => u.Activity)
-        // .Where(
-        //     u => u.UserId == username &&
-        //     u.Status == "Accept"
-        // )
-        // .OrderByDescending(u => u.Activity.StartDate)
-        // .ThenByDescending(u => u.Activity.StartTime)
-        // .ToListAsync();
-        
-        List<NotificationViewModel> models = [];
-        foreach (var noti in notifications)
-        {
-            string[] msg = noti.Message.Split(' ', 3);
-            models.Add(new NotificationViewModel
-            {   
-                ReceiveDate = noti.ReceiveDate,
-                ActivityIdEncode = msg[0],
-                ActivityName = msg[1],
-                Message = msg[2],
-                Id = noti.NotificationId
+        .Where(n => n.UserId == username)
+        .ToListAsync();
 
+        List<NotificationViewModel> models = [];
+        foreach (var n in notifications)
+        {
+            var activityId = Base64Helper.DecodeBase64(n.ActivityIdString);
+            var keys = activityId.Split(" ", 2);
+
+            var activity = await _context.Activities
+            .Where(a => a.OwnerId == keys[0] && a.CreatedAt.ToString() == keys[1])
+            .FirstOrDefaultAsync();
+
+            Console.WriteLine($"Activity Name: {activity.ActivityName}");
+
+            models.Add(new NotificationViewModel
+            {
+                Id = n.NotificationId,
+                ActivityIdEncode = n.ActivityIdString,
+                ActivityName = activity.ActivityName,
+                Message = n.Message,
+                ReceiveDate = n.ReceiveDate,
             });
         }
-        // foreach (var uja in usersJoinActivity)
-        // {
-        //     if(uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(uja.Activity.StartTime)) <= DateTime.Now.AddHours(1))
-        //     {
-        //         var activityName = uja.Activity.ActivityName;
-        //         var startTime = uja.Activity.StartTime;
-        //         var startDateTime = uja.Activity.StartDate.ToDateTime(TimeOnly.FromTimeSpan(startTime));
-        //         var message = "กิจกรรมกำลังจะเริ่มวัน "+startDateTime.ToString(" dddd ที่ dd MMM yyyy, HH:mm น.");
-        //         models.Add(new NotificationViewModel
-        //         {
-        //             ActivityName = activityName, 
-        //             StartDateTime = startDateTime, 
-        //             ActivityIdEncode = Base64Helper.EncodeBase64(uja.ActivityOwnerId + " " + uja.ActivityCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"))),
-        //             Message = message
-        //         });
-        //         var noti = new Notification{
-        //             UserId = uja.UserId,
-        //             Message = message
-        //         };
-        //         _context.Notifications.Add(noti);
-        //     } 
-        // }
-        // await _context.SaveChangesAsync();
 
         return View(models);
-    }  
+    }
 
-    // [HttpDelete]
-    // public async Task<JsonResult> DeleteNotification(int notificationId)
-    // {
-    //     var counter = await _context.Notifications.Where(n => n.NotificationId == notificationId).ExecuteDeleteAsync();
-    //     return Json(new { success = true, count = counter });
-    // }
     [HttpDelete]
     public async Task<JsonResult> DeleteNotification(int notificationId)
     {

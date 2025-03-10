@@ -3,12 +3,14 @@
 <link rel="stylesheet" href="~/css/noti/not.css" asp-append-version="true">
 
 
-     <div class="container">
-       <nav>
-        <div class="logo">
-            <i class="fa-solid fa-ear-listen fa-3x"></i>
-            <span>EventListener</span>
-        </div>
+<div class="container">
+    <nav>
+        <a asp-controller="Home" asp-action="Index" style="text-decoration: none; color: inherit;">
+            <div class="logo">
+                <i class="fa-solid fa-ear-listen fa-4x"></i>
+                <span>EventListener</span>
+            </div>
+        </a>
         <div class="buttongroup-and-user">
             @if (User.Identity.IsAuthenticated)
             {
@@ -46,23 +48,23 @@
             }
         </div>
     </nav>
-        <h2>การแจ้งเตือนทั้งหมด</h2>
+    <h2>การแจ้งเตือนทั้งหมด</h2>
 
-    @if (Model.Count != 0) 
+    @if (Model.Count != 0)
     {
         @foreach (var notification in Model)
-        {   
+        {
             <div class="noti-container">
-                  <a href="/activity/detail/@notification.ActivityIdEncode" class="notification">
-                <span class="icon">🔔</span>
-                <div class="content">
-                    <strong>@notification.ActivityName</strong>
-                    <p>@notification.Message</p>
-                </div>
-                 </a>
-            <button onclick="deleteNoti(@notification.Id, this)" class="delete">🗑️</button> 
+                <a href="/activity/detail/@notification.ActivityIdEncode" class="notification">
+                    <span class="icon">🔔</span>
+                    <div class="content">
+                        <strong>@notification.ActivityName</strong>
+                        <p>@notification.Message</p>
+                    </div>
+                </a>
+                <button onclick="deleteNoti(@notification.Id, this)" class="delete">🗑️</button>
             </div>
-            
+
         }
     }
     else

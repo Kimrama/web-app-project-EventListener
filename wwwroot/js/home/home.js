@@ -91,6 +91,7 @@ function closePopupDate(event) {
 
     if (startDate == "Invalid Date" && endDate == "Invalid Date") {
         dateFilterBtn.textContent = "All";
+        applyFilter();
         return;
     }
 
@@ -234,15 +235,19 @@ function updateActivityCards(data) {
                     categoryClass = "";
             }
             const startDate = new Date(Date.parse(activity.startDate));
-            let formattedDate = startDate.toLocaleDateString("th-TH", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-            });
+            let formattedDate =
+                startDate.toLocaleDateString("th-TH", {
+                    weekday: "long",
+                }) +
+                ", " +
+                startDate.toLocaleDateString("th-TH", {
+                    day: "numeric",
+                    month: "long",
+                }) +
+                " " +
+                startDate.getFullYear();
 
             let formattedTime = activity.startTime.substring(0, 5) + " น.";
-
             card.innerHTML = `
                 <div class="header-tag-card ${categoryClass}">${
                 activity.activityTagCategory

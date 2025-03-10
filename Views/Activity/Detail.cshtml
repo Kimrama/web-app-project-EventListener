@@ -73,7 +73,7 @@
                 </div>
                 <h4 class="start-datetime">
                     @Model.Activity.StartDate.ToString("dddd", new System.Globalization.CultureInfo("th-Th")),
-                    @Model.Activity.StartDate.AddYears(-543).ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
+                    @Model.Activity.StartDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("th-Th")),
                     @Model.Activity.StartTime.ToString(@"hh\:mm") น.
                 </h4>
                 <br>
@@ -187,16 +187,7 @@
             </div>
             <div class="owner">
                 <h3>เจ้าของ</h3>
-                @if(Model.Activity.User.UserImageUrl == null){
-                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@Model.Activity.User.UserName">
-                        <img src="~/user.png" alt="">
-                    </a>
-                }
-                else{
-                    <a asp-controller="Profile" asp-action="Person" asp-route-id="@Model.Activity.User.UserName">
-                        <img src="@Model.Activity.User.UserImageUrl" alt="">
-                    </a>
-                }
+                <img src="@Model.Activity.User.UserImageUrl" alt="">
                 <h4>@Model.Activity.User.UserName</h4>
             </div>
         </div>

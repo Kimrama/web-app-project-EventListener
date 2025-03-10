@@ -123,6 +123,7 @@ nav {
     align-items: center;
     box-sizing: border-box;
     gap: 30px;
+    margin-botton: 30px;
 
     .activity-card {
         /* height: 290px; */

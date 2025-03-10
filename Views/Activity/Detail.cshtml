@@ -132,8 +132,8 @@
                                             <span>ออกจากกิจกรรม</span>
                                         </button>
                                     }
-                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
-                                    Model.Activity.OwnerId == p.ActivityOwnerId && p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3" )
+                                    else if ((User.Identity.Name == p.UserId) && (Model.Activity.CreatedAt == p.ActivityCreatedAt) &&
+                                    (Model.Activity.OwnerId == p.ActivityOwnerId) && (p.Status == "wait" || p.Status == "wait2" || p.Status == "wait3" ))
                                     {
                                         <button class="wait-btn">
                                             <i class="fa-solid fa-hourglass-start fa-lg"></i>
@@ -144,12 +144,12 @@
                                             data-createdate="@p.ActivityCreatedAt" 
                                             data-userid="@p.UserId"
                                             data-curstatus="@p.Status">
-                                            <i class="fa-solid fa-hourglass-start fa-lg"></i>
+                                            <i class="fa-solid fa-xmark fa-lg"></i>
                                             <span>ยกเลิกคำขอ</span>
                                         </button>
                                         }
-                                    else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
-                                    Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny" || p.Status == "Deny2" || p.Status == "exit" || p.Status == "exit2" || p.Status == "exit3"))
+                                    else if ((User.Identity.Name == p.UserId) && (Model.Activity.CreatedAt == p.ActivityCreatedAt) &&
+                                    (Model.Activity.OwnerId == p.ActivityOwnerId) && (p.Status == "Deny" || p.Status == "Deny2" || p.Status == "exit" || p.Status == "exit2" || p.Status == "exit3"))
                                     {
                                         <button class="join-btn" onclick="join_activity('@Model.ActivityId','@Model.Activity.OwnerId','@Model.Activity.CreatedAt','@User.Identity.Name','@p.Status')" id="join-btn">
                                             <i class="fa-solid fa-right-to-bracket fa-lg"></i>
@@ -159,8 +159,8 @@
                                     else if (User.Identity.Name == p.UserId && Model.Activity.CreatedAt == p.ActivityCreatedAt &&
                                     Model.Activity.OwnerId == p.ActivityOwnerId && (p.Status == "Deny3"))
                                     {
-                                        <button class="join-btnca" id="join-btn">
-                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                        <button class="too-much-denied" id="too-much-denied">
+                                            <i class="fa-solid fa-xmark fa-lg"></i>
                                             <span>คุณถูกปฏิเสธมากเกินไปแล้ว</span>
                                         </button>
                                     }

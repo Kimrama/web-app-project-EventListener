@@ -43,11 +43,11 @@
         <div class="question">
             <div class="label-div">
                 <label asp-for="StartDateTime"><i class="fa-regular fa-calendar"></i> เวลา-วันที่</label>
-                <span class="error-message" asp-validation-for="StartDateTime"></span>
             </div>
             <input type="datetime-local" id="date_time" asp-for="StartDateTime"
                 class="@(ViewData.ModelState["StartDateTime"]?.Errors.Any() == true ? "input-error" : "input")"
                 required>
+            <span class="error-message" asp-validation-for="StartDateTime" style="margin-top: 10px;"></span>
         </div>
 
         <div class="question">

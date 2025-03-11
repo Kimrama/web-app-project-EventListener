@@ -289,7 +289,7 @@ public class ProfileController : Controller
     {
         var username = User.FindFirstValue(ClaimTypes.Name);//inspect login user
         var user = await _userManager.FindByNameAsync(usernameparam);//fetch db ready to use
-        var indexuser = await _userManager.FindByNameAsync(username);
+        // var indexuser = await _userManager.FindByNameAsync(username);
 
         if (user == null)
         {
@@ -315,7 +315,7 @@ public class ProfileController : Controller
             SexColor = "",
             InterestTags = userInterestTag,
             PersonImageUrl = user.UserImageUrl,
-            UserImageUrl = indexuser.UserImageUrl,
+            // UserImageUrl = indexuser.UserImageUrl,
             About = user.About
         };
 
